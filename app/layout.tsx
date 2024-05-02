@@ -1,8 +1,17 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Navbar from "@/components/Navbar";
+import AuthProvider from "@/components/AuthProvider";
+import type { Session } from 'next-auth';
 
 const inter = Inter({ subsets: ["latin"] });
+
+
+interface RootLayoutProps {
+  children: React.ReactNode;
+  session: Session | null;
+}
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -10,13 +19,17 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+  children,session
+}: RootLayoutProps) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+      <AuthProvider session={session}>
+          <Navbar />
+          {/* <Navbar authenticated={false} name='null' image='null'/> */}
+          {children}
+        </AuthProvider>
+        </body>
     </html>
   );
 }
