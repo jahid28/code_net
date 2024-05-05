@@ -76,6 +76,11 @@
   }
 
 
+  
+*::selection{
+  color: #ffffff;
+  background-color:  #e53e3e;
+}
 
   .darkmode {
     --p-color: rgb(255, 255, 255);
@@ -86,7 +91,7 @@
   .lightmode {
     --p-color: rgb(0, 0, 0);
     --bg-color: rgb(245, 245, 245);
-    --bg-dark:rgb(113, 113, 113);
+    --bg-dark:rgb(188, 188, 188);
   }
 
   .bg-color{

@@ -8,16 +8,16 @@ import { usePathname, useRouter } from 'next/navigation'
 import { cookies } from 'next/headers'
 import { setCookie } from 'cookies-next';
 
-import User from "@/models/user";
+import User from "@/models/googleUser";
 import { connectToMongo } from "@/utils/mongo";
 import { NextResponse } from "next/server";
-
+import { googleUserInterface } from '@/lib/interfaces';
 // console.log("hererrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
-interface user_insert {
-  name: string;
-  email: string;
-  profile_pic: string;
-}
+// interface user_insert {
+//   name: string;
+//   email: string;
+//   profilePic: string;
+// }
 
 const handler = NextAuth({
   providers: [
@@ -54,10 +54,10 @@ const handler = NextAuth({
         const checkEmail = await User.find({ email: user.email })
 
         if (checkEmail.length == 0) {
-          const data_to_insert: user_insert = {
+          const data_to_insert: googleUserInterface = {
             name: user.name!,
             email: user.email!,
-            profile_pic: user.image!,
+            profilePic: user.image!,
           }
 
           await User.insertMany(data_to_insert)
