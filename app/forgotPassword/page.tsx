@@ -116,8 +116,8 @@ const SignupPage = () => {
 
             <ReCAPTCHA
               sitekey={`${process.env.NEXT_PUBLIC_REACT_APP_RECAPTCHA}`}
-              onChange={(value: boolean) => setCaptchaValue(value)}
-              domain="ecommerce-both-frontend.onrender.com"
+              onChange={(value: any) => setCaptchaValue(value)}
+              // domain="ecommerce-both-frontend.onrender.com"
             />
 
             <input
