@@ -29,7 +29,7 @@ export default function Home() {
   //   e.preventDefault();
 
   //   try {
-  //     const API_KEY = 'sk-proj-FewpZnRxNmGULnPLeadnT3BlbkFJoD6s6udVxQfHC57aaKRC'; // Replace with your actual key (store securely)
+  //     const API_KEY = ''; // Replace with your actual key (store securely)
   //     const url = 'https://api.openai.com/v1/completions';
 
   //     const aidata = {
@@ -60,7 +60,7 @@ export default function Home() {
   // };
 
 
-// const openai = new OpenAI( { apiKey: 'sk-proj-FewpZnRxNmGULnPLeadnT3BlbkFJoD6s6udVxQfHC57aaKRC' } );
+// const openai = new OpenAI( { apiKey: '' } );
 
 // openai.chat.completions.create({ 
 //     model: "gpt-3.5-turbo",
