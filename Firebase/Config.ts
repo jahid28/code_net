@@ -5,19 +5,14 @@ import { initializeApp } from "firebase/app";
 import {getStorage} from 'firebase/storage'
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDtGmKUoypEPSsqQPZoJ-fvi1ZIfACMSVo",
-  authDomain: "codenet-9a617.firebaseapp.com",
-  projectId: "codenet-9a617",
-  storageBucket: "codenet-9a617.appspot.com",
-  messagingSenderId: "197135389081",
-  appId: "1:197135389081:web:43f2c310e5e0910ed7c308"
+  
+  apiKey: process.env.NEXT_PUBLIC_apiKey,
+    authDomain: process.env.NEXT_PUBLIC_authDomain,
+    projectId: process.env.NEXT_PUBLIC_projectId,
+    storageBucket: process.env.NEXT_PUBLIC_storageBucket,
+    messagingSenderId:process.env.NEXT_PUBLIC_messagingSenderId,
+    appId: process.env.NEXT_PUBLIC_appId
 };
-// apiKey: process.env.apiKey,
-//   authDomain: process.env.authDomain,
-//   projectId: process.env.projectId,
-//   storageBucket: process.env.storageBucket,
-//   messagingSenderId:process.env.messagingSenderId,
-//   appId: process.env.appId
 
 const app = initializeApp(firebaseConfig);
 export const imageDb=getStorage(app)
