@@ -11,15 +11,26 @@ import { GoHomeFill } from "react-icons/go";
 import { signIn, signOut, useSession, getProviders } from "next-auth/react";
 import Image from "next/image";
 import { NextRequest, NextResponse } from "next/server";
-import { getCookie } from "cookies-next";
 import { CgProfile } from "react-icons/cg";
 import Link from "next/link";
 import lottie from "lottie-web";
 import { defineElement } from "@lordicon/element";
 import { Player } from "@lordicon/react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { deleteCookie, getCookie, setCookie } from "cookies-next";
+import { useRouter } from "next/navigation";
+
 // useRef
 const Navbar = () => {
   // defineElement(lottie.loadAnimation);
+  const router = useRouter();
 
   const playerRefHome = useRef<Player>(null);
   const playerRefSearch = useRef<Player>(null);
@@ -42,6 +53,7 @@ const Navbar = () => {
 
   const [isEmail, setIsEmail] = useState<boolean>(false);
   const [profilePic, setprofilePic] = useState<string | undefined>("");
+  const [userName, setUserName] = useState<string>("");
   // const [profilePic, setprofilePic] = useState<string | undefined>(undefined);
 
   // let res=NextResponse.next()
@@ -49,13 +61,23 @@ const Navbar = () => {
     // console.log("hahah")
     const pic = getCookie("profilePic");
     setprofilePic(pic);
-
-    if (getCookie("email") != undefined) {
+    if (pic == undefined) {
+      setprofilePic(process.env.NEXT_PUBLIC_DEFAULT_PROFILE_PIC);
+    }
+    const userNameExist = getCookie("userName");
+    if (userNameExist != undefined) {
       setIsEmail(true);
+      setUserName(userNameExist);
     }
   }, []);
 
-  console.log("now");
+  function logout() {
+    deleteCookie("userName");
+    deleteCookie("profilePic");
+    router.replace("/login");
+  }
+
+  // console.log("now");
 
   // if(profilePic==undefined){
   //   // console.log("und")
@@ -126,15 +148,34 @@ const Navbar = () => {
         </div>
 
         {isEmail ? (
-          <Link className="ml-auto md:ml-4" href={"/account"}>
-            <Image
-              className="rounded-full  mr-4 cursor-pointer"
-              src={`${profilePic}`}
-              width={40}
-              height={40}
-              alt="profilePic"
-            />
-          </Link>
+          <div className="ml-4">
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <Image
+                  className="rounded-full  mr-4 cursor-pointer"
+                  src={`${profilePic}`}
+                  width={40}
+                  height={40}
+                  alt="profilePic"
+                />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                {/* <DropdownMenuLabel>My Account</DropdownMenuLabel> */}
+                <Link href={`/account/${userName}`} className="cursor-pointer">
+                  <DropdownMenuItem>Profile</DropdownMenuItem>
+                </Link>
+                <DropdownMenuSeparator />
+                <p
+                  onClick={() => {
+                    signOut();
+                    logout();
+                  }}
+                >
+                  <DropdownMenuItem>Logout</DropdownMenuItem>
+                </p>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         ) : (
           <div className="text-red-500 ml-auto md:ml-4 cursor-pointer text-xl font-bold inp-border p-1 mr-4 hover:bg-color">
             <Link href={"/login"}>Login</Link>
@@ -142,11 +183,9 @@ const Navbar = () => {
         )}
       </nav>
 
-
       {/* For mobile */}
 
       <div className="flex justify-between text-5xl p-2 w-full md:hidden text-color bg-color fixed bottom-0 z-20">
-        
         <div className="w-1/4 grid place-items-center border-red-500 border-2">
           <div
             className="cursor-pointer ml-2 border-red-500 border-2"
@@ -210,7 +249,6 @@ const Navbar = () => {
             />
           </div>
         </div>
-
       </div>
     </div>
   );

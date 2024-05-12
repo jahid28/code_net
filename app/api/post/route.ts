@@ -1,41 +1,45 @@
 import { connectToMongo } from "@/utils/mongo";
-import normalUser from "@/models/normalUser";
+// import normalUser from "@/models/normalUser";
+import post from "@/models/post";
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import bcrypt from 'bcrypt'
-import { Resend } from "resend"
-import { revalidatePath } from "next/cache";
-import { normalUserInterface } from "@/lib/interfaces";
+// import bcrypt from 'bcrypt'
+// import { Resend } from "resend"
+// import { revalidatePath } from "next/cache";
+// import { normalUserInterface } from "@/lib/interfaces";
+import { postInterface } from "@/lib/interfaces";
 
 export async function POST(req: NextRequest) {
     try {
-        const  res = await req.json();
-        const email=res.data.email
-        const password=res.data.password
+        let  {codeType,msg,code,lang,imagesForMongoDB} = await req.json();
+        // const email=res.data.email
+        // const password=res.data.password
         // console.log("00000000000000000 ",data)
         // const { email, password } = await req.json();
+        if(code==""){
+code=" "
+        }
+
+        const postDetails=<postInterface>{
+            codeType,
+            msg,
+            code,
+            lang,
+            imagesForMongoDB,
+            date:new Date(),
+            likes:0,
+            commentsNum:0,
+            comments:[{user:"jk",comment:"great post"}]
+        }
+
+        console.log("yoyo ",postDetails)
 
         await connectToMongo()
 
-        const check = await normalUser.find({ email })
+       
+        await post.insertMany([postDetails])
 
-        if (check.length <= 0) {
-            return NextResponse.json({ success: false, msg: "Email is not registered" }, { status: 400 })
-
-        }
-
-        const compare = await bcrypt.compare(password, check[0].password);
-
-        if (compare) {
-            cookies().set('userName', `${email}`, { maxAge: 60 * 60 * 24 })
-            cookies().set('profilePic', `${check[0].profilePic}`, { maxAge: 60 * 60 * 24 })
-            return NextResponse.json({ success: true, msg: "Successfully logged in" }, { status: 201 })
-
-        }
-        else {
-            return NextResponse.json({ success: false, msg: "Invalid credentials" }, { status: 201 })
-        }
-
+        return NextResponse.json({ success: true, msg: "Successfully posted" }, { status: 200 })
 
 
     } catch (error) {

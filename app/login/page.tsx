@@ -29,7 +29,7 @@ const LoginPage = () => {
   //     return null; // Prevent rendering while redirecting
   //   }
   useEffect(() => {
-    if (getCookie("email") != undefined) {
+    if (getCookie("userName") != undefined) {
       router.replace("/");
       // router.refresh()
     }

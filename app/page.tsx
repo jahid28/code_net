@@ -13,22 +13,20 @@ export default function Home() {
 
   const [c, setC] = useState<string | undefined>("nope");
   useEffect(() => {
-    const val = getCookie("email");
+    const val = getCookie("userName");
     setC(val);
-    console.log(val);
   }, []);
 
-  console.log("hello")
-
-  
 
   return (
     <>
     <div className="mt-20">
 
-    
+   
     </div>
-     <PostBox/>
+    <div className="fixed bottom-24 right-8 md:bottom-6 md:right-8">
+    <PostBox/>
+    </div>
       <div className="bg-color text-color mt-28">{c}</div>
     </>
   );

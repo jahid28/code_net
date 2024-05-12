@@ -16,14 +16,14 @@ const page = () => {
   // }
 
   useEffect(()=>{
-    if(getCookie("email")==undefined){
+    if(getCookie("userName")==undefined){
     router.replace("/login")
     }
   },[])
 
   function logout(){
 // signOut()
-deleteCookie("email")
+deleteCookie("userName")
 deleteCookie("profilePic")
 // deleteCookie("next-auth.session-token")
 // setCookie("next-auth.callback-url","http%3A%2F%2Flocalhost%3A3000%2Faccount")
@@ -35,11 +35,12 @@ deleteCookie("profilePic")
   return (
     <div>
       {/* <Link onClick={()=>{}} href={"login"}> */}
-<button onClick={()=>{signOut()
+{/* <button onClick={()=>{signOut()
   logout()
 }} className="w-full mt-20 cursor-pointer text-white bg-red-500 border-0 py-2 px-6 focus:outline-none hover:bg-red-600 rounded text-lg">
 Submit
-</button>
+</button> */}
+<p>Account</p>
       {/* </Link> */}
     </div>
   )

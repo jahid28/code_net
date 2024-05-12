@@ -11,16 +11,24 @@ import { toast } from "sonner";
 import Link from "next/link";
 import { getCookie } from "cookies-next";
 import ReCAPTCHA from "react-google-recaptcha";
-import {z} from "zod"
+import { z } from "zod";
 import ClipLoader from "react-spinners/ClipLoader";
 
-
-const signupSchema=z.object({
-  name:z.string().trim().min(2,{message:"Name must be atleast 2 characters long."}),
-  email:z.string().email({message:"Enter a zod email"}).trim(),
-  password:z.string().trim().min(4,{message:"Password must be atleast 4 characters long."})
-})
-
+const signupSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(1, { message: "Name must be atleast 1 character long." }),
+    email: z.string().email({ message: "Enter a zod email" }).trim(),
+    password: z
+    .string()
+    .trim()
+    .min(4, { message: "Password must be atleast 4 characters long." }),
+    userName: z
+      .string()
+      .trim()
+      .min(2, { message: "User Name must be atleast 2 characters long." }),
+});
 
 // getCookie
 // import ReCAPTCHA from "react-google-recaptcha";
@@ -28,13 +36,14 @@ interface formInter {
   email: string;
   password: string;
   name: string;
+  userName: string;
 }
 const SignupPage = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (getCookie("email") != undefined) {
+    if (getCookie("userName") != undefined) {
       router.replace("/");
       // router.refresh()
     }
@@ -51,6 +60,7 @@ const SignupPage = () => {
     email: "",
     password: "",
     name: "",
+    userName: "",
   });
   async function submit(e: any) {
     e.preventDefault();
@@ -59,24 +69,25 @@ const SignupPage = () => {
         toast.error("Fill the captcha");
         return;
       }
-      const signupDetails={
-        name:formData.name,
+      const signupDetails = {
+        name: formData.name,
         email: formData.email,
         password: formData.password,
-      }
-      const result=signupSchema.safeParse(signupDetails)
-      if(!result.success){
-        let errorMsg=""
-        result.error.issues.forEach((i)=>{
-          errorMsg+=i.path[0]+" : " + i.message + ". "
-        })
-        toast.error(errorMsg)
-        return
+        userName: formData.userName,
+      };
+      const result = signupSchema.safeParse(signupDetails);
+      if (!result.success) {
+        let errorMsg = "";
+        result.error.issues.forEach((i) => {
+          errorMsg += i.path[0] + " : " + i.message + ". ";
+        });
+        toast.error(errorMsg);
+        return;
       }
       // console.log(formData.email)
       // console.log(formData.password)
       // console.log(formData.name)
-      setLoading(true)
+      setLoading(true);
       const response = await fetch("/api/normalSignup", {
         method: "POST",
         headers: {
@@ -89,16 +100,17 @@ const SignupPage = () => {
       if (data.success == true) {
         toast.success(data.msg);
         window.location.reload();
+        setFormData({ email: "", password: "", name: "", userName: "" });
       } else {
         toast.error(data.msg);
       }
-      setLoading(false)
+      setLoading(false);
       
-      setFormData({ email: "", password: "", name: "" });
       // console.log("data in client is ", data);
     } catch (error) {
       toast.error("Something went wrong!");
-      setLoading(false)
+      setFormData({ email: "", password: "", name: "", userName: "" });
+      setLoading(false);
     }
   }
 
@@ -115,8 +127,13 @@ const SignupPage = () => {
   // }
 
   return (
-    <div className="h-[112vh] bg-color grid place-items-center">
-              <ClipLoader className="absolute top-[45vh] z-30" color="#e94154" loading={loading} size={100}/>
+    <div className="h-[124vh] bg-color grid place-items-center">
+      <ClipLoader
+        className="absolute top-[45vh] z-30"
+        color="#e94154"
+        loading={loading}
+        size={100}
+      />
 
       {/* <section className="text-gray-600 body-font grid place-items-center  relative  "> */}
       <div className="w-[90vw] md:w-[50vw] lg:w-[30vw] bg-dark-color text-color rounded-lg p-8 mt-20  relative z-10 shadow-md">
@@ -125,7 +142,7 @@ const SignupPage = () => {
         <form action="" onSubmit={submit}>
           <div className=" mb-4">
             <label htmlFor="email" className="leading-7 text-sm">
-              Name
+              Your Name
             </label>
             <input
               value={formData.name}
@@ -179,6 +196,26 @@ const SignupPage = () => {
               type="password"
               id="password"
               name="password"
+              className="w-full bg-white rounded border border-gray-300 focus:border-neutral-400 focus:ring-2 focus:ring-neutral-400 text-base outline-none text-black py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+            />
+          </div>
+
+          <div className=" mb-4">
+            <label htmlFor="userName" className="leading-7 text-sm">
+              User Name
+            </label>
+            <input
+              value={formData.userName}
+              onChange={(event) =>
+                setFormData({
+                  ...formData,
+                  [event.target.name]: event.target.value,
+                })
+              }
+              required
+              type="text"
+              id="userName"
+              name="userName"
               className="w-full bg-white rounded border border-gray-300 focus:border-neutral-400 focus:ring-2 focus:ring-neutral-400 text-base outline-none text-black py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
             />
           </div>

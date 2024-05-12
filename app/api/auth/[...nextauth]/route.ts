@@ -45,9 +45,9 @@ const handler = NextAuth({
       try {
 
         // const oneDay = 24 * 60 * 60 * 1000
-        cookies().set('email', `${user.email}`,{ maxAge: 60*60*24 })
+        cookies().set('userName', `${user.email}`,{ maxAge: 60*60*24 })
         cookies().set('profilePic', `${user.image}`,{ maxAge: 60*60*24 })
-// cookies().delete('email')
+// cookies().delete('userName')
 // cookies().delete('profilePic')
 
         await connectToMongo();
