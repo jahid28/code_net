@@ -15,11 +15,11 @@ const page = () => {
   //   router.replace("/login");
   // }
 
-  useEffect(()=>{
-    if(getCookie("userName")==undefined){
-    router.replace("/login")
-    }
-  },[])
+  // useEffect(()=>{
+  //   if(getCookie("userName")==undefined){
+  //   router.replace("/login")
+  //   }
+  // },[])
 
   function logout(){
 // signOut()

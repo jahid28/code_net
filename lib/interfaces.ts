@@ -4,10 +4,11 @@ export interface normalUserInterface {
     email: string;
     profilePic:string,
     password:string
-}
-
-export interface googleUserInterface {
+  }
+  
+  export interface googleUserInterface {
     name: string;
+    userName: string;
     email: string;
     profilePic:string
   }
@@ -17,6 +18,7 @@ interface commentInterface{
     comment:string
 }
 export interface postInterface {
+  userName:string,
     codeType: string;
     msg: string;
     code:string;

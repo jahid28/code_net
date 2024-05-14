@@ -8,14 +8,14 @@ const page = ({params}:{params:any}) => {
   const router = useRouter();
   const [userName, setUserName] = useState<string>("");
 
-  useEffect(() => {
-    let name = getCookie("userName");
-    if (name == undefined) {
-      router.replace("/login");
-      return;
-    }
-    setUserName(name!);
-  }, []);
+  // useEffect(() => {
+  //   let name = getCookie("userName");
+  //   if (name == undefined) {
+  //     router.replace("/login");
+  //     return;
+  //   }
+  //   setUserName(name!);
+  // }, []);
 
   function logout() {
     // signOut()
@@ -39,7 +39,7 @@ const page = ({params}:{params:any}) => {
         >
         Logout
       </button> */}
-          <p>Hi {params.userName}</p>
+          <p className="mt-20">Hi {params.userName}</p>
       {/* </Link> */}
     </div>
   );

@@ -44,10 +44,6 @@ const Navbar = () => {
   const noti = require("@/icons/noti.json");
   const setting = require("@/icons/setting.json");
 
-  // useEffect(() => {
-  //     playerRef.current?.playFromBeginning();
-  // }, [])
-
   // const [mode, setMode] = useState<string>("darkmode");
   document.body.className = "darkmode";
 
@@ -58,7 +54,6 @@ const Navbar = () => {
 
   // let res=NextResponse.next()
   useEffect(() => {
-    // console.log("hahah")
     const pic = getCookie("profilePic");
     setprofilePic(pic);
     if (pic == undefined) {
@@ -71,37 +66,16 @@ const Navbar = () => {
     }
   }, []);
 
+
   function logout() {
-    deleteCookie("userName");
-    deleteCookie("profilePic");
-    router.replace("/login");
+    const res = confirm("Are you sure you want to logout?");
+    if (res) {
+      signOut();
+      deleteCookie("userName");
+      deleteCookie("profilePic");
+    }
   }
 
-  // console.log("now");
-
-  // if(profilePic==undefined){
-  //   // console.log("und")
-  //   profilePic='https://t4.ftcdn.net/jpg/02/15/84/43/240_F_215844325_ttX9YiIIyeaR7Ne6EaLLjMAmy4GvPC69.jpg'
-  // }
-
-  // setInterval(()=>{
-  //   console.log("pis is ",profilePic)
-  // },200)
-
-  // setprofilePic(pp)
-  // useEffect(()=>{
-
-  //   if (profilePic != undefined) {
-  //     setIsProfilePic(false);
-  //     clg
-  //   }
-  // },[])
-  // console.log("gg ", profilePic);
-  //   const inter = Roboto({ subsets: ["latin"], weight: ["100", "300", "700"] });
-
-  // useEffect(() => {
-  // document.body.className = mode;
-  // }, [mode]);
   return (
     <div className="fixed top-0 w-[100vw] z-50">
       <nav className="bg-dark-color flex p-2 w-full ">
@@ -167,7 +141,6 @@ const Navbar = () => {
                 <DropdownMenuSeparator />
                 <p
                   onClick={() => {
-                    signOut();
                     logout();
                   }}
                 >

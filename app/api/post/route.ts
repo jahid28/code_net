@@ -11,32 +11,34 @@ import { postInterface } from "@/lib/interfaces";
 
 export async function POST(req: NextRequest) {
     try {
-        let  {codeType,msg,code,lang,imagesForMongoDB} = await req.json();
+        let { codeType, msg, code, lang, imagesForMongoDB } = await req.json();
         // const email=res.data.email
         // const password=res.data.password
         // console.log("00000000000000000 ",data)
         // const { email, password } = await req.json();
-        if(code==""){
-code=" "
+        if (code == "") {
+            code = " "
         }
 
-        const postDetails=<postInterface>{
+        const userName = req.cookies.get("userName")
+
+        const postDetails: postInterface = {
+            userName: userName?.value!,
             codeType,
             msg,
             code,
             lang,
             imagesForMongoDB,
-            date:new Date(),
-            likes:0,
-            commentsNum:0,
-            comments:[{user:"jk",comment:"great post"}]
+            date: new Date(),
+            likes: 0,
+            commentsNum: 0,
+            comments: [{ user: "jk", comment: "great post" }]
         }
 
-        console.log("yoyo ",postDetails)
 
         await connectToMongo()
 
-       
+
         await post.insertMany([postDetails])
 
         return NextResponse.json({ success: true, msg: "Successfully posted" }, { status: 200 })

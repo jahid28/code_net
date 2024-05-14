@@ -9,7 +9,7 @@ import { json } from "node:stream/consumers";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Link from "next/link";
-import { getCookie } from "cookies-next";
+// import { getCookie } from "cookies-next";
 import ReCAPTCHA from "react-google-recaptcha";
 import { z } from "zod";
 import ClipLoader from "react-spinners/ClipLoader";
@@ -19,15 +19,15 @@ const signupSchema = z.object({
     .string()
     .trim()
     .min(1, { message: "Name must be atleast 1 character long." }),
-    email: z.string().email({ message: "Enter a zod email" }).trim(),
-    password: z
+  email: z.string().email({ message: "Enter a zod email" }).trim(),
+  password: z
     .string()
     .trim()
     .min(4, { message: "Password must be atleast 4 characters long." }),
-    userName: z
-      .string()
-      .trim()
-      .min(2, { message: "User Name must be atleast 2 characters long." }),
+  userName: z
+    .string()
+    .trim()
+    .min(2, { message: "User Name must be atleast 2 characters long." }),
 });
 
 // getCookie
@@ -42,12 +42,12 @@ const SignupPage = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (getCookie("userName") != undefined) {
-      router.replace("/");
-      // router.refresh()
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (getCookie("userName") != undefined) {
+  //     router.replace("/");
+  //     // router.refresh()
+  //   }
+  // }, []);
   //   const { data: session } = useSession();
   //   if (session) {
   //     router.replace("/userPage");
@@ -62,6 +62,7 @@ const SignupPage = () => {
     name: "",
     userName: "",
   });
+
   async function submit(e: any) {
     e.preventDefault();
     try {
@@ -84,10 +85,24 @@ const SignupPage = () => {
         toast.error(errorMsg);
         return;
       }
-      // console.log(formData.email)
-      // console.log(formData.password)
-      // console.log(formData.name)
-      setLoading(true);
+      setLoading(true)
+
+      // const userNameResponse = await fetch("/api/checkUserName", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-type": "application/json",
+      //   },
+      //   body: JSON.stringify({ userName: formData.userName }),
+      // });
+      // const userNameData = await userNameResponse.json();
+
+      //   if (userNameData.success == false) {
+      //     toast.error(userNameData.msg);
+      //     setLoading(false)
+      //     return
+      //   }
+
+
       const response = await fetch("/api/normalSignup", {
         method: "POST",
         headers: {
@@ -99,13 +114,15 @@ const SignupPage = () => {
       const data = await response.json();
       if (data.success == true) {
         toast.success(data.msg);
-        window.location.reload();
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
         setFormData({ email: "", password: "", name: "", userName: "" });
       } else {
         toast.error(data.msg);
       }
       setLoading(false);
-      
+
       // console.log("data in client is ", data);
     } catch (error) {
       toast.error("Something went wrong!");
@@ -124,6 +141,61 @@ const SignupPage = () => {
   //     toast.error("Something went wrong!")
 
   //   }
+  // }
+  // async function googleSignup() {
+  //   try {
+  //     if (formData.userName.length < 2) {
+  //       toast.error("Please enter a User Name of min 2 chars to continue");
+  //       return;
+  //     }
+  //     const response = await fetch("/api/checkUserName", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-type": "application/json",
+  //       },
+  //       body: JSON.stringify({ userName: formData.userName }),
+  //     });
+  //     const data = await response.json();
+  //     if (data.success == true) {
+  //       //  const res=await signIn("google")
+
+  //       const response = await signIn("google");
+  //       // const data = await response.json();
+
+  //       console.log("response is", response);
+
+  //       setFormData({ email: "", password: "", name: "", userName: "" });
+  //     } else {
+  //       toast.error(data.msg);
+  //     }
+  //   } catch (error: any) {
+  //     toast.error(error);
+  //   }
+  // }
+
+  // async function githubSignup() {
+  //   if (formData.userName.length < 2) {
+  //     toast.error("Please enter a User Name of min 2 chars to continue");
+  //     return;
+  //   }
+  //   const response = await fetch("/api/checkUserName", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-type": "application/json",
+  //     },
+  //     body: JSON.stringify({ userName: formData.userName }),
+  //   });
+  //   // console.log("insertetd")
+  //   const data = await response.json();
+  //   if (data.success == true) {
+  //     signIn("github");
+  //     // toast.success(data.msg);
+  //     // window.location.reload();
+  //     setFormData({ email: "", password: "", name: "", userName: "" });
+  //   } else {
+  //     toast.error(data.msg);
+  //   }
+  //   // const data = await response.json();
   // }
 
   return (

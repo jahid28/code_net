@@ -9,7 +9,7 @@ import { json } from "node:stream/consumers";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Link from "next/link";
-import { getCookie } from "cookies-next";
+// import { getCookie } from "cookies-next";
 import ReCAPTCHA from "react-google-recaptcha";
 import {z} from "zod"
 import ClipLoader from "react-spinners/ClipLoader";
@@ -28,12 +28,12 @@ const LoginPage = () => {
   //     router.replace("/userPage");
   //     return null; // Prevent rendering while redirecting
   //   }
-  useEffect(() => {
-    if (getCookie("userName") != undefined) {
-      router.replace("/");
-      // router.refresh()
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (getCookie("userName") != undefined) {
+  //     router.replace("/");
+  //     // router.refresh()
+  //   }
+  // }, []);
 
   const [captchaValue, setCaptchaValue] = useState(false);
 
@@ -77,7 +77,9 @@ const LoginPage = () => {
       const data = await response.json();
       if (data.success == true) {
         toast.success(data.msg);
-        window.location.reload();
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
         // router.replace("/")
       } else {
         toast.error(data.msg);

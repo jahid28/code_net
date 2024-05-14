@@ -79,7 +79,7 @@ const PostBox = () => {
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files!;
     if (files.length > 4) {
-      toast.error("max 4 images are allowed");
+      toast.error("Max 4 images are allowed");
       return;
     }
     const imagesArray: any[] = [];
@@ -125,24 +125,24 @@ const PostBox = () => {
         setLoading(false);
         return;
       }
-
+      
       let imagesForMongoDB: string[] = [];
-
+      
       if (imagesToUload.length > 0) {
         for (const e of imagesToUload) {
           // imagesToUload.forEach(async (e) => {
-          const imgRef = ref(imageDb, `postimages/${v4()}`);
-          await uploadBytes(imgRef, e)
+            const imgRef = ref(imageDb, `postimages/${v4()}`);
+            await uploadBytes(imgRef, e)
             .then(() => {
               // console.log("doneeeeee");
             })
             .catch((e) => {
+              setLoading(false);
               toast.error("Some error ocurred while uploading images.");
               return;
               // console.log("oooooops");
             });
           const url = await getDownloadURL(imgRef);
-          console.log("url is ", url);
           // setImagesForMongoDB([...imagesForMongoDB, url]);
           imagesForMongoDB.push(url);
         }
@@ -152,7 +152,6 @@ const PostBox = () => {
       // setTimeout(() => {
       // console.log("after url ",imagesForMongoDB);
       // for(let e of imagesForMongoDB){
-      console.log("finally ", imagesForMongoDB);
       // }
       // }, 5000);
 

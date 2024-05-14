@@ -6,6 +6,7 @@ import bcrypt from 'bcrypt'
 import { Resend } from "resend"
 import { revalidatePath } from "next/cache";
 import { normalUserInterface } from "@/lib/interfaces";
+import googleUser from "@/models/googleUser";
 
 export async function POST(req: NextRequest) {
     try {
@@ -24,7 +25,8 @@ export async function POST(req: NextRequest) {
         }
 
         const checkUserName = await normalUser.find({ userName })
-        if (checkUserName.length > 0) {
+        const checkUserName2 = await googleUser.find({ userName })
+        if (checkUserName.length > 0 || checkUserName2.length>0) {
             return NextResponse.json({ success: false, msg: "User name already taken." }, { status: 400 })
         }
 

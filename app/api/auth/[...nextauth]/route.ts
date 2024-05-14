@@ -6,11 +6,11 @@ import GithubProvider from 'next-auth/providers/github';
 import { usePathname, useRouter } from 'next/navigation'
 
 import { cookies } from 'next/headers'
-import { setCookie } from 'cookies-next';
+// import { setCookie } from 'cookies-next';
 
 import User from "@/models/googleUser";
 import { connectToMongo } from "@/utils/mongo";
-import { NextResponse } from "next/server";
+// import { NextResponse } from "next/server";
 import { googleUserInterface } from '@/lib/interfaces';
 // console.log("hererrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
 // interface user_insert {
@@ -45,25 +45,53 @@ const handler = NextAuth({
       try {
 
         // const oneDay = 24 * 60 * 60 * 1000
-        cookies().set('userName', `${user.email}`,{ maxAge: 60*60*24 })
-        cookies().set('profilePic', `${user.image}`,{ maxAge: 60*60*24 })
-// cookies().delete('userName')
-// cookies().delete('profilePic')
+       // cookies().delete('userName')
+        // cookies().delete('profilePic')
+
+          let randomUserName = '';
+          const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+          const charactersLength = characters.length;
+          
+          for (let i = 0; i < 6; i++) {
+            randomUserName += characters.charAt(Math.floor(Math.random() * charactersLength));
+          }
+        
 
         await connectToMongo();
+
+
         const checkEmail = await User.find({ email: user.email })
+        const checkUserName = await User.find({ userName: randomUserName })
+
+        if(checkUserName.length>0){
+          for (let i = 0; i < 10; i++) {
+            randomUserName += characters.charAt(Math.floor(Math.random() * charactersLength));
+          }
+        }
+
+
+        // const userName = cookies().get('userName')
+        // console.log("ggo name is ", userName?.value)
+
+
 
         if (checkEmail.length == 0) {
           const data_to_insert: googleUserInterface = {
             name: user.name!,
+            userName: randomUserName,
             email: user.email!,
             profilePic: user.image!,
           }
-
-          await User.insertMany(data_to_insert)
+         
+          await User.insertMany([data_to_insert])
 
         }
+        else{
+          randomUserName=checkEmail[0].userName
+        }
 
+        cookies().set('userName', `${randomUserName}`, { maxAge: 60 * 60 * 24 })
+        cookies().set('profilePic', `${user.image}`, { maxAge: 60 * 60 * 24 })
 
         return true
       }

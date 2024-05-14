@@ -12,6 +12,7 @@ const collectionName:string="GoogleUser"
 // User schema with type safety
 const UserSchema = new Schema({
   name: { type: String, required: true },
+  userName: { type: String, required: true },
   email: { type: String, required: true}, 
   profilePic:{type:String, required:true}
 })
