@@ -95,12 +95,12 @@ const LoginPage = () => {
   }
 
   return (
-    <div className="h-[110vh] bg-color grid place-items-center">
+    <div className="grid place-items-center">
     {/* <div className='h-[100vh] z-50 w-[97vw] absolute top-0 grid place-items-center'> */}
         <ClipLoader className="absolute top-[45vh] z-30" color="#e94154" loading={loading} size={100}/>
     {/* </div> */}
       {/* <section className="border-red-400 border-2 text-gray-600 body-font grid place-items-center  relative  "> */}
-      <div className="w-[90vw] md:w-[50vw] lg:w-[30vw] bg-dark-color text-color rounded-lg p-8 mt-24  relative z-10 shadow-md">
+      <div className="w-[90vw] md:w-[50vw] lg:w-[30vw] bg-dark-color text-color rounded-lg p-8 mt-24 mb-10 relative z-10 shadow-md">
         <h2 className=" text-2xl mb-5 font-medium">Login</h2>
 
         <form action="" onSubmit={submit}>

@@ -8,6 +8,8 @@ import { cookies } from "next/headers";
 // import { revalidatePath } from "next/cache";
 // import { normalUserInterface } from "@/lib/interfaces";
 import { postInterface } from "@/lib/interfaces";
+import normalUser from "@/models/normalUser";
+import googleUser from "@/models/googleUser";
 
 export async function POST(req: NextRequest) {
     try {
@@ -20,19 +22,60 @@ export async function POST(req: NextRequest) {
             code = " "
         }
 
-        const userName = req.cookies.get("userName")
+        const userName =  req.cookies.get("userName")
+        const name =  req.cookies.get("name")
+        const profilePic =  req.cookies.get("profilePic")
+        if(userName===undefined || name===undefined || profilePic ===undefined){
+            return NextResponse.json({ success: false, msg: "User donot exist!" }, { status: 400 })
+        }
+        const checkUser=await normalUser.find({userName:userName?.value!})
+        const checkUser2=await googleUser.find({userName:userName?.value!})
+        if(checkUser.length===0 && checkUser2.length===0){
+            return NextResponse.json({ success: false, msg: "User donot exist!" }, { status: 400 })
+        }
+        // console.log("uName is ",userName)
+        // var getUserInfo=await normalUser.find({userName:userName?.value!})
+        // console.log("info1 is ",getUserInfo)
+        // if(getUserInfo.length===0){
+        //     getUserInfo=await googleUser.find({userName:userName?.value!})
+        //     if(getUserInfo.length===0){
+        //         return NextResponse.json({ success: false, msg: "User doesnot exist!" }, { status: 400 })
+
+        //     }
+        // }
+
+        // console.log("info is ",getUserInfo)
+
+
+
 
         const postDetails: postInterface = {
             userName: userName?.value!,
+            name:name?.value!,
+            profilePic:profilePic?.value!,
+            // name:getUserInfo[0].name,
+            // profilePic:getUserInfo[0].profilePic,
             codeType,
             msg,
             code,
             lang,
             imagesForMongoDB,
             date: new Date(),
-            likes: 0,
-            commentsNum: 0,
-            comments: [{ user: "jk", comment: "great post" }]
+            // likes: 0,
+            likedBy: [],
+            // commentsNum: 0,
+            comments: [{
+                name: name?.value!,
+                user: userName?.value!,
+                profilePic: profilePic?.value!,
+                comment: "this is a comment"
+            }, {
+                name: name?.value!,
+                user: userName?.value!,
+                profilePic: profilePic?.value!,
+                comment: "this is a 2nd comment"
+            }
+        ]
         }
 
 
@@ -45,7 +88,7 @@ export async function POST(req: NextRequest) {
 
 
     } catch (error) {
-        // console.log(error)
+        console.log("oooooooooooo ",error )
         return NextResponse.json({ success: false, msg: "Something went wrong!" }, { status: 400 })
     }
 }

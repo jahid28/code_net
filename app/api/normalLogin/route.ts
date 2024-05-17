@@ -27,8 +27,9 @@ export async function POST(req: NextRequest) {
         const compare = await bcrypt.compare(password, check[0].password);
 
         if (compare) {
-            cookies().set('userName', `${check[0].userName}`, { maxAge: 60 * 60 * 24 })
-            cookies().set('profilePic', `${check[0].profilePic}`, { maxAge: 60 * 60 * 24 })
+            cookies().set('userName', `${check[0].userName}`, { maxAge: 60 * 60 * 24,priority:"high",secure:true, })
+            cookies().set('name', `${check[0].name}`,{ maxAge: 60 * 60 * 24 })
+            cookies().set('profilePic', `${check[0].profilePic}`,{ maxAge: 60 * 60 * 24 })
             return NextResponse.json({ success: true, msg: "Successfully logged in" }, { status: 201 })
 
         }

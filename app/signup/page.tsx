@@ -199,7 +199,7 @@ const SignupPage = () => {
   // }
 
   return (
-    <div className="h-[124vh] bg-color grid place-items-center">
+    <div className="grid place-items-center">
       <ClipLoader
         className="absolute top-[45vh] z-30"
         color="#e94154"
@@ -208,7 +208,7 @@ const SignupPage = () => {
       />
 
       {/* <section className="text-gray-600 body-font grid place-items-center  relative  "> */}
-      <div className="w-[90vw] md:w-[50vw] lg:w-[30vw] bg-dark-color text-color rounded-lg p-8 mt-20  relative z-10 shadow-md">
+      <div className="w-[90vw] md:w-[50vw] lg:w-[30vw] bg-dark-color text-color rounded-lg p-8 mt-20 mb-10 relative z-10 shadow-md">
         <h2 className=" text-2xl mb-5 font-medium">Signup</h2>
 
         <form action="" onSubmit={submit}>

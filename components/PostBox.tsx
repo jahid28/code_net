@@ -62,8 +62,8 @@ const PostBox = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const [lang, setLang] = useState<string>("javascript");
-  const [codeType, setCodeType] = useState<string>("randomFact");
+  const [lang, setLang] = useState<string>("Javascript");
+  const [codeType, setCodeType] = useState<string>("Random Fact");
   const [msg, setMsg] = useState<string>("");
   const [code, setCode] = useState<string>("");
   // const [imagesForMongoDB, setImagesForMongoDB] = useState<string[]>(["lol"]);
@@ -161,14 +161,13 @@ const PostBox = () => {
           "Content-type": "application/json",
         },
         body: JSON.stringify({ codeType, msg, code, lang, imagesForMongoDB }),
-      });
+      })
 
       const data = await response.json();
       if (data.success == true) {
         toast.success(data.msg);
-        // window.location.reload();
-        // router.replace("/")
       } else {
+        console.log("uuuuhhh")
         toast.error(data.msg);
       }
       setImages([]);
@@ -177,6 +176,7 @@ const PostBox = () => {
       setCode("");
       setLoading(false);
     } catch (error: any) {
+      console.log("boooooo")
       setLoading(false);
       toast.error(error);
     }
@@ -201,7 +201,7 @@ const PostBox = () => {
             checkEmail();
           }}
           className="flex cursor-pointer text-white bg-red-500 hover:bg-red-600 font-bold rounded-lg text-2xl p-2"
-          onMouseOver={() => playerRefCheck.current?.playFromBeginning()}
+          onMouseEnter={() => playerRefCheck.current?.playFromBeginning()}
         >
           Post
           <div className="ml-2">
@@ -233,9 +233,9 @@ const PostBox = () => {
                 </SelectTrigger>
                 <SelectContent>
                   {/* <div className="text-yellow-600 bg-green-400 border-blue-600"> */}
-                  <SelectItem value="randomFact">Random Fact</SelectItem>
-                  <SelectItem value="question">Question</SelectItem>
-                  <SelectItem value="codeToShare">Code to share</SelectItem>
+                  <SelectItem value="Random Fact">Random Fact</SelectItem>
+                  <SelectItem value="Question">Question</SelectItem>
+                  <SelectItem value="Code To Share">Code to share</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -273,7 +273,7 @@ const PostBox = () => {
                 id="userCode"
                 required
                 autoComplete="off"
-                placeholder="Write a code here"
+                placeholder="Write a code here (optional)"
                 onChange={(e) => {
                   setCode(e.target.value);
                 }}
@@ -290,14 +290,14 @@ const PostBox = () => {
                   </SelectTrigger>
                   <SelectContent>
                     {/* <div className="text-yellow-600 bg-green-400 border-blue-600"> */}
-                    <SelectItem value="html">HTML</SelectItem>
-                    <SelectItem value="css">CSS</SelectItem>
-                    <SelectItem value="javascript">Javascript</SelectItem>
-                    <SelectItem value="python">Python</SelectItem>
-                    <SelectItem value="cpp">CPP</SelectItem>
-                    <SelectItem value="c">C</SelectItem>
-                    <SelectItem value="java">Java</SelectItem>
-                    <SelectItem value="c#">C#</SelectItem>
+                    <SelectItem value="HTML">HTML</SelectItem>
+                    <SelectItem value="CSS">CSS</SelectItem>
+                    <SelectItem value="Javascript">Javascript</SelectItem>
+                    <SelectItem value="Python">Python</SelectItem>
+                    <SelectItem value="CPP">CPP</SelectItem>
+                    <SelectItem value="C">C</SelectItem>
+                    <SelectItem value="Java">Java</SelectItem>
+                    <SelectItem value="C#">C#</SelectItem>
                     {/* </div> */}
                   </SelectContent>
                 </Select>
@@ -358,7 +358,7 @@ const PostBox = () => {
                 onChange={handleImageChange}
               />
               <div
-                onMouseOver={() => playerRefUpload.current?.playFromBeginning()}
+                onMouseEnter={() => playerRefUpload.current?.playFromBeginning()}
                 onClick={inputClicked}
                 className=" w-fit cursor-pointer flex text-red-500"
               >
@@ -372,7 +372,7 @@ const PostBox = () => {
               </div>
 
               <div
-                onMouseOver={() => playerRefArrow.current?.playFromBeginning()}
+                onMouseEnter={() => playerRefArrow.current?.playFromBeginning()}
                 onClick={() => {
                   submit();
                 }}

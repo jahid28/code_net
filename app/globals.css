@@ -5,6 +5,16 @@
     color: #ffffff;
     background-color:  #e53e3e;
   }
+  *{
+    margin: 0;
+    padding: 0;
+  }
+
+
+  body{
+    overflow-x: hidden;
+    background-color: var(--bg-color);
+  }
   
     .darkmode {
       --p-color: rgb(255, 255, 255);

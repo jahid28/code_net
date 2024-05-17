@@ -91,6 +91,7 @@ const handler = NextAuth({
         }
 
         cookies().set('userName', `${randomUserName}`, { maxAge: 60 * 60 * 24 })
+        cookies().set('name', `${user.name}`, { maxAge: 60 * 60 * 24 })
         cookies().set('profilePic', `${user.image}`, { maxAge: 60 * 60 * 24 })
 
         return true

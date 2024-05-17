@@ -44,6 +44,7 @@ export async function POST(req: NextRequest) {
         await normalUser.insertMany([data])
 
         cookies().set('userName', `${userName}`, { maxAge: 60 * 60 * 24 })
+        cookies().set('name', `${data.name}`, { maxAge: 60 * 60 * 24 })
         cookies().set('profilePic', `${data.profilePic}`, { maxAge: 60 * 60 * 24 })
 
         return NextResponse.json({ success: true, msg: "Successfully registered" }, { status: 200 })

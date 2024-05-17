@@ -72,12 +72,13 @@ const Navbar = () => {
     if (res) {
       signOut();
       deleteCookie("userName");
+      deleteCookie("name");
       deleteCookie("profilePic");
     }
   }
 
   return (
-    <div className="fixed top-0 w-[100vw] z-50">
+    <div className="sticky top-0 w-[100vw] z-50">
       <nav className="bg-dark-color flex p-2 w-full ">
         <p className="text-color font-extrabold text-4xl">
           <Link href={"/"}>CodeNet</Link>
@@ -91,7 +92,7 @@ const Navbar = () => {
           />
           <div
             className="cursor-pointer ml-2"
-            onMouseOver={() => playerRefSearchPC.current?.playFromBeginning()}
+            onMouseEnter={() => playerRefSearchPC.current?.playFromBeginning()}
           >
             <Player
               colorize={
@@ -105,7 +106,7 @@ const Navbar = () => {
 
           <div
             className="cursor-pointer ml-2"
-            onMouseOver={() => playerRefNotiPC.current?.playFromBeginning()}
+            onMouseEnter={() => playerRefNotiPC.current?.playFromBeginning()}
           >
             <Player
               colorize={
@@ -162,7 +163,7 @@ const Navbar = () => {
         <div className="w-1/4 grid place-items-center border-red-500 border-2">
           <div
             className="cursor-pointer ml-2 border-red-500 border-2"
-            onMouseOver={() => playerRefHome.current?.playFromBeginning()}
+            onMouseEnter={() => playerRefHome.current?.playFromBeginning()}
           >
             <Player
               colorize={
@@ -178,7 +179,7 @@ const Navbar = () => {
         <div className="w-1/4 grid place-items-center border-red-500 border-2">
           <div
             className="cursor-pointer ml-2 border-red-500 border-2"
-            onMouseOver={() => playerRefSearch.current?.playFromBeginning()}
+            onMouseEnter={() => playerRefSearch.current?.playFromBeginning()}
           >
             <Player
               colorize={
@@ -194,7 +195,7 @@ const Navbar = () => {
         <div className="w-1/4 grid place-items-center border-red-500 border-2">
           <div
             className="cursor-pointer ml-2 border-red-500 border-2"
-            onMouseOver={() => playerRefNoti.current?.playFromBeginning()}
+            onMouseEnter={() => playerRefNoti.current?.playFromBeginning()}
           >
             <Player
               colorize={
@@ -210,7 +211,7 @@ const Navbar = () => {
         <div className="w-1/4 grid place-items-center border-red-500 border-2">
           <div
             className="cursor-pointer ml-2 border-red-500 border-2"
-            onMouseOver={() => playerRefSetting.current?.playFromBeginning()}
+            onMouseEnter={() => playerRefSetting.current?.playFromBeginning()}
           >
             <Player
               colorize={

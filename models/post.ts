@@ -8,26 +8,29 @@ import { Schema, model,models, Model, HydratedDocumentFromSchema, InferSchemaTyp
 //   password:string
 // }
 interface commentInterface{
+    name:string,
     user:string,
+    profilePic:string,
     comment:string
 }
 
-const collectionName:string="Post"
+const collectionName:string="AllPost"
 
 // User schema with type safety
 const PostSchema = new Schema({
   userName: { type: String, required: true },
+  name: { type: String, required: true },
+  profilePic: { type: String, required: true },
   codeType: { type: String, required: true },
   msg: { type: String, required: true}, 
   code:{type:String, required:true},
   lang:{type:String, required:true},
   imagesForMongoDB:{type:Array<string>,required:true},
   date:{type:Date, required:true},
-  likes:{type:Number, required:true},
-  commentsNum:{type:Number, required:true},
+  likedBy:{type:Array<string>, required:true},
   comments:{type:Array<commentInterface>, required:true},
 })
 
 
 
-export default models.Post || model(collectionName, PostSchema);
+export default models.AllPost || model(collectionName, PostSchema);
