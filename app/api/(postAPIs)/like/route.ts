@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
 
         // await post.updateOne({ _id }, { likes: data[0].likes })
 
-        await post.updateOne({ _id }, { likedBy: data[0].likedBy })
+        await data[0].save()
 
         return NextResponse.json({ success: true, msg: "Liked!" }, { status: 201 })
 

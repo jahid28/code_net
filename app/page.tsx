@@ -2,21 +2,22 @@
 import Image from "next/image";
 import ReactMarkdown from "react-markdown";
 import Markdown from "markdown-to-jsx";
-// import { getCookie } from "cookies-next";
 import { useEffect, useRef, useState, ChangeEvent } from "react";
-// import { cookies } from 'next/headers'
-// import { getCookie } from 'cookies-next';
 import ClipLoader from "react-spinners/ClipLoader";
 import PostBox from "@/components/PostBox";
 import AllPosts from "@/components/AllPosts";
-
+import { useContext } from "react";
+// import { AuthContext } from "./layout";
 export default function Home() {
-
+// const {name} = useContext(AuthContext)
+// console.log("name",name)  
   // const [c, setC] = useState<string | undefined>("nope");
   // useEffect(() => {
   //   const val = getCookie("userName");
   //   setC(val);
   // }, []);
+
+  
 
 
   return (

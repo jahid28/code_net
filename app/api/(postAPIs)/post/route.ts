@@ -64,18 +64,7 @@ export async function POST(req: NextRequest) {
             // likes: 0,
             likedBy: [],
             // commentsNum: 0,
-            comments: [{
-                name: name?.value!,
-                user: userName?.value!,
-                profilePic: profilePic?.value!,
-                comment: "this is a comment"
-            }, {
-                name: name?.value!,
-                user: userName?.value!,
-                profilePic: profilePic?.value!,
-                comment: "this is a 2nd comment"
-            }
-        ]
+            comments: []
         }
 
 

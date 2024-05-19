@@ -3,17 +3,21 @@ export interface normalUserInterface {
     userName: string;
     email: string;
     profilePic:string,
-    password:string
+    password:string,
+    followers:Array<string>,
+    following:Array<string>,
   }
   
   export interface googleUserInterface {
     name: string;
     userName: string;
     email: string;
-    profilePic:string
+    profilePic:string,
+    followers:Array<string>,
+    following:Array<string>,
   }
 
-interface commentInterface{
+export interface commentInterface{
     name:string,
     user:string,
     profilePic:string,

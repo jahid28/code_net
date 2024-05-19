@@ -7,16 +7,18 @@ import { Schema, model,models, Model, HydratedDocumentFromSchema, InferSchemaTyp
 //   profilePic:string
 // }
 
-const collectionName:string="GoogleUser"
+const collectionName:string="GoogleUserPls"
 
 // User schema with type safety
 const UserSchema = new Schema({
   name: { type: String, required: true },
   userName: { type: String, required: true },
   email: { type: String, required: true}, 
-  profilePic:{type:String, required:true}
+  profilePic:{type:String, required:true},
+  followers:{type:Array<string>, required:true},
+  following:{type:Array<string>, required:true},
 })
 
 
 
-export default models.GoogleUser || model(collectionName, UserSchema);
+export default models.GoogleUserPls || model(collectionName, UserSchema);

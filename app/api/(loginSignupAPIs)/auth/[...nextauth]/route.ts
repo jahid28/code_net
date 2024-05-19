@@ -6,7 +6,6 @@ import GithubProvider from 'next-auth/providers/github';
 import { usePathname, useRouter } from 'next/navigation'
 
 import { cookies } from 'next/headers'
-// import { setCookie } from 'cookies-next';
 
 import User from "@/models/googleUser";
 import { connectToMongo } from "@/utils/mongo";
@@ -81,6 +80,8 @@ const handler = NextAuth({
             userName: randomUserName,
             email: user.email!,
             profilePic: user.image!,
+            followers: [],
+            following: []
           }
          
           await User.insertMany([data_to_insert])

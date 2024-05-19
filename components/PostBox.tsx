@@ -31,7 +31,6 @@ import { toast } from "sonner";
 import { imageDb } from "@/Firebase/Config";
 import { ref, uploadBytes, listAll, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
-import { getCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import ClipLoader from "react-spinners/ClipLoader";
 import { z } from "zod";
@@ -41,7 +40,8 @@ const postSchema = z.object({
   msg: z
     .string()
     .trim()
-    .min(3, { message: "Message must be atleast 3 characters long." }),
+    .min(3, { message: "Message must be atleast 3 characters long." })
+    .max(200, { message: "Message must be atmost 200 characters long." }),
   code: z.string().trim(),
   lang: z.string().trim(),
 });
@@ -186,20 +186,12 @@ const PostBox = () => {
   //   console.log("i is ", imagesForMongoDB);
   // }, 10000);
 
-  function checkEmail() {
-    if (getCookie("userName") == undefined) {
-      toast.warning("You need to login before posting.");
-      router.replace("/login");
-    }
-  }
+  
 
   return (
     <Dialog>
       <DialogTrigger>
         <div
-          onClick={() => {
-            checkEmail();
-          }}
           className="flex cursor-pointer text-white bg-red-500 hover:bg-red-600 font-bold rounded-lg text-2xl p-2"
           onMouseEnter={() => playerRefCheck.current?.playFromBeginning()}
         >

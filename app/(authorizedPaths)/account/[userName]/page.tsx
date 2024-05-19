@@ -3,10 +3,14 @@ import React, { useEffect, useState } from "react";
 import { signOut, useSession } from "next-auth/react";
 import { deleteCookie, getCookie, setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
-
+import { useContext } from "react";
+// import { AuthContext } from "../../layout";
 const page = ({params}:{params:any}) => {
   const router = useRouter();
   const [userName, setUserName] = useState<string>("");
+  // const {name} = useContext(AuthContext)
+
+  // alert(`acc name ${name}`)
 
   // useEffect(() => {
   //   let name = getCookie("userName");

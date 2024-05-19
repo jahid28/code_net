@@ -8,7 +8,7 @@ import { Schema, model,models, Model, HydratedDocumentFromSchema, InferSchemaTyp
 //   password:string
 // }
 
-const collectionName:string="NormalUser"
+const collectionName:string="NormalUserPls"
 
 // User schema with type safety
 const UserSchema = new Schema({
@@ -16,9 +16,11 @@ const UserSchema = new Schema({
   userName: { type: String, required: true },
   email: { type: String, required: true}, 
   profilePic:{type:String, required:true},
-  password:{type:String, required:true}
+  password:{type:String, required:true},
+  followers:{type:Array<string>, required:true},
+  following:{type:Array<string>, required:true},
 })
 
 
 
-export default models.NormalUser || model(collectionName, UserSchema);
+export default models.NormalUserPls || model(collectionName, UserSchema);

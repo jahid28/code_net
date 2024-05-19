@@ -9,7 +9,6 @@ import { json } from "node:stream/consumers";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Link from "next/link";
-// import { getCookie } from "cookies-next";
 import ReCAPTCHA from "react-google-recaptcha";
 import {z} from "zod"
 import ClipLoader from "react-spinners/ClipLoader";

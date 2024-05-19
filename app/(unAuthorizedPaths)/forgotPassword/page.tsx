@@ -9,7 +9,6 @@ import { signIn, signOut, useSession, getProviders } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Link from "next/link";
-// import { getCookie } from "cookies-next";
 import ReCAPTCHA from "react-google-recaptcha";
 import ClipLoader from "react-spinners/ClipLoader";
 
