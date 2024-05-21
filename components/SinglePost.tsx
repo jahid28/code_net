@@ -16,6 +16,7 @@ import CommentBox from "./CommentBox";
 import LikeComponent from "./LikeComponent";
 import { Player } from "@lordicon/react";
 import FollowComponent from "./FollowComponent";
+import DeleteComponent from "./DeleteComponent";
 const SinglePost = (props: any) => {
   const data = props.data;
 
@@ -27,6 +28,9 @@ const SinglePost = (props: any) => {
 
   const playerRefShare = useRef<Player>(null);
   const share = require("@/icons/share.json");
+
+  const playerRefTrash = useRef<Player>(null);
+  const trash = require("@/icons/trash.json");
 
   const dateInstance = new Date(data.date);
 
@@ -53,7 +57,7 @@ const SinglePost = (props: any) => {
         <FollowComponent
           followingList={props.followingList}
           userToFollow={data.userName}
-          myName={props.user}
+          myName={props.myName}
         />
 
         <p className="ml-auto">
@@ -118,7 +122,7 @@ const SinglePost = (props: any) => {
           _id={data._id}
           likeArr={data.likedBy}
           likeNum={data.likedBy.length}
-          userName={props.user}
+          userName={props.myName}
         />
 
         <CommentBox postId={data._id} comments={data.comments} />
@@ -144,6 +148,11 @@ const SinglePost = (props: any) => {
             icon={share}
           />
         </div>
+
+        {
+          props.myName == data.userName && 
+          <DeleteComponent _id={data._id}/>
+        }
       </div>
       <br />
       <hr />

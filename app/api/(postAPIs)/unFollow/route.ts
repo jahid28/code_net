@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
         let { userToUnFollow,myName } = await req.json();
         
        
-        var myself = await normalUser.find({ userName: myName });
+        let myself = await normalUser.find({ userName: myName });
 
         if (myself.length === 0) {
             myself = await googleUser.find({ userName: myName });
@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
             }
         }
 
-        var other = await normalUser.find({ userName: userToUnFollow });
+        let other = await normalUser.find({ userName: userToUnFollow });
 
         if (other.length === 0) {
             other = await googleUser.find({ userName: userToUnFollow });

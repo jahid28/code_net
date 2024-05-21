@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 import React, { useEffect, useRef, useState } from "react";
 import { Roboto } from "next/font/google";
 import { Input } from "@/components/ui/input";
@@ -78,7 +78,7 @@ const Navbar = () => {
   }
 
   return (
-    <div className="sticky top-0 w-[100vw] z-50">
+    <div className="sticky top-0 w-[100vw] z-50 mb-4">
       <nav className="bg-dark-color flex p-2 w-full ">
         <p className="text-color font-extrabold text-4xl">
           <Link href={"/"}>CodeNet</Link>

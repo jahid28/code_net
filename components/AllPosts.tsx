@@ -3,11 +3,12 @@ import React, { useEffect, useRef, useState } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "sonner";
 import SinglePost from "./SinglePost";
-
+// import PostSkeleton from "./PostSkeleton";
+import PostSkeleton from "./PostSkeleton";
 const AllPosts = () => {
 
   const [loading, setLoading] = useState<boolean>(false);
-const [userName, setUserName] = useState<string>("");
+const [myName, setMyname] = useState<string>("");
   interface getPostInterface extends postInterface {
     _id: string;
   }
@@ -16,6 +17,7 @@ const [userName, setUserName] = useState<string>("");
   const [followingList, setFollowingList] = useState<string[]>([]);
 
   useEffect(() => {
+   try {
     const fetchData = async () => {
       setLoading(true);
       const res = await fetch("/api/getPosts", {
@@ -54,7 +56,7 @@ const [userName, setUserName] = useState<string>("");
         if (data.success === false) {
           toast.error(data.msg);
         } else {
-          setUserName(data.userName);
+          setMyname(data.userName);
           setFollowingList(data.data);
         }
       } catch (error: any) {
@@ -62,26 +64,45 @@ const [userName, setUserName] = useState<string>("");
       }
     };
     fetchData2();
+   } catch (error:any) {
+    toast.error(error);
+   }
   }, []);
 
   return (
     <div className="border-2 border-red-700 grid place-items-center">
-      <ClipLoader
+      {/* <ClipLoader
         className="absolute top-[45vh] z-30"
         color="#e94154"
         loading={loading}
         size={100}
-      />
-      {posts.map((e, index) => {
-        return (
-          <div
-            className="border-x-0 border-green-600 w-[90vw] md:w-[50vw] mb-6"
-            key={index}
-          >
-            <SinglePost data={e} user={userName} followingList={followingList}/>
+      /> */}
+
+<div className="border-x-0 border-green-600 w-[90vw] md:w-[50vw] mb-6">
+        {loading &&
+          <div>
+            <PostSkeleton/>
+          <br />
+          <br />
+          <PostSkeleton/>
+          <br />
+          <br />
+          <PostSkeleton/>
+          <br />
+          <br />
+          <PostSkeleton/>
           </div>
+  
+       }
+
+      {!loading && posts.map((e, index) => {
+        return (
+          <SinglePost data={e} myName={myName} followingList={followingList}/>
         );
-      })}
+      })
+    }
+    </div>
+    
     </div>
   );
 };

@@ -19,6 +19,7 @@ const FollowComponent = (props: any) => {
   const myName = props.myName;
   const userToFollow = props.userToFollow;
 
+
   async function follow() {
     try {
       const res = await fetch("/api/follow", {

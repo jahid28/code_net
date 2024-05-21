@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 import React, { useRef, useState, ChangeEvent, useEffect } from "react";
 import Image from "next/image";
 import {
@@ -114,43 +114,53 @@ const CommentBox = (props: any) => {
             />
           </div>
 
-          <p className="text-xl mr-auto">All Comments :</p>
+          <ClipLoader
+            className="absolute top-40%"
+            color="#e94154"
+            loading={loading}
+            size={100}
+          />
 
-          <div className="w-full grid place-items-center mb-4">
-            {/* <div className="flex items-center"> */}
-            {/* <DialogTitle> */}
-            {/* </DialogTitle> */}
+          {!loading && props.comments.length > 0 && (
+            <div>
+              <p className="text-xl mr-auto mb-6">All Comments :</p>
 
-            <div className="h-[40vh] w-full overflow-y-auto border-0 border-gray-300">
-              {props.comments.map((e: any) => {
-                return (
-                  <div className="w-full border-0 border-teal-400">
-                    <Link className="flex w-fit" href={`/account/${e.user}`}>
-                      <Image
-                        className="rounded-full"
-                        src={e.profilePic}
-                        width={30}
-                        height={30}
-                        alt="profile pic"
-                      />
-                      <p className="ml-2 rounded-md w-fit">{e.name}</p>
-                    </Link>
-                    <p className="mt-2">{e.comment}</p>
-                    <br />
-                    <hr />
-                    <br />
-                  </div>
-                );
-              })}
+              <div className="w-full grid place-items-center mb-4">
+                <div className="h-[40vh] w-full overflow-y-auto border-0 border-gray-300">
+                  {props.comments.map((e: any) => {
+                    return (
+                      <div className="w-full border-0 border-teal-400">
+                        <Link
+                          className="flex w-fit"
+                          href={`/account/${e.user}`}
+                        >
+                          <Image
+                            className="rounded-full"
+                            src={e.profilePic}
+                            width={30}
+                            height={30}
+                            alt="profile pic"
+                          />
+                          <p className="ml-2 rounded-md w-fit">{e.name}</p>
+                        </Link>
+                        <p className="mt-2">{e.comment}</p>
+                        <br />
+                        <hr />
+                        <br />
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
+          )}
 
-            <ClipLoader
-              className="absolute top-40%"
-              color="#e94154"
-              loading={loading}
-              size={100}
-            />
-          </div>
+
+          {!loading && props.comments.length == 0 && (
+            <div className="text-color text-2xl font-extrabold">
+              No Comments yet!
+            </div>
+          )}
         </DialogHeader>
       </DialogContent>
     </Dialog>

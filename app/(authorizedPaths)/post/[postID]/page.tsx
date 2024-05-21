@@ -4,6 +4,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import ClipLoader from "react-spinners/ClipLoader";
 import { set } from "mongoose";
+// import PostSkeleton from "@/components/PostSkeleton";
+import PostSkeleton from "@/components/PostSkeleton";
 // useState
 // useRef
 import { Player } from "@lordicon/react";
@@ -38,15 +40,22 @@ const page = ({ params }: { params: any }) => {
   }, []);
   return (
     <div className="border-2 border-red-700 grid place-items-center">
-        <ClipLoader
+        {/* <ClipLoader
           className="absolute top-[45vh] z-30"
           color="#e94154"
           loading={loading}
           size={100}
-        />
+        /> */}
       <div className="border-2 border-green-600 w-[90vw] md:w-[50vw] mb-6">
-        {data ? (<SinglePost data={data} user={userName} followingList={followingList}/>):
-        (<p className="text-2xl text-color mt-8 font-bold text-center">Post Not Found</p>)}
+
+      {loading &&
+          <PostSkeleton/>
+  
+       }
+
+        {!loading && data && <SinglePost data={data} myName={userName} followingList={followingList}/>}
+        {!loading && !data &&  <p className="text-2xl text-color mt-8 font-bold text-center">Post Not Found</p>}
+       
       </div>
     </div>
   );
