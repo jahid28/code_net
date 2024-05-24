@@ -1,4 +1,5 @@
 import { connectToMongo } from "@/utils/mongo";
+import redis from "@/utils/redis";
 // import normalUser from "@/models/normalUser";
 import post from "@/models/post";
 import { NextRequest, NextResponse } from "next/server";
@@ -28,11 +29,16 @@ export async function POST(req: NextRequest) {
         if(userName===undefined || name===undefined || profilePic ===undefined){
             return NextResponse.json({ success: false, msg: "User donot exist!" }, { status: 400 })
         }
-        const checkUser=await normalUser.find({userName:userName?.value!})
-        const checkUser2=await googleUser.find({userName:userName?.value!})
-        if(checkUser.length===0 && checkUser2.length===0){
-            return NextResponse.json({ success: false, msg: "User donot exist!" }, { status: 400 })
-        }
+        let checkUser=await normalUser.find({userName:userName?.value!})
+        if(checkUser.length===0){
+             checkUser=await googleUser.find({userName:userName?.value!})
+             if(checkUser.length===0){
+                return NextResponse.json({ success: false, msg: "User donot exist!" }, { status: 400 })
+             }
+        } 
+        // if(checkUser.length===0 && checkUser2.length===0){
+        //     return NextResponse.json({ success: false, msg: "User donot exist!" }, { status: 400 })
+        // }
         // console.log("uName is ",userName)
         // var getUserInfo=await normalUser.find({userName:userName?.value!})
         // console.log("info1 is ",getUserInfo)
@@ -70,8 +76,18 @@ export async function POST(req: NextRequest) {
 
         await connectToMongo()
 
+        const postToInsert= await post.insertMany([postDetails])
 
-        await post.insertMany([postDetails])
+        for(let i=0;i<checkUser[0].followers.length;i++){
+            await redis.rpush(checkUser[0].followers[i],postToInsert[0]._id.toString())
+        }
+               
+                // Delete the entire list
+                // await redis.del('myList');
+                // console.log('List deleted successfully.');
+          
+
+
 
         return NextResponse.json({ success: true, msg: "Successfully posted" }, { status: 200 })
 

@@ -36,13 +36,13 @@ const LikeComponent = (props: any) => {
     }
   }
   return (
-    <div className="ml-16">
+    <div className="ml-[10vw] md:ml-16 w-fit">
       <div
         onMouseEnter={() => playerRefTrash.current?.playFromBeginning()}
         onClick={() => {
           deletePost(props._id);
         }}
-        className="cursor-pointer flex align-middle text-xl mr-16"
+        className="cursor-pointer flex align-middle text-xl"
       >
         <Player
           colorize={"#e94154"}

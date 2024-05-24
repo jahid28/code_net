@@ -125,14 +125,14 @@ const PostBox = () => {
         setLoading(false);
         return;
       }
-      
+
       let imagesForMongoDB: string[] = [];
-      
+
       if (imagesToUload.length > 0) {
         for (const e of imagesToUload) {
           // imagesToUload.forEach(async (e) => {
-            const imgRef = ref(imageDb, `postimages/${v4()}`);
-            await uploadBytes(imgRef, e)
+          const imgRef = ref(imageDb, `postimages/${v4()}`);
+          await uploadBytes(imgRef, e)
             .then(() => {
               // console.log("doneeeeee");
             })
@@ -161,13 +161,13 @@ const PostBox = () => {
           "Content-type": "application/json",
         },
         body: JSON.stringify({ codeType, msg, code, lang, imagesForMongoDB }),
-      })
+      });
 
       const data = await response.json();
       if (data.success == true) {
         toast.success(data.msg);
       } else {
-        console.log("uuuuhhh")
+        console.log("uuuuhhh");
         toast.error(data.msg);
       }
       setImages([]);
@@ -176,7 +176,7 @@ const PostBox = () => {
       setCode("");
       setLoading(false);
     } catch (error: any) {
-      console.log("boooooo")
+      console.log("boooooo");
       setLoading(false);
       toast.error(error);
     }
@@ -185,8 +185,6 @@ const PostBox = () => {
   // setTimeout(() => {
   //   console.log("i is ", imagesForMongoDB);
   // }, 10000);
-
-  
 
   return (
     <Dialog>
@@ -207,6 +205,7 @@ const PostBox = () => {
         </div>
       </DialogTrigger>
       <DialogContent>
+        <div className="max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <div className="w-full grid place-items-center mb-4">
             {/* <div className="flex items-center"> */}
@@ -265,7 +264,7 @@ const PostBox = () => {
                 id="userCode"
                 required
                 autoComplete="off"
-                placeholder="Write a code here (optional)"
+                placeholder="Write a code here (SelectItemal)"
                 onChange={(e) => {
                   setCode(e.target.value);
                 }}
@@ -282,14 +281,31 @@ const PostBox = () => {
                   </SelectTrigger>
                   <SelectContent>
                     {/* <div className="text-yellow-600 bg-green-400 border-blue-600"> */}
+                    <SelectItem value="Python">Python</SelectItem>
+                    <SelectItem value="Javascript">JavaScript</SelectItem>
+                    <SelectItem value="JSX">JSX</SelectItem>
+                    <SelectItem value="Typescript">TypeScript</SelectItem>
+                    <SelectItem value="TSX">TSX</SelectItem>
                     <SelectItem value="HTML">HTML</SelectItem>
                     <SelectItem value="CSS">CSS</SelectItem>
-                    <SelectItem value="Javascript">Javascript</SelectItem>
-                    <SelectItem value="Python">Python</SelectItem>
-                    <SelectItem value="CPP">CPP</SelectItem>
-                    <SelectItem value="C">C</SelectItem>
                     <SelectItem value="Java">Java</SelectItem>
+                    <SelectItem value="C">C</SelectItem>
+                    <SelectItem value="C++">C++</SelectItem>
+                    <SelectItem value="Ruby">Ruby</SelectItem>
+                    <SelectItem value="PHP">PHP</SelectItem>
                     <SelectItem value="C#">C#</SelectItem>
+                    <SelectItem value="Go">Go</SelectItem>
+                    <SelectItem value="Swift">Swift</SelectItem>
+                    <SelectItem value="Kotlin">Kotlin</SelectItem>
+                    <SelectItem value="Rust">Rust</SelectItem>
+                    <SelectItem value="SQL">SQL</SelectItem>
+                    <SelectItem value="Markdown">Markdown</SelectItem>
+                    <SelectItem value="JSON">JSON</SelectItem>
+                    <SelectItem value="YAML">YAML</SelectItem>
+                    <SelectItem value="XML">XML</SelectItem>
+                    <SelectItem value="Bash">Bash</SelectItem>
+                    <SelectItem value="Shell">Shell</SelectItem>
+
                     {/* </div> */}
                   </SelectContent>
                 </Select>
@@ -350,11 +366,13 @@ const PostBox = () => {
                 onChange={handleImageChange}
               />
               <div
-                onMouseEnter={() => playerRefUpload.current?.playFromBeginning()}
+                onMouseEnter={() =>
+                  playerRefUpload.current?.playFromBeginning()
+                }
                 onClick={inputClicked}
                 className=" w-fit cursor-pointer flex text-red-500"
               >
-                <p className="mr-2 text-xl">Insert image</p>
+                <p className="mr-2 text-xl">Insert image(s)</p>
                 <Player
                   colorize="#f44336"
                   ref={playerRefUpload}
@@ -383,6 +401,7 @@ const PostBox = () => {
           </div>
           <DialogDescription></DialogDescription>
         </DialogHeader>
+        </div>
       </DialogContent>
     </Dialog>
   );

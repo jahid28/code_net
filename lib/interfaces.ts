@@ -40,5 +40,30 @@ export interface postInterface {
   }
 
   
-  
+  export const languageMap = {
+    Python: "python",
+    Javascript: "javascript",
+    JSX: "jsx",
+    Typescript: "typescript",
+    TSX: "tsx",
+    HTML: "xml", // CodeMirror uses 'xml' for HTML
+    CSS: "css",
+    Java: "java",
+    C: "clike", // CodeMirror uses 'clike' for C and C++
+    "C++": "cpp",
+    Ruby: "ruby",
+    PHP: "php",
+    "C#": "csharp",
+    Go: "go",
+    Swift: "swift",
+    Kotlin: "kotlin",
+    Rust: "rust",
+    SQL: "sql",
+    Markdown: "markdown",
+    JSON: "json",
+    YAML: "yaml",
+    XML: "xml",
+    Bash: "bash",
+    Shell: "shell",
+  };
   

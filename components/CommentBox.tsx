@@ -73,7 +73,7 @@ const CommentBox = (props: any) => {
           onMouseEnter={() => playerRefComment.current?.playFromBeginning()}
         >
           <Player
-            colorize={document.body.className == "darkmode" ? "white" : "black"}
+            colorize={"var(--icon-color)"}
             ref={playerRefComment}
             size={30}
             icon={commentIcon}

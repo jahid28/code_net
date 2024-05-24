@@ -28,10 +28,10 @@ const LikeComponent = (props: any) => {
             setLikeNum((prev) => prev + 1);
             like(props._id);
           }}
-          className="cursor-pointer flex align-middle text-xl mr-16"
+          className="cursor-pointer flex align-middle text-xl mr-[10vw] md:mr-16"
         >
           <Player
-            colorize={document.body.className == "darkmode" ? "white" : "black"}
+            colorize={"var(--icon-color)"}
             ref={playerRefHeart}
             size={30}
             icon={heart}

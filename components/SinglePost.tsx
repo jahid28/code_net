@@ -17,6 +17,11 @@ import LikeComponent from "./LikeComponent";
 import { Player } from "@lordicon/react";
 import FollowComponent from "./FollowComponent";
 import DeleteComponent from "./DeleteComponent";
+import { View } from "lucide-react";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { darcula } from "react-syntax-highlighter/dist/esm/styles/prism";
+// import { languageMap } from "@/lib/languageMap";
+import { languageMap } from "@/lib/interfaces";
 const SinglePost = (props: any) => {
   const data = props.data;
 
@@ -29,9 +34,6 @@ const SinglePost = (props: any) => {
   const playerRefShare = useRef<Player>(null);
   const share = require("@/icons/share.json");
 
-  const playerRefTrash = useRef<Player>(null);
-  const trash = require("@/icons/trash.json");
-
   const dateInstance = new Date(data.date);
 
   const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -39,6 +41,9 @@ const SinglePost = (props: any) => {
   const day = String(dateInstance.getUTCDate()).padStart(2, "0");
   const month = String(dateInstance.getUTCMonth() + 1).padStart(2, "0"); // Months are zero-indexed
   const year = dateInstance.getUTCFullYear();
+
+  type LanguageKey = keyof typeof languageMap;
+  const langObj: { lang: LanguageKey } = { lang: data.lang }; // Example type annotation
 
   return (
     <div className="text-color">
@@ -66,10 +71,10 @@ const SinglePost = (props: any) => {
       </div>
       <p className="text-lg mb-2">{data.msg}</p>
       {data.code != " " && (
-        <div className="p-2 bg-dark-color rounded-md">
+        <div className="p-2 bg-dark-color rounded-md ">
           <div className="flex mb-2">
-            <p className="px-1 bg-color rounded-md">{data.codeType}</p>
-            <p className="px-1 bg-color rounded-md ml-2">{data.lang}</p>
+            <p className="px-1 bg-color rounded-md">Type : {data.codeType}</p>
+            <p className="px-1 bg-color rounded-md ml-2">Lang : {data.lang}</p>
             <p
               className="ml-auto cursor-pointer text-lg"
               onClick={() => {
@@ -87,7 +92,15 @@ const SinglePost = (props: any) => {
             </p>
           </div>
 
-          <p>{data.code}</p>
+          <div className="max-h-[60vh] overflow-y-auto">
+            <SyntaxHighlighter
+              language={languageMap[langObj.lang]}
+              style={darcula}
+              showLineNumbers={true}
+            >
+              {data.code}
+            </SyntaxHighlighter>
+          </div>
         </div>
       )}
       {data.imagesForMongoDB.length > 0 && (
@@ -133,26 +146,24 @@ const SinglePost = (props: any) => {
             navigator.clipboard
               .writeText(`localhost:3000/post/${data._id}`)
               .then(() => {
-                toast.success("Link Copied!");
+                toast.success("Post link copied!");
               })
               .catch((err) => {
                 toast.error(err);
               });
           }}
-          className="ml-16 cursor-pointer"
+          className="ml-[10vw] md:ml-16 cursor-pointer"
         >
           <Player
-            colorize={document.body.className == "darkmode" ? "white" : "black"}
+            colorize={"var(--icon-color)"}
+            // colorize={document.body.className == "darkmode" ? "white" : "black"}
             ref={playerRefShare}
             size={30}
             icon={share}
           />
         </div>
 
-        {
-          props.myName == data.userName && 
-          <DeleteComponent _id={data._id}/>
-        }
+        {props.myName == data.userName && <DeleteComponent _id={data._id} />}
       </div>
       <br />
       <hr />

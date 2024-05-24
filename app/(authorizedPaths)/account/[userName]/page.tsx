@@ -14,9 +14,12 @@ const page = ({ params }: { params: any }) => {
   interface getPostInterface extends postInterface {
     _id: string;
   }
-  
+
   const playerRefShare = useRef<Player>(null);
   const share = require("@/icons/share.json");
+
+  const playerRefAt = useRef<Player>(null);
+  const at = require("@/icons/at.json");
 
   // const [userName, setUserName] = useState<string>("");
   const [loading, setLoading] = useState(false);
@@ -75,7 +78,8 @@ const page = ({ params }: { params: any }) => {
         <div className="text-2xl text-color font-extrabold">No User found!</div>
       )}
       {!loading && !isEmpty(userDetails) && (
-        <div className="border-0 border-white w-full grid place-items-center lg:flex items-center text-color mb-4 border-b-2 pb-3">
+        <div                
+        className="border-0 border-white w-full grid place-items-center lg:flex items-center text-color mb-4 border-b-2 pb-3">
           <Image
             className="rounded-full mr-4 ml-2"
             src={userDetails.profilePic}
@@ -84,9 +88,19 @@ const page = ({ params }: { params: any }) => {
             alt="profile pic"
           />
 
-          <div>
+          <div  onMouseEnter={() => playerRefAt.current?.playFromBeginning()}>
             <p className="text-2xl font-bold">{userDetails.name}</p>
-            <p className="text-xl opacity-50">@{userDetails.userName}</p>
+            <div className="text-xl opacity-50 flex">
+              
+                <Player
+                  colorize={"var(--icon-color)"}
+                  ref={playerRefAt}
+                  size={26}
+                  icon={at}
+                />
+
+             <p> {userDetails.userName}</p>
+            </div>
           </div>
           <div className="flex text-lg lg:text-2xl mt-2 lg:mt-0 font-bold">
             <p className="ml-[6vw]">
@@ -98,26 +112,26 @@ const page = ({ params }: { params: any }) => {
             <p className="ml-[6vw]">{posts.length} Posts</p>
 
             <div
-          onMouseEnter={() => playerRefShare.current?.playFromBeginning()}
-          onClick={() => {
-            navigator.clipboard
-              .writeText(`localhost:3000/account/${userName}`)
-              .then(() => {
-                toast.success("Profile link copied!");
-              })
-              .catch((err) => {
-                toast.error(err);
-              });
-          }}
-          className="ml-[6vw] cursor-pointer"
-        >
-          <Player
-            colorize={document.body.className == "darkmode" ? "white" : "black"}
-            ref={playerRefShare}
-            size={30}
-            icon={share}
-          />
-        </div>
+              onMouseEnter={() => playerRefShare.current?.playFromBeginning()}
+              onClick={() => {
+                navigator.clipboard
+                  .writeText(`localhost:3000/account/${userName}`)
+                  .then(() => {
+                    toast.success("Profile link copied!");
+                  })
+                  .catch((err) => {
+                    toast.error(err);
+                  });
+              }}
+              className="ml-[6vw] cursor-pointer"
+            >
+              <Player
+                colorize={"var(--icon-color)"}
+                ref={playerRefShare}
+                size={30}
+                icon={share}
+              />
+            </div>
           </div>
         </div>
       )}

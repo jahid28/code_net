@@ -7,6 +7,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import PostBox from "@/components/PostBox";
 import AllPosts from "@/components/AllPosts";
 import { useContext } from "react";
+import Tags from "@/components/Tags";
 // import { AuthContext } from "./layout";
 export default function Home() {
 // const {name} = useContext(AuthContext)
@@ -22,7 +23,8 @@ export default function Home() {
 
   return (
     <>
-    <div className="fixed bottom-24 right-8 md:bottom-6 md:right-8">
+    <Tags/>
+    <div className="fixed bottom-24 right-8 md:bottom-6 md:right-8 z-[200]">
     <PostBox/>
     </div>
 
