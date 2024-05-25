@@ -69,12 +69,15 @@ const SinglePost = (props: any) => {
           {dayOfWeek} {day}-{month}-{year}
         </p>
       </div>
+
+      <p className="bg-dark-color rounded-md mb-2 px-1 w-fit">{data.codeType}</p>
+
       <p className="text-lg mb-2">{data.msg}</p>
       {data.code != " " && (
         <div className="p-2 bg-dark-color rounded-md ">
-          <div className="flex mb-2">
-            <p className="px-1 bg-color rounded-md">Type : {data.codeType}</p>
-            <p className="px-1 bg-color rounded-md ml-2">Lang : {data.lang}</p>
+          <div className="flex">
+            {/* <p className="px-1 bg-color rounded-md">Type : {data.codeType}</p> */}
+            <p className="px-1 bg-color rounded-md ml-2 mb-2">{data.lang}</p>
             <p
               className="ml-auto cursor-pointer text-lg"
               onClick={() => {

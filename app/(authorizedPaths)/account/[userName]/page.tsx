@@ -7,6 +7,7 @@ import SinglePost from "@/components/SinglePost";
 import PostSkeleton from "@/components/PostSkeleton";
 import Image from "next/image";
 import { Player } from "@lordicon/react";
+import FollowComponent from "@/components/FollowComponent";
 // useRef
 // import { set } from "mongoose";
 // import getPostInter// import { AuthContext } from "../../layout";
@@ -102,14 +103,23 @@ const page = ({ params }: { params: any }) => {
              <p> {userDetails.userName}</p>
             </div>
           </div>
-          <div className="flex text-lg lg:text-2xl mt-2 lg:mt-0 font-bold">
-            <p className="ml-[6vw]">
+          <div className="flex flex-wrap text-lg lg:text-2xl mt-2 lg:mt-0 font-bold">
+            
+         
+            
+            <p className="ml-[6vw] mb-2">
               Followers : {userDetails.followers.length}
             </p>
-            <p className="ml-[6vw]">
+            <p className="ml-[6vw] mb-2">
               Following : {userDetails.following.length}
             </p>
-            <p className="ml-[6vw]">{posts.length} Posts</p>
+            <p className="ml-[6vw] mr-[4vw] mb-2">{posts.length} Posts</p>
+
+            <FollowComponent
+          followingList={followingList}
+          userToFollow={userName}
+          myName={myName}
+        />
 
             <div
               onMouseEnter={() => playerRefShare.current?.playFromBeginning()}

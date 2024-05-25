@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
         const userName=req.cookies.get("userName")
         await connectToMongo()
        
-       const allPostIds:Array<string>= await redis.lrange(userName?.value!,0,-1)
+       const allPostIds:Array<string>= await redis.lrange(`noti:${userName?.value!}`,0,-1)
        let allPosts:any=[]
 
        await Promise.all(allPostIds.map(async (postId) => {
@@ -19,7 +19,7 @@ export async function GET(req: NextRequest) {
         }
       }));
 
-      await redis.del(userName?.value!)
+      await redis.del(`noti:${userName?.value!}`)
 
 
         return NextResponse.json({ success: true, data:allPosts }, { status: 201 })

@@ -34,6 +34,7 @@ const Navbar = () => {
   // defineElement(lottie.loadAnimation);
   const router = useRouter();
   const [size, setSize] = useState(50); // Default size is 50
+  const [query, setQuery] = useState("");
 
 
   const playerRefHome = useRef<Player>(null);
@@ -87,7 +88,6 @@ const Navbar = () => {
         setprofilePic(data.profilePic);
         setIsEmail(true);
         setUserName(data.userName);
-        toast.success("wooo")
       }
     } catch (error) {
       
@@ -114,17 +114,18 @@ const Navbar = () => {
     }
   }
 
+  function pushQuery() {
+    let finalQuery = query.trim();
+    if(finalQuery == "") {
+      return
+    }
+    
+    finalQuery = finalQuery.replace(/\s+/g, ' ');
+    
+    finalQuery = finalQuery.replace(/ /g, '+');
 
-  // useEffect(() => {
-  //   const handleResize = () => {
-  //     const isBelowMd = window.innerWidth <= 768; // Check if screen is below "md"
-  //     setSize(isBelowMd ? 20 : 50); // Set size based on screen width
-  //   };
-
-  //  handleResize();
-
-  //   return () => window.removeEventListener("resize", handleResize);
-  // }, []); 
+    router.push(`/searchPage?query=${finalQuery}`);
+  }
 
   return (
     <div className="sticky text-color top-0 w-[100vw] z-50 mb-4">
@@ -148,10 +149,12 @@ const Navbar = () => {
           <input
             type="text"
             placeholder="Search"
+            onChange={(e) => setQuery(e.target.value)}
             className="inp-border flex h-9 w-96 rounded-md border  bg-transparent px-3 py-1 text-xs md:text-sm focus:border-neutral-400 focus:ring-2 focus:ring-neutral-400"
           />
           <div
             className="cursor-pointer ml-2"
+            onClick={pushQuery}
             onMouseEnter={() => playerRefSearchPC.current?.playFromBeginning()}
           >
             <Player
@@ -164,6 +167,7 @@ const Navbar = () => {
 
           <Link 
           href={"/notifications"}
+          onClick={() => setIsNoti(false)}
             className="cursor-pointer ml-2 flex"
 
             onMouseEnter={() => playerRefNotiPC.current?.playFromBeginning()}

@@ -4,15 +4,16 @@ import post from "@/models/post";
 import { NextRequest, NextResponse } from "next/server";
 
 
-export async function GET(req: NextRequest) {
+export async function POST(req: NextRequest) {
     try {
-        const randomNumber:number = Math.floor(Math.random() * 3) + 1;
-        const redisPostList=await redis.lrange(`allPostList${randomNumber}`,0,-1)
-        await connectToMongo()
-
+        const {redisPostList,loadNumber} = await req.json();
+        // const randomNumber:number = Math.floor(Math.random() * 3) + 1;
+        // const redisPostList=await redis.lrange(`allPostList${randomNumber}`,0,-1)
+        
         let data = []
-
-        for(let i=0;i<10;i++){
+        
+        await connectToMongo()
+        for(let i=loadNumber*10+1;i<loadNumber*10+10;i++){
             const postFromMongo=await post.findOne({_id:redisPostList[i]})
             if(postFromMongo){
                 data.push(postFromMongo)
@@ -21,7 +22,7 @@ export async function GET(req: NextRequest) {
 
         // const data = await post.find()
 
-        return NextResponse.json({ success: true, data,redisPostList }, { status: 201 })
+        return NextResponse.json({ success: true, data }, { status: 201 })
 
     } catch (error) {
 

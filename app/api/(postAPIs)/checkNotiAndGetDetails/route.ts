@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
         if(userName===undefined || profilePic===undefined){
             return NextResponse.json({ success: false, msg: "User donot exist!" }, { status: 400 })
         }
-        const notiListLength = await redis.llen(userName?.value!);
+        const notiListLength = await redis.llen(`noti:${userName?.value!}`);
         let noti=false
         if(notiListLength>0){
             noti=true

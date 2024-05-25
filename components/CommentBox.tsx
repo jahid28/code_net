@@ -114,19 +114,20 @@ const CommentBox = (props: any) => {
             />
           </div>
 
-          <ClipLoader
-            className="absolute top-40%"
+         <div className="w-full grid place-items-center absolute top-40%">
+         <ClipLoader
             color="#e94154"
             loading={loading}
             size={100}
           />
+         </div>
 
           {!loading && props.comments.length > 0 && (
             <div>
               <p className="text-xl mr-auto mb-6">All Comments :</p>
 
               <div className="w-full grid place-items-center mb-4">
-                <div className="h-[40vh] w-full overflow-y-auto border-0 border-gray-300">
+                <div className="max-h-[50vh] w-full overflow-y-auto border-0 border-gray-300">
                   {props.comments.map((e: any) => {
                     return (
                       <div className="w-full border-0 border-teal-400">
