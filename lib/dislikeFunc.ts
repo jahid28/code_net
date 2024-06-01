@@ -26,7 +26,6 @@ export async function dislike(_id: string) {
         toast.error(data.msg);
       }
     } catch (err: any) {
-      // console.log(err)
       toast.error(err);
     }
   }

@@ -1,22 +1,16 @@
 // import { EmailTemplate } from '../../../components/email-template';
-import { Resend } from 'resend';
-import * as React from 'react';
+// import { Resend } from 'resend';
 import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from "nodemailer"
 import { connectToMongo } from '@/utils/mongo';
 import normalUser from '@/models/normalUser';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function POST(req: NextRequest) {
-    // console.log("hahaahah")
 
     try {
         const { email, otp } = await req.json()
         await connectToMongo()
-
         const check = await normalUser.find({ email })
-        // console.log("check i s ", check)
 
         if (check.length <= 0) {
             return NextResponse.json({ success: false, msg: "Email is not registered" }, { status: 400 })
@@ -40,7 +34,6 @@ export async function POST(req: NextRequest) {
         };
 
         await transporter.sendMail(mailOptions);
-        //     console.log("email and otp are ",email,otp)
         //     await resend.emails.send({
         //         from: 'CodeNet <codenet@resend.dev>',
         //         to: email,
@@ -57,6 +50,5 @@ export async function POST(req: NextRequest) {
         // return Response.json({ data });
     } catch (error) {
         return NextResponse.json({ success: false, msg: "Something went wrong!" }, { status: 400 })
-        // console.log("ff")
     }
 }

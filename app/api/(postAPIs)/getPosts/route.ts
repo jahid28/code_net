@@ -2,14 +2,12 @@ import { connectToMongo } from "@/utils/mongo";
 import redis from "@/utils/redis";
 import post from "@/models/post";
 import { NextRequest, NextResponse } from "next/server";
-
-
+var jwt = require('jsonwebtoken');
 export async function GET(req: NextRequest) {
     try {
         const randomNumber:number = Math.floor(Math.random() * 3) + 1;
         const redisPostList=await redis.lrange(`allPostList${randomNumber}`,0,-1)
         await connectToMongo()
-
         let data = []
 
         for(let i=0;i<10;i++){
@@ -18,6 +16,12 @@ export async function GET(req: NextRequest) {
                 data.push(postFromMongo)
             }
         }
+
+        const token = jwt.sign( {name:"kkk"}, 'secret', { expiresIn: '1h' });
+
+        // const token = await decode({"secret"})
+
+
 
         // const data = await post.find()
 

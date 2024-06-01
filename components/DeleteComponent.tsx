@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Player } from "@lordicon/react";
 import { useRef } from "react";
-import { like } from "@/lib/likeFunc";
-import { dislike } from "@/lib/dislikeFunc";
-import { set } from "mongoose";
 import { toast } from "sonner";
-// useEffect
-// useState
+
 const LikeComponent = (props: any) => {
   const playerRefTrash = useRef<Player>(null);
   const trash = require("@/icons/trash.json");

@@ -1,36 +1,25 @@
 "use client";
-import { useEffect, useState } from "react";
-// import { FcGoogle } from "react-icons/fc";
+import { useEffect, useRef, useState, ChangeEvent } from "react";
 import { FaGithub, FaGoogle } from "react-icons/fa";
-
 import { signIn, signOut, useSession, getProviders } from "next-auth/react";
-import { json } from "node:stream/consumers";
-// import { PacmanLoader } from "react-spinners";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Link from "next/link";
 import ReCAPTCHA from "react-google-recaptcha";
-import { z } from "zod";
 import ClipLoader from "react-spinners/ClipLoader";
+import { signupSchema } from "@/lib/zodSchemas";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import { Player } from "@lordicon/react";
+import { imageDb } from "@/Firebase/Config";
+import { v4 } from "uuid";
+import { ref, uploadBytes, listAll, getDownloadURL } from "firebase/storage";
+import Image from "next/image";
 
-const signupSchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(1, { message: "Name must be atleast 1 character long." }),
-  email: z.string().email({ message: "Enter a zod email" }).trim(),
-  password: z
-    .string()
-    .trim()
-    .min(4, { message: "Password must be atleast 4 characters long." }),
-  userName: z
-    .string()
-    .trim()
-    .min(2, { message: "User Name must be atleast 2 characters long." }),
-});
-
-// getCookie
-// import ReCAPTCHA from "react-google-recaptcha";
 interface formInter {
   email: string;
   password: string;
@@ -38,20 +27,14 @@ interface formInter {
   userName: string;
 }
 const SignupPage = () => {
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  // useEffect(() => {
-  //   if (getCookie("userName") != undefined) {
-  //     router.replace("/");
-  //     // router.refresh()
-  //   }
-  // }, []);
-  //   const { data: session } = useSession();
-  //   if (session) {
-  //     router.replace("/userPage");
-  //     return null; // Prevent rendering while redirecting
-  //   }
+  // const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const playerRefPhoto = useRef<Player>(null);
+  const photo = require("@/icons/photo.json");
+  const [imagesToUload, setImagesToUload] = useState<File[]>([]);
+  const [images, setImages] = useState<string[]>([]);
 
   const [captchaValue, setCaptchaValue] = useState(false);
 
@@ -61,6 +44,35 @@ const SignupPage = () => {
     name: "",
     userName: "",
   });
+
+  function inputClicked() {
+    if (inputRef.current) {
+      inputRef.current.click();
+    }
+  }
+
+  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const files: FileList = e.target.files!;
+    if (files.length > 4) {
+      toast.error("Max 4 images are allowed");
+      return;
+    }
+    const imagesArray: any[] = [];
+
+    for (let i: number = 0; i < files.length; i++) {
+      const reader = new FileReader();
+      reader.onload = (e: any | never) => {
+        imagesArray.push(e.target.result);
+        if (imagesArray.length === files.length) {
+          setImages(imagesArray);
+        }
+      };
+      reader.readAsDataURL(files[i]);
+    }
+
+    const selectedImages = Array.from(files);
+    setImagesToUload(selectedImages);
+  };
 
   async function submit(e: any) {
     e.preventDefault();
@@ -74,6 +86,7 @@ const SignupPage = () => {
         email: formData.email,
         password: formData.password,
         userName: formData.userName,
+        profilePic: "",
       };
       const result = signupSchema.safeParse(signupDetails);
       if (!result.success) {
@@ -84,22 +97,24 @@ const SignupPage = () => {
         toast.error(errorMsg);
         return;
       }
-      setLoading(true)
+      setLoading(true);
 
-      // const userNameResponse = await fetch("/api/checkUserName", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-type": "application/json",
-      //   },
-      //   body: JSON.stringify({ userName: formData.userName }),
-      // });
-      // const userNameData = await userNameResponse.json();
+      // let imagesForMongoDB: string[] = [];
 
-      //   if (userNameData.success == false) {
-      //     toast.error(userNameData.msg);
-      //     setLoading(false)
-      //     return
-      //   }
+      if (imagesToUload.length > 0) {
+        // for (const e of imagesToUload) {
+          const imgRef = ref(imageDb, `postimages/${v4()}`);
+          await uploadBytes(imgRef, imagesToUload[0])
+            .then(() => {})
+            .catch((e) => {
+              toast.error("Some error ocurred while uploading profile pic.");
+              return;
+            });
+          const url = await getDownloadURL(imgRef);
+          // imagesForMongoDB.push(url);
+          signupDetails.profilePic = url;
+        // }
+      }
 
 
       const response = await fetch("/api/normalSignup", {
@@ -107,9 +122,8 @@ const SignupPage = () => {
         headers: {
           "Content-type": "application/json",
         },
-        body: JSON.stringify(result),
+        body: JSON.stringify(signupDetails),
       });
-      // console.log("insertetd")
       const data = await response.json();
       if (data.success == true) {
         toast.success(data.msg);
@@ -121,8 +135,6 @@ const SignupPage = () => {
         toast.error(data.msg);
       }
       setLoading(false);
-
-      // console.log("data in client is ", data);
     } catch (error) {
       toast.error("Something went wrong!");
       setFormData({ email: "", password: "", name: "", userName: "" });
@@ -161,8 +173,6 @@ const SignupPage = () => {
   //       const response = await signIn("google");
   //       // const data = await response.json();
 
-  //       console.log("response is", response);
-
   //       setFormData({ email: "", password: "", name: "", userName: "" });
   //     } else {
   //       toast.error(data.msg);
@@ -184,7 +194,6 @@ const SignupPage = () => {
   //     },
   //     body: JSON.stringify({ userName: formData.userName }),
   //   });
-  //   // console.log("insertetd")
   //   const data = await response.json();
   //   if (data.success == true) {
   //     signIn("github");
@@ -206,8 +215,10 @@ const SignupPage = () => {
         size={100}
       />
 
-      {/* <section className="text-gray-600 body-font grid place-items-center  relative  "> */}
-      <div className="w-[90vw] md:w-[50vw] lg:w-[30vw] bg-dark-color text-color rounded-lg p-8 mt-20 mb-10 relative z-10 shadow-md">
+
+      <h2 className="mt-2 mb-6 py-1 ml-4 mr-4 text-center font-bold text-4xl bg-gradient-to-r from-sky-600 via-green-500 to-orange-400 inline-block text-transparent bg-clip-text">Welcome to CodeNet &lt;/&gt;, your daily coding community.</h2>
+
+      <div className="w-[90vw] md:w-[50vw] lg:w-[30vw] bg-dark-color rounded-lg p-8 mb-10 relative z-10 shadow-md">
         <h2 className=" text-2xl mb-5 font-medium">Signup</h2>
 
         <form action="" onSubmit={submit}>
@@ -217,6 +228,7 @@ const SignupPage = () => {
             </label>
             <input
               value={formData.name}
+              placeholder="John Doe"
               onChange={(event) =>
                 setFormData({
                   ...formData,
@@ -237,6 +249,7 @@ const SignupPage = () => {
             </label>
             <input
               value={formData.email}
+              placeholder="johndoe@gmail.com"
               onChange={(event) =>
                 setFormData({
                   ...formData,
@@ -257,6 +270,7 @@ const SignupPage = () => {
             </label>
             <input
               value={formData.password}
+              placeholder="********"
               onChange={(event) =>
                 setFormData({
                   ...formData,
@@ -277,6 +291,7 @@ const SignupPage = () => {
             </label>
             <input
               value={formData.userName}
+              placeholder="johndoe123"
               onChange={(event) =>
                 setFormData({
                   ...formData,
@@ -291,6 +306,56 @@ const SignupPage = () => {
             />
           </div>
 
+          {images.length > 0 && (
+            <div className="w-full grid place-items-center mt-3">
+              <Carousel className="w-full max-w-xs">
+                <CarouselContent>
+                  {images.map((image, index) => (
+                    <CarouselItem key={index}>
+                      <div className="p-1 w-full grid place-items-center">
+                        <Image
+                          key={index}
+                          src={image}
+                          alt="uploaded images"
+                          width={200}
+                          height={200}
+                        />
+                      </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+
+                <div className="text-red-500">
+                  <CarouselPrevious />
+                </div>
+                <div className="text-red-500">
+                  <CarouselNext />
+                </div>
+              </Carousel>
+            </div>
+          )}
+
+          <input
+            className="hidden"
+            ref={inputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+          />
+          <div
+            onMouseEnter={() => playerRefPhoto.current?.playFromBeginning()}
+            onClick={inputClicked}
+            className=" w-fit cursor-pointer flex text-red-500 mt-1 mb-2"
+          >
+            <p className="mr-2 text-xl">Profile Pic(optional)</p>
+            <Player
+              colorize="#f44336"
+              ref={playerRefPhoto}
+              size={32}
+              icon={photo}
+            />
+          </div>
+
           <ReCAPTCHA
             sitekey={`${process.env.NEXT_PUBLIC_REACT_APP_RECAPTCHA}`}
             onChange={(value: boolean) => setCaptchaValue(value)}
@@ -298,7 +363,7 @@ const SignupPage = () => {
           />
 
           <input
-            className="w-full mt-3 cursor-pointer text-white bg-red-500 border-0 py-2 px-6 focus:outline-none hover:bg-red-600 rounded text-lg"
+            className="w-full mt-3 cursor-pointer text-white py-2 px-6 focus:outline-none bg-red-500 hover:bg-red-600 rounded text-lg"
             type="submit"
             value="Submit"
           />
@@ -315,7 +380,7 @@ const SignupPage = () => {
           onClick={() => {
             signIn("google");
           }}
-          className="text-white w-full mb-5 flex  bg border-0 py-2 justify-center focus:outline-none bg-red-500 hover:bg-red-600 rounded text-lg"
+          className="text-white w-full mb-5 flex  bg py-2 justify-center focus:outline-none bg-red-500 hover:bg-red-600 rounded text-lg"
         >
           Signup through Google
           <p className="mt-1.5 ml-2">

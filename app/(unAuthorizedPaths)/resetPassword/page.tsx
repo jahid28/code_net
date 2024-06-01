@@ -2,24 +2,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { z } from "zod";
 import ClipLoader from "react-spinners/ClipLoader";
-
-// interface formInter {
-//   email: string;
-// }
-
-const resetPassSchema = z.object({
-  email: z.string().email({ message: "Enter a zod email" }).trim(),
-  pass: z
-    .string()
-    .trim()
-    .min(4, { message: "Password must be atleast 4 characters long." }),
-  cpass: z
-    .string()
-    .trim()
-    .min(4, { message: "Password must be atleast 4 characters long." }),
-});
+import { resetPassSchema } from "@/lib/zodSchemas";
 
 const ResetPassword = ({ searchParams }: { searchParams: any }) => {
   const router = useRouter();
@@ -87,7 +71,7 @@ const ResetPassword = ({ searchParams }: { searchParams: any }) => {
         size={100}
       />
 
-      <div className="w-[90vw] md:w-[50vw] lg:w-[30vw] bg-dark-color text-color rounded-lg p-8 mt-10 mb-10 relative z-10 shadow-md">
+      <div className="w-[90vw] md:w-[50vw] lg:w-[30vw] bg-dark-color rounded-lg p-8 mt-10 mb-10 relative z-10 shadow-md">
         <h2 className=" text-2xl mb-5 font-medium">Reset Password</h2>
 
         <form action="" onSubmit={submit}>
@@ -122,7 +106,7 @@ const ResetPassword = ({ searchParams }: { searchParams: any }) => {
           </div>
 
           <input
-            className="w-full mt-3 cursor-pointer text-white bg-red-500 border-0 py-2 px-6 focus:outline-none hover:bg-red-600 rounded text-lg"
+            className="w-full mt-3 cursor-pointer text-white py-2 px-6 focus:outline-none bg-red-500 hover:bg-red-600 rounded text-lg"
             type="submit"
             value="Submit"
           />

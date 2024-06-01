@@ -2,13 +2,9 @@
 import SinglePost from "@/components/SinglePost";
 import React, { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import ClipLoader from "react-spinners/ClipLoader";
-import { set } from "mongoose";
-// import PostSkeleton from "@/components/PostSkeleton";
 import PostSkeleton from "@/components/PostSkeleton";
-// useState
-// useRef
-import { Player } from "@lordicon/react";
+import Image from "next/image";
+
 const page = ({ params }: { params: any }) => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<any>();
@@ -39,14 +35,14 @@ const page = ({ params }: { params: any }) => {
     fetchData();
   }, []);
   return (
-    <div className="border-2 border-red-700 grid place-items-center">
+    <div className="grid place-items-center">
         {/* <ClipLoader
           className="absolute top-[45vh] z-30"
           color="#e94154"
           loading={loading}
           size={100}
         /> */}
-      <div className="border-2 border-green-600 w-[90vw] md:w-[50vw] mb-6">
+      <div className="w-[90vw] md:w-[50vw] mb-6">
 
       {loading &&
           <PostSkeleton/>
@@ -54,7 +50,12 @@ const page = ({ params }: { params: any }) => {
        }
 
         {!loading && data && <SinglePost data={data} myName={userName} followingList={followingList}/>}
-        {!loading && !data &&  <p className="text-2xl text-color mt-8 font-bold text-center">Post Not Found</p>}
+        {!loading && !data &&  
+        <div className='grid place-items-center '>
+        <Image className='mt-10 mb-4' src='/empty.png' width={300} height={300} alt='404' />
+          <p className='text-2xl font-bold'>POST NOT FOUND</p>
+        </div>
+        }
        
       </div>
     </div>

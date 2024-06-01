@@ -1,15 +1,19 @@
 import { connectToMongo } from "@/utils/mongo";
 import post from "@/models/post";
 import { NextRequest, NextResponse } from "next/server";
-
+ import { jwtTokenInterface } from "@/lib/interfaces";
+const jwt=require("jsonwebtoken")
 
 export async function POST(req: NextRequest) {
     try {
-        const userName =  req.cookies.get("userName")
-        if(userName===undefined){
-            return NextResponse.json({ success: false, msg: "Please login to continue" }, { status: 400 })
-        }
-        await connectToMongo()
+        const token=req.cookies.get("token")?.value
+        const verify:jwtTokenInterface=jwt.verify(token,`${process.env.NEXTAUTH_SECRET}`)
+        const userName = verify.userName
+        
+        // if(userName===undefined){
+        //     return NextResponse.json({ success: false, msg: "Please login to continue" }, { status: 400 })
+        // }
+        await connectToMongo()        
         const { _id } = await req.json()
 
         const data = await post.find({ _id})
@@ -20,7 +24,7 @@ export async function POST(req: NextRequest) {
 
         // data[0].likes+=1
 
-        data[0].likedBy.push(userName?.value!)
+        data[0].likedBy.push(userName)
 
         // await post.updateOne({ _id }, { likes: data[0].likes })
 

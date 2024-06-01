@@ -14,13 +14,8 @@ import { Player } from "@lordicon/react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import ClipLoader from "react-spinners/ClipLoader";
-import { z } from "zod";
 import Link from "next/link";
-const commentSchema = z
-  .string()
-  .trim()
-  .min(3, { message: "Comment must be atleast 3 characters long." })
-  .max(200, { message: "Comment must be atmost 200 characters long." });
+import { commentSchema } from "@/lib/zodSchemas";
 
 const CommentBox = (props: any) => {
   const playerRefComment = useRef<Player>(null);
@@ -69,7 +64,7 @@ const CommentBox = (props: any) => {
     <Dialog>
       <DialogTrigger>
         <div
-          className="flex cursor-pointer text-color text-xl"
+          className="flex cursor-pointer text-xl"
           onMouseEnter={() => playerRefComment.current?.playFromBeginning()}
         >
           <Player
@@ -85,7 +80,7 @@ const CommentBox = (props: any) => {
         <DialogHeader>
           <textarea
             value={comment}
-            className="mt-4 inp-border w-full bg-color text-color rounded-md p-1"
+            className="mt-4 inp-border w-full bg-color rounded-md p-1"
             cols={60}
             rows={4}
             id="userTextinp"
@@ -114,34 +109,42 @@ const CommentBox = (props: any) => {
             />
           </div>
 
-         <div className="w-full grid place-items-center absolute top-40%">
-         <ClipLoader
-            color="#e94154"
-            loading={loading}
-            size={100}
-          />
-         </div>
+          <div className="w-full grid place-items-center absolute top-40%">
+            <ClipLoader color="#e94154" loading={loading} size={100} />
+          </div>
 
           {!loading && props.comments.length > 0 && (
             <div>
               <p className="text-xl mr-auto mb-6">All Comments :</p>
 
               <div className="w-full grid place-items-center mb-4">
-                <div className="max-h-[50vh] w-full overflow-y-auto border-0 border-gray-300">
+                <div className="max-h-[50vh] w-full overflow-y-auto">
                   {props.comments.map((e: any) => {
                     return (
-                      <div className="w-full border-0 border-teal-400">
+                      <div className="w-full">
                         <Link
                           className="flex w-fit"
                           href={`/account/${e.user}`}
                         >
-                          <Image
+                          {/* <Image
                             className="rounded-full"
                             src={e.profilePic}
                             width={30}
                             height={30}
                             alt="profile pic"
-                          />
+                          /> */}
+                          <div className="relative w-8 h-8 rounded-full overflow-hidden cursor-pointer">
+                            <Image
+                              src={e.profilePic}
+                              alt="profile Pic"
+                              layout="fill"
+                              // width={100}
+                              // height={100}
+                              // layout="fill"
+                              // className="rounded-full object-cover"
+                              className="object-center"
+                            />
+                          </div>
                           <p className="ml-2 rounded-md w-fit">{e.name}</p>
                         </Link>
                         <p className="mt-2">{e.comment}</p>
@@ -156,11 +159,17 @@ const CommentBox = (props: any) => {
             </div>
           )}
 
-
           {!loading && props.comments.length == 0 && (
-            <div className="text-color text-2xl font-extrabold">
-              No Comments yet!
-            </div>
+            <div className="grid place-items-center ">
+            <Image
+              className="mt-10 mb-4"
+              src="/empty.png"
+              width={150}
+              height={150}
+              alt="404"
+            />
+            <p className="text-2xl font-bold">No Comments yet!</p>
+          </div>
           )}
         </DialogHeader>
       </DialogContent>

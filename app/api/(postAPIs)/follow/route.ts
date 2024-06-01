@@ -5,7 +5,8 @@ import googleUser from "@/models/googleUser";
 export async function POST(req: NextRequest) {
     try {
         let { userToFollow,myName } = await req.json();
-        
+
+        await connectToMongo()
        
         let myself = await normalUser.find({ userName: myName });
 

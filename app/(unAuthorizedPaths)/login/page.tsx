@@ -1,22 +1,13 @@
 "use client";
 import { useEffect, useState } from "react";
-// import { FcGoogle } from "react-icons/fc";
 import { FaGithub, FaGoogle } from "react-icons/fa";
-
 import { signIn, signOut, useSession, getProviders } from "next-auth/react";
-import { json } from "node:stream/consumers";
-// import { PacmanLoader } from "react-spinners";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Link from "next/link";
 import ReCAPTCHA from "react-google-recaptcha";
-import {z} from "zod"
 import ClipLoader from "react-spinners/ClipLoader";
-
-const loginSchema=z.object({
-  email:z.string().email({message:"Enter a zod email"}).trim(),
-  password:z.string().trim().min(2,{message:"Password must be atleast 2 characters long."})
-})
+import { loginSchema } from "@/lib/zodSchemas";
 
 const LoginPage = () => {
   const { data: session } = useSession();
@@ -27,12 +18,6 @@ const LoginPage = () => {
   //     router.replace("/userPage");
   //     return null; // Prevent rendering while redirecting
   //   }
-  // useEffect(() => {
-  //   if (getCookie("userName") != undefined) {
-  //     router.replace("/");
-  //     // router.refresh()
-  //   }
-  // }, []);
 
   const [captchaValue, setCaptchaValue] = useState(false);
 
@@ -41,30 +26,27 @@ const LoginPage = () => {
     password: "",
   });
 
-  async function submit(e:any) {
+  async function submit(e: any) {
     e.preventDefault();
     try {
-      
       if (!captchaValue) {
         toast.error("Fill the captcha");
         return;
       }
-      const loginDetails={
+      const loginDetails = {
         email: formData.email,
         password: formData.password,
+      };
+      const result = loginSchema.safeParse(loginDetails);
+      if (!result.success) {
+        let errorMsg = "";
+        result.error.issues.forEach((i) => {
+          errorMsg += i.path[0] + " : " + i.message + ". ";
+        });
+        toast.error(errorMsg);
+        return;
       }
-      const result=loginSchema.safeParse(loginDetails)
-      if(!result.success){
-        let errorMsg=""
-        result.error.issues.forEach((i)=>{
-          errorMsg+=i.path[0]+" : " + i.message + ". "
-        })
-        toast.error(errorMsg)
-        return
-      }
-      setLoading(true)
-      // console.log(formData.email)
-      // console.log(formData.password)
+      setLoading(true);
       const response = await fetch("/api/normalLogin", {
         method: "POST",
         headers: {
@@ -72,7 +54,6 @@ const LoginPage = () => {
         },
         body: JSON.stringify(result),
       });
-      // console.log("logged in ")
       const data = await response.json();
       if (data.success == true) {
         toast.success(data.msg);
@@ -83,23 +64,26 @@ const LoginPage = () => {
       } else {
         toast.error(data.msg);
       }
-      setLoading(false)
-      
+      setLoading(false);
+
       setFormData({ email: "", password: "" });
-      // console.log("data in client is ", data);
     } catch (error) {
       toast.error("Something went wrong!");
-      setLoading(false)
+      setLoading(false);
     }
   }
 
   return (
     <div className="grid place-items-center">
-    {/* <div className='h-[100vh] z-50 w-[97vw] absolute top-0 grid place-items-center'> */}
-        <ClipLoader className="absolute top-[45vh] z-30" color="#e94154" loading={loading} size={100}/>
-    {/* </div> */}
-      {/* <section className="border-red-400 border-2 text-gray-600 body-font grid place-items-center  relative  "> */}
-      <div className="w-[90vw] md:w-[50vw] lg:w-[30vw] bg-dark-color text-color rounded-lg p-8 mt-24 mb-10 relative z-10 shadow-md">
+      <ClipLoader
+        className="absolute top-[45vh] z-30"
+        color="#e94154"
+        loading={loading}
+        size={100}
+      />
+      <h2 className="mt-2 mb-2 py-1 ml-4 mr-4 text-center font-bold text-4xl bg-gradient-to-r from-sky-600 via-green-500 to-orange-400 inline-block text-transparent bg-clip-text">Welcome to CodeNet &lt;/&gt;, your daily coding community.</h2>
+      <h2 className="mb-6 py-1 ml-4 mr-4 text-center font-bold text-4xl bg-gradient-to-r from-sky-600 via-green-500 to-orange-400 inline-block text-transparent bg-clip-text">Login to continue.</h2>
+      <div className="w-[90vw] md:w-[50vw] lg:w-[30vw] bg-dark-color rounded-lg p-8 mt-0 mb-10 relative z-10 shadow-md">
         <h2 className=" text-2xl mb-5 font-medium">Login</h2>
 
         <form action="" onSubmit={submit}>
@@ -109,6 +93,7 @@ const LoginPage = () => {
             </label>
             <input
               value={formData.email}
+              placeholder="johndoe@gmail.com"
               onChange={(event) =>
                 setFormData({
                   ...formData,
@@ -128,6 +113,7 @@ const LoginPage = () => {
             </label>
             <input
               value={formData.password}
+              placeholder="********"
               onChange={(event) =>
                 setFormData({
                   ...formData,
@@ -148,7 +134,7 @@ const LoginPage = () => {
             domain="ecommerce-both-frontend.onrender.com"
           />
           <input
-            className="w-full mt-3 cursor-pointer text-white bg-red-500 border-0 py-2 px-6 focus:outline-none hover:bg-red-600 rounded text-lg"
+            className="w-full mt-3 cursor-pointer text-white py-2 px-6 focus:outline-none bg-red-500 hover:bg-red-600 rounded text-lg"
             type="submit"
             value="Submit"
           />
@@ -160,7 +146,7 @@ const LoginPage = () => {
           onClick={() => {
             signIn("google");
           }}
-          className="text text-white w-full mb-5 flex  bg border-0 py-2 justify-center focus:outline-none bg-red-500 hover:bg-red-600 rounded text-lg"
+          className="text text-white w-full mb-5 flex  bg py-2 justify-center focus:outline-none bg-red-500 hover:bg-red-600 rounded text-lg"
         >
           Login through Google
           <p className="mt-1.5 ml-2">
@@ -172,7 +158,7 @@ const LoginPage = () => {
           onClick={() => {
             signIn("github");
           }}
-          className="text text-white w-full flex  bg border-0 py-2 justify-center focus:outline-none bg-red-500 hover:bg-red-600 rounded text-lg"
+          className="text text-white w-full flex  bg py-2 justify-center focus:outline-none bg-red-500 hover:bg-red-600 rounded text-lg"
         >
           Login through Github
           <p className="mt-1.5 ml-2">

@@ -59,11 +59,14 @@ export interface postInterface {
     Kotlin: "kotlin",
     Rust: "rust",
     SQL: "sql",
-    Markdown: "markdown",
-    JSON: "json",
-    YAML: "yaml",
-    XML: "xml",
-    Bash: "bash",
-    Shell: "shell",
   };
   
+
+  export interface jwtTokenInterface{
+    name:string,
+    userName:string,
+    email:string,
+    profilePic:string,
+    iat:number,
+    exp:number
+  }

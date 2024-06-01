@@ -1,8 +1,7 @@
 import { connectToMongo } from "@/utils/mongo";
-import redis from "@/utils/redis";
 import post from "@/models/post";
 import { NextRequest, NextResponse } from "next/server";
-
+ 
 
 export async function POST(req: NextRequest) {
     try {
@@ -12,7 +11,8 @@ export async function POST(req: NextRequest) {
         
         let data = []
         
-        await connectToMongo()
+        await connectToMongo()        
+        
         for(let i=loadNumber*10+1;i<loadNumber*10+10;i++){
             const postFromMongo=await post.findOne({_id:redisPostList[i]})
             if(postFromMongo){

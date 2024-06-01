@@ -1,11 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-// import { FcGoogle } from "react-icons/fc";
-import { FaGithub, FaGoogle } from "react-icons/fa";
-
-import { signIn, signOut, useSession, getProviders } from "next-auth/react";
-// import { json } from "node:stream/consumers";
-// import { PacmanLoader } from "react-spinners";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Link from "next/link";
@@ -72,7 +66,6 @@ const SignupPage = () => {
       }
       
       setLoading(false)
-      // console.log("data in client is ", data);
     } catch (error) {
       setLoading(false)
       toast.error("Something went wrong!");
@@ -80,7 +73,6 @@ const SignupPage = () => {
   }
 
   function submitOTP() {
-    console.log("otp ", otp, " user ", parseInt(userOTP));
     if (otp == parseInt(userOTP)) {
       router.replace(`/resetPassword?email=${email}`);
       // toast.success("Correct OTP")
@@ -94,7 +86,7 @@ const SignupPage = () => {
                           <ClipLoader className="absolute top-[45vh] z-30" color="#e94154" loading={loading} size={100}/>
 
       <div>
-        <div className="w-[90vw] md:w-[50vw] lg:w-[30vw] bg-dark-color text-color rounded-lg p-8 mt-10 mb-10 relative z-10 shadow-md">
+        <div className="w-[90vw] md:w-[50vw] lg:w-[30vw] bg-dark-color   rounded-lg p-8 mt-10 mb-10 relative z-10 shadow-md">
           <h2 className=" text-2xl mb-5 font-medium">Forgot Password</h2>
 
           <form action="" onSubmit={submit}>
@@ -103,6 +95,7 @@ const SignupPage = () => {
                 Email
               </label>
               <input
+              placeholder="johndoe@gmail.com"
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
                 required
@@ -120,7 +113,7 @@ const SignupPage = () => {
             />
 
             <input
-              className="w-full mt-3 cursor-pointer text-white bg-red-500 border-0 py-2 px-6 focus:outline-none hover:bg-red-600 rounded text-lg"
+              className="w-full mt-3 cursor-pointer text-white py-2 px-6 focus:outline-none bg-red-500 hover:bg-red-600 rounded text-lg"
               type="submit"
               value="Submit"
             />
@@ -134,7 +127,7 @@ const SignupPage = () => {
         {otpPopup ? (
           <Dialog>
             <DialogTrigger>
-              <p className="w-full mt-3 cursor-pointer text-white bg-red-500 border-0 py-2 px-6 focus:outline-none hover:bg-red-600 rounded text-lg">
+              <p className="w-full mt-3 cursor-pointer text-white py-2 px-6 focus:outline-none hover:bg-red-600 rounded text-lg">
                 Enter OTP
               </p>
             </DialogTrigger>
@@ -166,7 +159,7 @@ const SignupPage = () => {
 
                   <button
                     onClick={submitOTP}
-                    className="w-full mt-3 cursor-pointer text-white bg-red-500 border-0 py-2 px-6 focus:outline-none hover:bg-red-600 rounded text-lg"
+                    className="w-full mt-3 cursor-pointer text-white bg-red-500 py-2 px-6 focus:outline-none hover:bg-red-600 rounded text-lg"
                   >
                     Submit
                   </button>

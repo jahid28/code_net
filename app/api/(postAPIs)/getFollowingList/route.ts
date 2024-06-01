@@ -1,15 +1,17 @@
 import { connectToMongo } from "@/utils/mongo";
-import post from "@/models/post";
 import { NextRequest, NextResponse } from "next/server";
 import normalUser from "@/models/normalUser";
 import googleUser from "@/models/googleUser";
-
+ import { jwtTokenInterface } from "@/lib/interfaces";
+const jwt=require("jsonwebtoken")
 export async function GET(req: NextRequest) {
     try {
-        await connectToMongo()
-        // const { user } = await req.json()
-        const userName=req.cookies.get("userName")?.value
-
+        const token=req.cookies.get("token")?.value
+        const verify:jwtTokenInterface=jwt.verify(token,`${process.env.NEXTAUTH_SECRET}`)
+        
+        const userName=verify.userName
+        
+        await connectToMongo()        
         let data=await normalUser.find({userName})
 
         if(data.length===0){

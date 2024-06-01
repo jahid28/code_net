@@ -31,7 +31,7 @@
     overflow-x: hidden;
     background-color: var(--bg-color);
   }
-  
+
     .darkmode {
       --p-color: rgb(255, 255, 255);
       --bg-color: rgb(54, 53, 53);

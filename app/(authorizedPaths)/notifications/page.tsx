@@ -1,11 +1,10 @@
 "use client";
 import { postInterface } from "@/lib/interfaces";
 import React, { useEffect, useRef, useState } from "react";
-import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "sonner";
 import SinglePost from "@/components/SinglePost";
-// import PostSkeleton from "./PostSkeleton";
 import PostSkeleton from "@/components/PostSkeleton";
+import Image from "next/image";
 const AllPosts = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [myName, setMyname] = useState<string>("");
@@ -76,7 +75,7 @@ const AllPosts = () => {
   }, []);
 
   return (
-    <div className="border-2 border-red-700 grid place-items-center">
+    <div className="grid place-items-center">
       {/* <ClipLoader
         className="absolute top-[45vh] z-30"
         color="#e94154"
@@ -84,35 +83,32 @@ const AllPosts = () => {
         size={100}
       /> */}
 
-      <div className="border-x-0 border-green-600 w-[90vw] md:w-[50vw] mb-6">
+      <div className="w-[90vw] md:w-[50vw] mb-6">
         {loading && (
-          <div>
-            <PostSkeleton />
-            <br />
-            <br />
-            <PostSkeleton />
-            <br />
-            <br />
-            <PostSkeleton />
-            <br />
-            <br />
-            <PostSkeleton />
-          </div>
+         <PostSkeleton />
         )}
 
-        {!loading && posts.length === 0 && 
-        <p className="text-color text-2xl font-bold text-center mt-6">No notifications right now</p>
-         }
         {!loading &&
           posts.map((e, index) => {
             return (
               <SinglePost
-                data={e}
-                myName={myName}
-                followingList={followingList}
+              key={index}
+              data={e}
+              myName={myName}
+              followingList={followingList}
               />
             );
           })}
+
+          {!loading && posts.length === 0 && 
+          <div className='grid place-items-center '>
+          <Image className='mt-10 mb-4' src='/empty.png' width={300} height={300} alt='404' />
+            <p className='text-2xl font-bold'>NO NOTIFICATIONS</p>
+            <p className='text-xl font-medium'>You will get notifications when someone you follow posts something.</p>
+            
+          </div>
+           }
+
       </div>
     </div>
   );

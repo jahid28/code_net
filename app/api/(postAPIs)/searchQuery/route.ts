@@ -1,22 +1,20 @@
 import { connectToMongo } from "@/utils/mongo";
-import redis from "@/utils/redis";
 import post from "@/models/post";
 import { NextRequest, NextResponse } from "next/server";
 import normalUser from "@/models/normalUser";
 import googleUser from "@/models/googleUser";
-
+ 
 
 export async function POST(req: NextRequest) {
     try {
         const { queryArray } = await req.json()
         // const randomNumber:number = Math.floor(Math.random() * 3) + 1;
         // const redisPostList=await redis.lrange(`allPostList${randomNumber}`,0,-1)
-        // await connectToMongo()
 
         // let profileArray: any = []
         // let postArray: any = []
 
-
+        await connectToMongo()
 
         // for (let i = 0; i < queryArray.length; i++) {
 

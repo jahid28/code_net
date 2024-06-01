@@ -3,7 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 const SingleProfile = (props:any) => {
   return (
-    <div className='text-color'>
+    <div>
       <div className="flex items-center">
         <Link className="flex items-center" href={`/account/${props.userName}`}>
           <Image

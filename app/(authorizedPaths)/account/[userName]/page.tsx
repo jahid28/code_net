@@ -1,16 +1,14 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import ClipLoader from "react-spinners/ClipLoader";
 import { postInterface } from "@/lib/interfaces";
 import SinglePost from "@/components/SinglePost";
 import PostSkeleton from "@/components/PostSkeleton";
 import Image from "next/image";
 import { Player } from "@lordicon/react";
 import FollowComponent from "@/components/FollowComponent";
-// useRef
-// import { set } from "mongoose";
-// import getPostInter// import { AuthContext } from "../../layout";
+import ProfileSkeleton from "@/components/ProfileSkeleton";
+
 const page = ({ params }: { params: any }) => {
   interface getPostInterface extends postInterface {
     _id: string;
@@ -22,7 +20,6 @@ const page = ({ params }: { params: any }) => {
   const playerRefAt = useRef<Player>(null);
   const at = require("@/icons/at.json");
 
-  // const [userName, setUserName] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [posts, setPosts] = useState<getPostInterface[]>([]);
   const [followingList, setFollowingList] = useState<string[]>([]);
@@ -59,7 +56,6 @@ const page = ({ params }: { params: any }) => {
 
   useEffect(() => {
     getUserPosts();
-    //  console.log("useeffect")
   }, []);
 
   const isEmpty = (obj: any) => {
@@ -67,46 +63,51 @@ const page = ({ params }: { params: any }) => {
   };
 
   return (
-    <div className="border-0 border-red-700 grid place-items-center">
-      {/* <ClipLoader
-        className="absolute top-[45vh] z-30"
-        color="#e94154"
-        loading={loading}
-        size={100}
-      /> */}
-
+    <div className="grid place-items-center">
       {!loading && isEmpty(userDetails) && (
-        <div className="text-2xl text-color font-extrabold">No User found!</div>
-      )}
-      {!loading && !isEmpty(userDetails) && (
-        <div                
-        className="border-0 border-white w-full grid place-items-center lg:flex items-center text-color mb-4 border-b-2 pb-3">
+        <div className="grid place-items-center ">
           <Image
-            className="rounded-full mr-4 ml-2"
-            src={userDetails.profilePic}
-            width={120}
-            height={120}
-            alt="profile pic"
+            className="mt-10 mb-4"
+            src="/empty.png"
+            width={300}
+            height={300}
+            alt="404"
           />
+          <p className="text-2xl font-bold">NO USER FOUND</p>
+        </div>
+      )}
 
-          <div  onMouseEnter={() => playerRefAt.current?.playFromBeginning()}>
+      {loading && (
+<ProfileSkeleton/>
+      )}
+      {/* {loading && !isEmpty(userDetails) && (
+        <ProfileSkeleton/>
+      )} */}
+
+      {!loading && !isEmpty(userDetails) && (
+        <div className="w-full grid place-items-center lg:flex items-center mb-4 pb-3">
+          <div className="relative w-36 h-36 rounded-full overflow-hidden mr-4 cursor-pointer">
+            <Image
+              src={`${userDetails.profilePic}`}
+              alt="profile Pic"
+              layout="fill"
+              className="object-center"
+            />
+          </div>
+
+          <div onMouseEnter={() => playerRefAt.current?.playFromBeginning()}>
             <p className="text-2xl font-bold">{userDetails.name}</p>
             <div className="text-xl opacity-50 flex">
-              
-                <Player
-                  colorize={"var(--icon-color)"}
-                  ref={playerRefAt}
-                  size={26}
-                  icon={at}
-                />
-
-             <p> {userDetails.userName}</p>
+              <Player
+                colorize={"var(--icon-color)"}
+                ref={playerRefAt}
+                size={26}
+                icon={at}
+              />
+              <p> {userDetails.userName}</p>
             </div>
           </div>
-          <div className="flex flex-wrap text-lg lg:text-2xl mt-2 lg:mt-0 font-bold">
-            
-         
-            
+          <div className="flex justify-center flex-wrap text-lg lg:text-2xl mt-2 lg:mt-0 font-bold">
             <p className="ml-[6vw] mb-2">
               Followers : {userDetails.followers.length}
             </p>
@@ -116,10 +117,10 @@ const page = ({ params }: { params: any }) => {
             <p className="ml-[6vw] mr-[4vw] mb-2">{posts.length} Posts</p>
 
             <FollowComponent
-          followingList={followingList}
-          userToFollow={userName}
-          myName={myName}
-        />
+              followingList={followingList}
+              userToFollow={userName}
+              myName={myName}
+            />
 
             <div
               onMouseEnter={() => playerRefShare.current?.playFromBeginning()}
@@ -144,23 +145,13 @@ const page = ({ params }: { params: any }) => {
             </div>
           </div>
         </div>
-      )}
+      )} 
 
-      <div className="border-x-0 border-yellow-600 w-[98vw] md:w-[50vw] mb-6">
-        {loading && (
-          <div>
-            <PostSkeleton />
-            <br />
-            <br />
-            <PostSkeleton />
-            <br />
-            <br />
-            <PostSkeleton />
-            <br />
-            <br />
-            <PostSkeleton />
-          </div>
-        )}
+      
+      <div className="w-[98vw] md:w-[50vw] mb-6">
+
+        {loading && <PostSkeleton />}
+
         {!loading &&
           posts.length > 0 &&
           !isEmpty(userDetails) &&
@@ -177,7 +168,7 @@ const page = ({ params }: { params: any }) => {
       </div>
 
       {!loading && posts.length == 0 && !isEmpty(userDetails) && (
-        <div className="text-2xl text-center text-color font-extrabold">
+        <div className="text-2xl text-center font-extrabold">
           No posts found!
         </div>
       )}

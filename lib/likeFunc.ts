@@ -26,7 +26,6 @@ export async function like(_id: string) {
         toast.error(data.msg);
       }
     } catch (err: any) {
-      // console.log(err)
       toast.error(err);
     }
   }

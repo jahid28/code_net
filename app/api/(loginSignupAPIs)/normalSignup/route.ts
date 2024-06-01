@@ -3,24 +3,30 @@ import normalUser from "@/models/normalUser";
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import bcrypt from 'bcrypt'
-import { Resend } from "resend"
-import { revalidatePath } from "next/cache";
 import { normalUserInterface } from "@/lib/interfaces";
 import googleUser from "@/models/googleUser";
-
+ const jwt = require('jsonwebtoken');
 export async function POST(req: NextRequest) {
     try {
         await connectToMongo()
-
         // const { name, email, password } = await req.json();
-        const res = await req.json();
-        const name = res.data.name
-        const email = res.data.email
-        const password = res.data.password
-        const userName = res.data.userName
+        const {name,email,password,userName,profilePic} = await req.json();
+        // const name = res.data.name
+        // const email = res.data.email
+        // const password = res.data.password
+        // const userName = res.data.userName
+        // const profilePic = res.data.profilePic
+
+        // const checkEmail = await normalUser.find({ email })
+        // if (checkEmail.length > 0) {
+        //     return NextResponse.json({ success: false, msg: "Email already registered." }, { status: 400 })
+        // }
+
+      
 
         const checkEmail = await normalUser.find({ email })
-        if (checkEmail.length > 0) {
+        const checkEmail2 = await googleUser.find({ email })
+        if (checkEmail.length > 0 || checkEmail2.length>0) {
             return NextResponse.json({ success: false, msg: "Email already registered." }, { status: 400 })
         }
 
@@ -39,22 +45,26 @@ export async function POST(req: NextRequest) {
             userName,
             email,
             password: hashPass,
-            profilePic: 'https://t4.ftcdn.net/jpg/02/15/84/43/240_F_215844325_ttX9YiIIyeaR7Ne6EaLLjMAmy4GvPC69.jpg',
+            profilePic: profilePic!==""?profilePic:`${process.env.NEXT_PUBLIC_DEFAULT_PROFILE_PIC}`,
             followers: [],
             following: [],
         }
         await normalUser.insertMany([data])
 
-        cookies().set('userName', `${userName}`, { maxAge: 60 * 60 * 24 })
-        cookies().set('name', `${data.name}`, { maxAge: 60 * 60 * 24 })
-        cookies().set('profilePic', `${data.profilePic}`, { maxAge: 60 * 60 * 24 })
+        // cookies().set('userName', `${userName}`, { maxAge: 60 * 60 * 24 })
+        // cookies().set('name', `${data.name}`, { maxAge: 60 * 60 * 24 })
+        // cookies().set('profilePic', `${data.profilePic}`, { maxAge: 60 * 60 * 24 }).
+
+        const token= jwt.sign({ name, userName, email, profilePic:data.profilePic }, `${process.env.NEXTAUTH_SECRET}`, { expiresIn: '1d' });
+        
+        cookies().set('token', `${token}`, { maxAge: 60 * 60 * 24 })
+        
 
         return NextResponse.json({ success: true, msg: "Successfully registered" }, { status: 200 })
 
 
 
     } catch (error) {
-        // console.log(error)
         return NextResponse.json({ success: false, msg: "Something went wrong!" }, { status: 400 })
 
     }

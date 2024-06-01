@@ -3,11 +3,15 @@ import post from "@/models/post";
 import { NextRequest, NextResponse } from "next/server";
 import normalUser from "@/models/normalUser";
 import googleUser from "@/models/googleUser";
-
+import { jwtTokenInterface } from "@/lib/interfaces";
+const jwt=require("jsonwebtoken")
 export async function POST(req: NextRequest) {
     try {
         const {userName} =await req.json()
-        const myName = req.cookies.get("userName")?.value!;
+        const token=req.cookies.get("token")?.value
+        const verify:jwtTokenInterface=jwt.verify(token,`${process.env.NEXTAUTH_SECRET}`)
+        const myName = verify.userName
+        
         await connectToMongo()
         
         let myDetails = await normalUser.find({ userName:myName });

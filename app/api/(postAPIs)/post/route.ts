@@ -1,17 +1,14 @@
 import { connectToMongo } from "@/utils/mongo";
 import redis from "@/utils/redis";
-// import normalUser from "@/models/normalUser";
 import post from "@/models/post";
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
-// import bcrypt from 'bcrypt'
-// import { Resend } from "resend"
-// import { revalidatePath } from "next/cache";
-// import { normalUserInterface } from "@/lib/interfaces";
 import { postInterface } from "@/lib/interfaces";
 import normalUser from "@/models/normalUser";
 import googleUser from "@/models/googleUser";
+import { jwtTokenInterface } from "@/lib/interfaces";
+import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "@google/generative-ai";
 
+const jwt = require('jsonwebtoken');
 function shuffle(array: any[]): any[] {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -38,7 +35,7 @@ async function shuffleRedisListWithNewValue(listKey: string, newValue: string) {
 
     await redis.del(listKey)
 
-    shuffledItems.map(async(post) => {
+    shuffledItems.map(async (post) => {
         await redis.rpush(listKey, post)
     })
 
@@ -51,21 +48,22 @@ export async function POST(req: NextRequest) {
         let { codeType, msg, code, lang, imagesForMongoDB } = await req.json();
         // const email=res.data.email
         // const password=res.data.password
-        // console.log("00000000000000000 ",data)
         // const { email, password } = await req.json();
         if (code == "") {
             code = " "
         }
+        const token = req.cookies.get("token")?.value
+        const verify: jwtTokenInterface = jwt.verify(token, `${process.env.NEXTAUTH_SECRET}`)
 
-        const userName = req.cookies.get("userName")
-        const name = req.cookies.get("name")
-        const profilePic = req.cookies.get("profilePic")
-        if (userName === undefined || name === undefined || profilePic === undefined) {
-            return NextResponse.json({ success: false, msg: "User donot exist!" }, { status: 400 })
-        }
-        let checkUser = await normalUser.find({ userName: userName?.value! })
+        const userName = verify.userName
+        const name = verify.name
+        const profilePic = verify.profilePic
+        // if (userName === undefined || name === undefined || profilePic === undefined) {
+        //     return NextResponse.json({ success: false, msg: "User donot exist!" }, { status: 400 })
+        // }
+        let checkUser = await normalUser.find({ userName })
         if (checkUser.length === 0) {
-            checkUser = await googleUser.find({ userName: userName?.value! })
+            checkUser = await googleUser.find({ userName })
             if (checkUser.length === 0) {
                 return NextResponse.json({ success: false, msg: "User donot exist!" }, { status: 400 })
             }
@@ -73,10 +71,7 @@ export async function POST(req: NextRequest) {
         // if(checkUser.length===0 && checkUser2.length===0){
         //     return NextResponse.json({ success: false, msg: "User donot exist!" }, { status: 400 })
         // }
-        // console.log("uName is ",userName)
-        // var getUserInfo=await normalUser.find({userName:userName?.value!})
-        // console.log("info1 is ",getUserInfo)
-        // if(getUserInfo.length===0){
+
         //     getUserInfo=await googleUser.find({userName:userName?.value!})
         //     if(getUserInfo.length===0){
         //         return NextResponse.json({ success: false, msg: "User doesnot exist!" }, { status: 400 })
@@ -84,15 +79,10 @@ export async function POST(req: NextRequest) {
         //     }
         // }
 
-        // console.log("info is ",getUserInfo)
-
-
-
-
         const postDetails: postInterface = {
-            userName: userName?.value!,
-            name: name?.value!,
-            profilePic: profilePic?.value!,
+            userName,
+            name,
+            profilePic,
             // name:getUserInfo[0].name,
             // profilePic:getUserInfo[0].profilePic,
             codeType,
@@ -108,8 +98,62 @@ export async function POST(req: NextRequest) {
         }
 
 
-        await connectToMongo()
+        const apiKey = process.env.GEMINI_API_KEY!;
+        const genAI = new GoogleGenerativeAI(apiKey);
 
+        const model = genAI.getGenerativeModel({
+            model: "gemini-1.5-flash",
+        });
+
+        const generationConfig = {
+            temperature: 1,
+            topP: 0.95,
+            topK: 64,
+            maxOutputTokens: 8192,
+            responseMimeType: "text/plain",
+        };
+
+        const safetySettings = [
+            {
+                category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+                threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+            },
+            {
+                category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+                threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+            },
+            {
+                category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+                threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+            },
+            {
+                category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+                threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+            },
+        ];
+
+        const chatSession = model.startChat({
+            generationConfig,
+            safetySettings,
+            history: [
+            ],
+        });
+
+        const result = await chatSession.sendMessage(
+        `"${msg}"
+        Is this message about programming/coding/tech? yes or no`
+        );
+        console.log("gemmmm ", result.response.text());
+
+        if(result.response.text().toLowerCase().includes("no")){
+            return NextResponse.json({ success: false, msg: "Please post something related to programming, coding or tech" }, { status: 400 })
+        }
+
+
+
+
+
+        await connectToMongo()
         const postToInsert = await post.insertMany([postDetails])
 
         for (let i = 0; i < checkUser[0].followers.length; i++) {
@@ -141,11 +185,9 @@ export async function POST(req: NextRequest) {
 //         subject:"CodeNet Reset Password",
 //         text:`OTP is 77. Use this code to reset your password in CodeNet`
 //       }).then(()=>{
-//         console.log("gg")
 //         // toast.success("Enter the OTP sent to your Email");
 //     })
 //     .catch(()=>{
-//           console.log("ff")
 //         // toast.error("Something went wrong!");
 //       })
 // }

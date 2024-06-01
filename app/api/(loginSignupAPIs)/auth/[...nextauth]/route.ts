@@ -1,9 +1,6 @@
 import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import GithubProvider from 'next-auth/providers/github';
-// import { useRouter } from 'next/router';
-// import { usePathname } from 'next/navigation'
-import { usePathname, useRouter } from 'next/navigation'
 
 import { cookies } from 'next/headers'
 
@@ -11,7 +8,8 @@ import User from "@/models/googleUser";
 import { connectToMongo } from "@/utils/mongo";
 // import { NextResponse } from "next/server";
 import { googleUserInterface } from '@/lib/interfaces';
-// console.log("hererrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
+// import { JWT } from 'next-auth/jwt';
+const jwt = require('jsonwebtoken');
 // interface user_insert {
 //   name: string;
 //   email: string;
@@ -56,8 +54,7 @@ const handler = NextAuth({
           }
         
 
-        await connectToMongo();
-
+          await connectToMongo()
 
         const checkEmail = await User.find({ email: user.email })
         const checkUserName = await User.find({ userName: randomUserName })
@@ -70,7 +67,6 @@ const handler = NextAuth({
 
 
         // const userName = cookies().get('userName')
-        // console.log("ggo name is ", userName?.value)
 
 
 
@@ -91,18 +87,22 @@ const handler = NextAuth({
           randomUserName=checkEmail[0].userName
         }
 
-        cookies().set('userName', `${randomUserName}`, { maxAge: 60 * 60 * 24 })
-        cookies().set('name', `${user.name}`, { maxAge: 60 * 60 * 24 })
-        cookies().set('profilePic', `${user.image}`, { maxAge: 60 * 60 * 24 })
+        // cookies().set('userName', `${randomUserName}`, { maxAge: 60 * 60 * 24 })
+        // cookies().set('name', `${user.name}`, { maxAge: 60 * 60 * 24 })
+        // cookies().set('profilePic', `${user.image}`, { maxAge: 60 * 60 * 24 })
+      
+         const token= jwt.sign({ name: user.name, userName: randomUserName, email: user.email, profilePic: user.image }, `${process.env.NEXTAUTH_SECRET}`, { expiresIn: '1d' });
+        
+        cookies().set('token', `${token}`, { maxAge: 60 * 60 * 24 })
 
+        // const verify=jwt.verify(cookies().get("userName")?.value,`${process.env.NEXTAUTH_SECRET}`)
+        
         return true
       }
       catch (error) {
         return false
       }
-      // finally{
-
-      // }
+    
     },
 
     //     async signOut({ session }) {

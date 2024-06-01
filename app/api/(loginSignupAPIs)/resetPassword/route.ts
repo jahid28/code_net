@@ -1,10 +1,7 @@
 import { connectToMongo } from "@/utils/mongo";
 import normalUser from "@/models/normalUser";
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
-// import { hash,compare } from "@/lib/hashPassword";
 import bcrypt from 'bcrypt'
-import {Resend} from "resend"
 
 export async function POST(req: NextRequest) {
     try {
@@ -14,9 +11,7 @@ export async function POST(req: NextRequest) {
         const password=res.data.pass
 
         await connectToMongo()
-
         // const check = await normalUser.find({ email })
-        // // console.log("check i s ", check)
         
         // if(check.length<=0){
         //     return NextResponse.json({ success: false,msg:"Email is not registered" }, { status: 400 })
@@ -33,7 +28,6 @@ export async function POST(req: NextRequest) {
         
         
     } catch (error) {
-        // console.log(error)
         return NextResponse.json({ success: false,msg:"Something went wrong!" }, { status: 400 })
     }
 }

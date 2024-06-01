@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import SinglePost from "@/components/SinglePost";
 import { postInterface } from "@/lib/interfaces";
 import SingleProfile from "@/components/SingleProfile";
+import Image from "next/image";
 const page = ({ searchParams }: { searchParams: any }) => {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
@@ -46,7 +47,6 @@ const page = ({ searchParams }: { searchParams: any }) => {
           },
           body: JSON.stringify({ queryArray }),
         });
-        // console.log("logged in ")
         const data = await response.json();
         if (data.success === false) {
           toast.error(data.msg);
@@ -87,31 +87,21 @@ const page = ({ searchParams }: { searchParams: any }) => {
     } catch (error: any) {
       toast.error(error);
     }
-  }, []);
+  }, [searchParams.query]);
 
   // finalQuery = finalQuery.replace(/ /g, '-');
   return (
-    <div className="border-2 border-red-700 grid place-items-center">
-      <div className="border-x-0 border-green-600 w-[90vw] md:w-[50vw] mb-6">
+    <div className="grid place-items-center">
+      <div className="w-[90vw] md:w-[50vw] mb-6">
         {loading && (
-          <div>
-            <PostSkeleton />
-            <br />
-            <br />
-            <PostSkeleton />
-            <br />
-            <br />
-            <PostSkeleton />
-            <br />
-            <br />
-            <PostSkeleton />
-          </div>
+         <PostSkeleton />
         )}
 
         {!loading &&
           profiles.map((e, index) => {
             return (
               <SingleProfile
+              key={index}
                 name={e.name}
                 userName={e.userName}
                 profilePic={e.profilePic}
@@ -123,12 +113,20 @@ const page = ({ searchParams }: { searchParams: any }) => {
           posts.map((e, index) => {
             return (
               <SinglePost
+              key={index}
                 data={e}
                 myName={myName}
                 followingList={followingList}
               />
             );
           })}
+
+        {posts.length === 0 && profiles.length === 0 && !loading && 
+         <div className='grid place-items-center   '>
+         <Image className='mt-10 mb-4' src='/empty.png' width={300} height={300} alt='404' />
+           <p className='text-2xl font-bold'>NO RESULTS</p>
+         </div>
+        }
       </div>
     </div>
   );
