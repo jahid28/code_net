@@ -14,7 +14,7 @@ interface PageProps {
   params: { postID: string };
 }
 
-const page: React.FC<PageProps> = ({ params }) => {
+const PostIDPage: React.FC<PageProps> = ({ params }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [data, setData] = useState<getPostInterface>();
 
@@ -70,4 +70,4 @@ const page: React.FC<PageProps> = ({ params }) => {
   );
 };
 
-export default page;
+export default PostIDPage;

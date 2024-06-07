@@ -25,7 +25,7 @@ import {
 import { useDispatch } from "react-redux";
 import { getEmailActionFunc } from "@/redux/actions";
 
-const SignupPage: React.FC = () => {
+const ForgotPassword: React.FC = () => {
   const router = useRouter();
   const [captchaValue, setCaptchaValue] = useState<boolean>(false);
   const [userOTP, setUserOTP] = useState<string>("");
@@ -184,4 +184,4 @@ const SignupPage: React.FC = () => {
   );
 };
 
-export default SignupPage;
+export default ForgotPassword;

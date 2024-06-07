@@ -10,7 +10,7 @@ interface getPostInterface extends postInterface {
   _id: string;
 }
 
-const AllPosts: React.FC = () => {
+const NotiPage: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const [posts, setPosts] = useState<getPostInterface[]>([]);
@@ -83,4 +83,4 @@ const AllPosts: React.FC = () => {
   );
 };
 
-export default AllPosts;
+export default NotiPage;

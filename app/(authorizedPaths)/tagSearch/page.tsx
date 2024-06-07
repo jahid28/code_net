@@ -15,7 +15,7 @@ interface getPostInterface extends postInterface {
   _id: string;
 }
 
-const page: React.FC<PageProps> = ({ searchParams }) => {
+const TagSearch: React.FC<PageProps> = ({ searchParams }) => {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const [posts, setPosts] = useState<getPostInterface[]>([]);
@@ -85,4 +85,4 @@ const page: React.FC<PageProps> = ({ searchParams }) => {
   );
 };
 
-export default page;
+export default TagSearch;

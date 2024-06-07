@@ -19,7 +19,7 @@ interface PageProps {
   params: { userName: string };
 }
 
-const page: React.FC<PageProps> = ({ params }) => {
+const AccountPage: React.FC<PageProps> = ({ params }) => {
   interface getPostInterface extends postInterface {
     _id: string;
   }
@@ -189,4 +189,4 @@ const page: React.FC<PageProps> = ({ params }) => {
   );
 };
 
-export default page;
+export default AccountPage;

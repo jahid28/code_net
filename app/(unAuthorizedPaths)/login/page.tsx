@@ -169,7 +169,7 @@ const LoginPage: React.FC = () => {
         <p className="text-base text-ascent mt-3">
           <Link href={"/forgotPassword"}>Forgot Password?</Link>
         </p>
-        <p className="text-base text-gray-500 mt-3">Don't have an account? </p>
+        <p className="text-base text-gray-500 mt-3">Don&apos;t have an account? </p>
         <p className="w-fit cursor-pointer text-base text-ascent mt-3">
           <Link href={"/signup"}>Signup</Link>
         </p>
