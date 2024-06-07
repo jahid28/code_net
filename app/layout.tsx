@@ -14,17 +14,17 @@ const inter = Inter({ subsets: ["latin"] });
 
 interface RootLayoutProps {
   children: React.ReactNode;
-  session: Session | null;
+  // session: Session | null;
 }
 
 
-export default function RootLayout({ children, session }: RootLayoutProps) {
+export default function RootLayout({ children }: RootLayoutProps) {
   const pathname:string = usePathname();
   console.log("layout")
   return (
     <html lang="en">
       <body className={inter.className}>
-        <AuthProvider session={session}>
+        <AuthProvider >
           <Provider store={store}>
           <Navbar />
           {(pathname === "/" || pathname === "/tagSearch") && <Tags />}

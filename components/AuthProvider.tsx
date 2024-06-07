@@ -1,11 +1,11 @@
-// 'use client'
-import { Session } from 'inspector'
+'use client'
+// import { Session } from 'inspector'
 import { SessionProvider } from 'next-auth/react'
 
-const AuthProvider = ({ children, session }: { children: React.ReactNode, session: Session & { expires: string } }) => {
+const AuthProvider = ({ children }: { children: React.ReactNode}) => {
   return (
     <div>
-      <SessionProvider session={session}>
+      <SessionProvider>
         {children}
       </SessionProvider>
     </div>
