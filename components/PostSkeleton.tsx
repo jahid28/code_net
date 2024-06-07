@@ -1,7 +1,7 @@
 import React from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const PostSkeleton = () => {
+const PostSkeleton: React.FC = () => {
   return (
     <div className="w-full items-center">
       <div className="flex items-center">
@@ -22,7 +22,7 @@ const PostSkeleton = () => {
 
       <br />
       <br />
-      
+
       <div className="flex items-center">
         <Skeleton className="h-10 w-10 rounded-full" />
         <Skeleton className="h-6 w-20 ml-2 rounded-lg" />

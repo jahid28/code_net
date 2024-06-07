@@ -28,50 +28,54 @@ import {
 import { Player } from "@lordicon/react";
 import { toast } from "sonner";
 import { imageDb } from "@/Firebase/Config";
-import { ref, uploadBytes, listAll, getDownloadURL } from "firebase/storage";
+import {
+  ref,
+  uploadBytes,
+  listAll,
+  getDownloadURL,
+  StorageReference,
+} from "firebase/storage";
 import { v4 } from "uuid";
 import ClipLoader from "react-spinners/ClipLoader";
 import { postSchema } from "@/lib/zodSchemas";
+import check from "@/icons/check.json";
+import upload from "@/icons/upload.json";
+import arrow from "@/icons/arrow.json";
 
-const PostBox = () => {
+const PostBox: React.FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const playerRefCheck = useRef<Player>(null);
   const playerRefUpload = useRef<Player>(null);
   const playerRefArrow = useRef<Player>(null);
-  const check = require("@/icons/check.json");
-  const upload = require("@/icons/photo.json");
-  const arrow = require("@/icons/arrow.json");
 
   const [imagesToUload, setImagesToUload] = useState<File[]>([]);
   const [images, setImages] = useState<string[]>([]);
-  //   const [list, setlist] = useState<string[]>(["lol", "hhhhh"]);
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const [lang, setLang] = useState<string>("Javascript");
   const [codeType, setCodeType] = useState<string>("Random Fact");
   const [msg, setMsg] = useState<string>("");
   const [code, setCode] = useState<string>("");
-  // const [imagesForMongoDB, setImagesForMongoDB] = useState<string[]>(["lol"]);
 
-  function inputClicked() {
+  function inputClicked(): void {
     if (inputRef.current) {
       inputRef.current.click();
     }
   }
 
-  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const files: FileList = e.target.files!;
     if (files.length > 4) {
       toast.error("Max 4 images are allowed");
       return;
     }
-    const imagesArray: any[] = [];
+    const imagesArray: string[] = [];
 
     for (let i: number = 0; i < files.length; i++) {
-      const reader = new FileReader();
-      reader.onload = (e: any | never) => {
-        imagesArray.push(e.target.result);
+      const reader: FileReader = new FileReader();
+      reader.onload = (e: ProgressEvent<FileReader>) => {
+        imagesArray.push(e.target!.result as string);
         if (imagesArray.length === files.length) {
           setImages(imagesArray);
         }
@@ -79,11 +83,11 @@ const PostBox = () => {
       reader.readAsDataURL(files[i]);
     }
 
-    const selectedImages = Array.from(files);
+    const selectedImages: File[] = Array.from(files);
     setImagesToUload(selectedImages);
   };
 
-  const submit = async () => {
+  const submit = async (): Promise<void> => {
     try {
       setLoading(true);
 
@@ -96,9 +100,7 @@ const PostBox = () => {
 
       const result = postSchema.safeParse(postDetails);
       if (!result.success) {
-        // let errorMsg = "";
         result.error.issues.forEach((i) => {
-          // errorMsg += i.path[0] + " : " + i.message + ". ";
           toast.error(i.message);
         });
         setLoading(false);
@@ -109,7 +111,7 @@ const PostBox = () => {
 
       if (imagesToUload.length > 0) {
         for (const e of imagesToUload) {
-          const imgRef = ref(imageDb, `postimages/${v4()}`);
+          const imgRef: StorageReference = ref(imageDb, `postimages/${v4()}`);
           await uploadBytes(imgRef, e)
             .then(() => {})
             .catch((e) => {
@@ -117,12 +119,12 @@ const PostBox = () => {
               toast.error("Some error ocurred while uploading images.");
               return;
             });
-          const url = await getDownloadURL(imgRef);
+          const url: string = await getDownloadURL(imgRef);
           imagesForMongoDB.push(url);
         }
       }
 
-      const response = await fetch("/api/post", {
+      const response: Response = await fetch("/api/post", {
         method: "POST",
         headers: {
           "Content-type": "application/json",
@@ -130,11 +132,11 @@ const PostBox = () => {
         body: JSON.stringify({ codeType, msg, code, lang, imagesForMongoDB }),
       });
 
-      const data = await response.json();
+      const data: { success: boolean; msg: string } = await response.json();
       if (data.success === false) {
         setLoading(false);
         toast.error(data.msg);
-        return
+        return;
       }
       toast.success(data.msg);
       setImages([]);
@@ -142,17 +144,19 @@ const PostBox = () => {
       setMsg("");
       setCode("");
       setLoading(false);
-    } catch (error: any) {
+      setCodeType("Random Fact");
+      setLang("Javascript");
+    } catch (error) {
       setLoading(false);
-      toast.error(error);
+      toast.error(String(error));
     }
   };
 
   return (
     <Dialog>
-      <DialogTrigger>
+      <DialogTrigger asChild>
         <div
-          className="flex cursor-pointer text-white bg-red-500 hover:bg-red-600 font-bold rounded-lg text-2xl p-2"
+          className="flex cursor-pointer text-white bg-ascent font-bold rounded-lg text-2xl p-2"
           onMouseEnter={() => playerRefCheck.current?.playFromBeginning()}
         >
           Post
@@ -167,12 +171,14 @@ const PostBox = () => {
         </div>
       </DialogTrigger>
       <DialogContent>
-        <div className="max-h-[90vh] overflow-y-auto">
+        <div className="max-h-[90vh] max-w-[90vw] overflow-y-auto">
           <DialogHeader>
             <div className="w-full mb-4">
-              <DialogTitle>
+              {/* <DialogTitle>
                 <p className="text-2xl">Write a message :</p>
-              </DialogTitle>
+              </DialogTitle> */}
+
+              <p className="text-2xl mt-3 font-bold">Write a message :</p>
 
               <div className="mt-2 mr-auto">
                 <Select
@@ -191,11 +197,9 @@ const PostBox = () => {
                 </Select>
               </div>
 
-          
-
               <textarea
                 value={msg}
-                className="mt-4 inp-border w-full bg-color rounded-md p-1"
+                className="mt-4 inp-border focus:outline-none w-full bg-color rounded-md p-1"
                 cols={60}
                 rows={5}
                 id="userTextinp"
@@ -207,16 +211,16 @@ const PostBox = () => {
                 }}
               ></textarea>
 
-<div className="w-full grid place-items-center">
-             <ClipLoader
-                className="absolute top-40%"
-                color="#e94154"
-                loading={loading}
-                size={100}
-              />
-             </div>
+              <div className="w-full grid place-items-center">
+                <ClipLoader
+                  className="absolute top-40%"
+                  color="#e94154"
+                  loading={loading}
+                  size={100}
+                />
+              </div>
 
-              <p className="text-2xl mt-3">
+              <p className="text-2xl mt-3 font-bold">
                 Write your code here(optional) :
               </p>
 
@@ -230,7 +234,7 @@ const PostBox = () => {
                     <SelectValue placeholder="Javascript" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Python">Python</SelectItem>            
+                    <SelectItem value="Python">Python</SelectItem>
                     <SelectItem value="Javascript">JavaScript</SelectItem>
                     <SelectItem value="JSX">JSX</SelectItem>
                     <SelectItem value="Typescript">TypeScript</SelectItem>
@@ -248,15 +252,13 @@ const PostBox = () => {
                     <SelectItem value="Kotlin">Kotlin</SelectItem>
                     <SelectItem value="Rust">Rust</SelectItem>
                     <SelectItem value="SQL">SQL</SelectItem>
-
-                    {/* </div> */}
                   </SelectContent>
                 </Select>
               </div>
 
               <textarea
                 value={code}
-                className="mt-4 inp-border w-full bg-color rounded-md p-1"
+                className="mt-4 inp-border focus:outline-none w-full bg-color rounded-md p-1"
                 cols={60}
                 rows={5}
                 id="userCode"
@@ -273,7 +275,7 @@ const PostBox = () => {
                   <h2>Selected images :</h2>
                   <Carousel className="w-full max-w-xs">
                     <CarouselContent>
-                      {images.map((image, index) => (
+                      {images.map((image: string, index: number) => (
                         <CarouselItem key={index}>
                           <div className="p-1 w-full grid place-items-center">
                             <Image
@@ -288,10 +290,10 @@ const PostBox = () => {
                       ))}
                     </CarouselContent>
 
-                    <div className="text-red-500">
+                    <div className="text-ascent">
                       <CarouselPrevious />
                     </div>
-                    <div className="text-red-500">
+                    <div className="text-ascent">
                       <CarouselNext />
                     </div>
                   </Carousel>
@@ -312,7 +314,7 @@ const PostBox = () => {
                     playerRefUpload.current?.playFromBeginning()
                   }
                   onClick={inputClicked}
-                  className=" w-fit cursor-pointer flex text-red-500"
+                  className=" w-fit cursor-pointer flex text-ascent"
                 >
                   <p className="mr-2 text-xl">Insert image(s)</p>
                   <Player
@@ -330,7 +332,7 @@ const PostBox = () => {
                   onClick={() => {
                     submit();
                   }}
-                  className="flex bg-red-500  hover:bg-red-600 align-middle text-white px-2 py-.05 rounded-xl cursor-pointer text-lg ml-auto"
+                  className="flex bg-ascent align-middle text-white px-2 py-.05 rounded-xl cursor-pointer text-lg ml-auto"
                 >
                   <p className="mr-2 text-xl">Post</p>
 

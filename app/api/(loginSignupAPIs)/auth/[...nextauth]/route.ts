@@ -6,15 +6,9 @@ import { cookies } from 'next/headers'
 
 import User from "@/models/googleUser";
 import { connectToMongo } from "@/utils/mongo";
-// import { NextResponse } from "next/server";
 import { googleUserInterface } from '@/lib/interfaces';
-// import { JWT } from 'next-auth/jwt';
-const jwt = require('jsonwebtoken');
-// interface user_insert {
-//   name: string;
-//   email: string;
-//   profilePic: string;
-// }
+import jwt from 'jsonwebtoken';
+
 
 const handler = NextAuth({
   providers: [
@@ -25,25 +19,16 @@ const handler = NextAuth({
     GithubProvider({
       clientId: process.env.GITHUB_CLIENT_ID!,
       clientSecret: process.env.GITHUB_SECRET!,
-      // authorizationUrl: 'https://github.com/login/oauth/authorize', // Customize this URL
 
     })
   ],
   callbacks: {
     async session({ session }) {
-      // store the user id from MongoDB to session
-      // const sessionUser = await User.findOne({ email: session.user.email });
-      // session.user.id = sessionUser._id.toString();
-
-      return session;
+     return session;
     },
 
     async signIn({ account, profile, user, credentials }) {
       try {
-
-        // const oneDay = 24 * 60 * 60 * 1000
-       // cookies().delete('userName')
-        // cookies().delete('profilePic')
 
           let randomUserName = '';
           const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -66,10 +51,6 @@ const handler = NextAuth({
         }
 
 
-        // const userName = cookies().get('userName')
-
-
-
         if (checkEmail.length == 0) {
           const data_to_insert: googleUserInterface = {
             name: user.name!,
@@ -87,15 +68,9 @@ const handler = NextAuth({
           randomUserName=checkEmail[0].userName
         }
 
-        // cookies().set('userName', `${randomUserName}`, { maxAge: 60 * 60 * 24 })
-        // cookies().set('name', `${user.name}`, { maxAge: 60 * 60 * 24 })
-        // cookies().set('profilePic', `${user.image}`, { maxAge: 60 * 60 * 24 })
-      
-         const token= jwt.sign({ name: user.name, userName: randomUserName, email: user.email, profilePic: user.image }, `${process.env.NEXTAUTH_SECRET}`, { expiresIn: '1d' });
+        const token= jwt.sign({ name: user.name, userName: randomUserName, email: user.email, profilePic: user.image }, `${process.env.NEXTAUTH_SECRET}`, { expiresIn: '1d' });
         
         cookies().set('token', `${token}`, { maxAge: 60 * 60 * 24 })
-
-        // const verify=jwt.verify(cookies().get("userName")?.value,`${process.env.NEXTAUTH_SECRET}`)
         
         return true
       }
@@ -105,18 +80,6 @@ const handler = NextAuth({
     
     },
 
-    //     async signOut({ session }) {
-    //       try {
-    //         // Here you can execute your custom function
-    //         // when someone signs out
-    // const router=useRouter()
-    // router.replace("/")        
-    //         // Returning true to allow sign out
-    //         return true;
-    //       } catch (error) {
-    //         return false;
-    //       }
-    //     },
   }
 })
 

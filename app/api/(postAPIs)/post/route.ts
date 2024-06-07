@@ -7,9 +7,9 @@ import normalUser from "@/models/normalUser";
 import googleUser from "@/models/googleUser";
 import { jwtTokenInterface } from "@/lib/interfaces";
 import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "@google/generative-ai";
+import jwt from "jsonwebtoken";
 
-const jwt = require('jsonwebtoken');
-function shuffle(array: any[]): any[] {
+function shuffle(array: string[]): string[] {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
@@ -19,17 +19,10 @@ function shuffle(array: any[]): any[] {
 
 
 async function shuffleRedisListWithNewValue(listKey: string, newValue: string) {
-    // let allPostsfromRedis = []
-    // const what = await post.find()
-    // for(let i=0;i<what.length;i++){
-    //     allPostsfromRedis.push(what[i]._id.toString())
-    // }
+   
     const allPostsfromRedis = await redis.lrange(listKey, 0, -1)
 
-
-    //   allPostsfromRedis.map((post)=>{
     allPostsfromRedis.push(newValue);
-    //   })
 
     const shuffledItems = shuffle(allPostsfromRedis);
 
@@ -51,106 +44,103 @@ export async function POST(req: NextRequest) {
         // const { email, password } = await req.json();
         if (code == "") {
             code = " "
+            lang = "None"
         }
         const token = req.cookies.get("token")?.value
-        const verify: jwtTokenInterface = jwt.verify(token, `${process.env.NEXTAUTH_SECRET}`)
+        // const verify: jwtTokenInterface = jwt.verify(token, `${process.env.NEXTAUTH_SECRET}`)
+
+        let verify: jwtTokenInterface | undefined = undefined;
+
+        if (token) {
+            // console.log("jwtToken", jwtToken)
+            try {
+                verify = jwt.verify(token, process.env.NEXTAUTH_SECRET as string) as jwtTokenInterface;
+            } catch (err) {
+                verify = undefined;
+            }
+        }
+
+        if (verify === undefined) {
+            return NextResponse.json({ success: false, msg: "Token not found!" }, { status: 200 })
+        }
 
         const userName = verify.userName
         const name = verify.name
         const profilePic = verify.profilePic
-        // if (userName === undefined || name === undefined || profilePic === undefined) {
-        //     return NextResponse.json({ success: false, msg: "User donot exist!" }, { status: 400 })
-        // }
+        
         let checkUser = await normalUser.find({ userName })
         if (checkUser.length === 0) {
             checkUser = await googleUser.find({ userName })
             if (checkUser.length === 0) {
-                return NextResponse.json({ success: false, msg: "User donot exist!" }, { status: 400 })
+                return NextResponse.json({ success: false, msg: "User donot exist!" }, { status: 200 })
             }
         }
-        // if(checkUser.length===0 && checkUser2.length===0){
-        //     return NextResponse.json({ success: false, msg: "User donot exist!" }, { status: 400 })
-        // }
-
-        //     getUserInfo=await googleUser.find({userName:userName?.value!})
-        //     if(getUserInfo.length===0){
-        //         return NextResponse.json({ success: false, msg: "User doesnot exist!" }, { status: 400 })
-
-        //     }
-        // }
+        
 
         const postDetails: postInterface = {
             userName,
             name,
             profilePic,
-            // name:getUserInfo[0].name,
-            // profilePic:getUserInfo[0].profilePic,
             codeType,
             msg,
             code,
             lang,
             imagesForMongoDB,
             date: new Date(),
-            // likes: 0,
             likedBy: [],
-            // commentsNum: 0,
             comments: []
         }
 
 
-        const apiKey = process.env.GEMINI_API_KEY!;
-        const genAI = new GoogleGenerativeAI(apiKey);
+        // const apiKey = process.env.GEMINI_API_KEY!;
+        // const genAI = new GoogleGenerativeAI(apiKey);
 
-        const model = genAI.getGenerativeModel({
-            model: "gemini-1.5-flash",
-        });
+        // const model = genAI.getGenerativeModel({
+        //     model: "gemini-1.5-flash",
+        // });
 
-        const generationConfig = {
-            temperature: 1,
-            topP: 0.95,
-            topK: 64,
-            maxOutputTokens: 8192,
-            responseMimeType: "text/plain",
-        };
+        // const generationConfig = {
+        //     temperature: 1,
+        //     topP: 0.95,
+        //     topK: 64,
+        //     maxOutputTokens: 8192,
+        //     responseMimeType: "text/plain",
+        // };
 
-        const safetySettings = [
-            {
-                category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-                threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-            },
-            {
-                category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
-                threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-            },
-            {
-                category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
-                threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-            },
-            {
-                category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
-                threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-            },
-        ];
+        // const safetySettings = [
+        //     {
+        //         category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+        //         threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+        //     },
+        //     {
+        //         category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+        //         threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+        //     },
+        //     {
+        //         category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+        //         threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+        //     },
+        //     {
+        //         category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+        //         threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+        //     },
+        // ];
 
-        const chatSession = model.startChat({
-            generationConfig,
-            safetySettings,
-            history: [
-            ],
-        });
+        // const chatSession = model.startChat({
+        //     generationConfig,
+        //     safetySettings,
+        //     history: [
+        //     ],
+        // });
 
-        const result = await chatSession.sendMessage(
-        `"${msg}"
-        Is this message about programming/coding/tech? yes or no`
-        );
-        console.log("gemmmm ", result.response.text());
+        // const result = await chatSession.sendMessage(
+        //     `"${msg}"
+        // Is this message about programming/coding/tech? yes or no`
+        // );
 
-        if(result.response.text().toLowerCase().includes("no")){
-            return NextResponse.json({ success: false, msg: "Please post something related to programming, coding or tech" }, { status: 400 })
-        }
-
-
-
+        // if (result.response.text().toLowerCase().includes("no")) {
+        //     return NextResponse.json({ success: false, msg: "Please post something related to programming, coding or tech" }, { status: 200 })
+        // }
 
 
         await connectToMongo()
@@ -172,22 +162,3 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ success: false, msg: "Something went wrong!" }, { status: 400 })
     }
 }
-
-
-
-
-// export async function GET(){
-//     const resend=new Resend(process.env.NEXT_PUBLIC_RESEND_API)
-
-//     await resend.emails.send({
-//         from:'jahidrhps123@gmail.com',
-//         to:"jahidkhan777367@gmail.com",
-//         subject:"CodeNet Reset Password",
-//         text:`OTP is 77. Use this code to reset your password in CodeNet`
-//       }).then(()=>{
-//         // toast.success("Enter the OTP sent to your Email");
-//     })
-//     .catch(()=>{
-//         // toast.error("Something went wrong!");
-//       })
-// }

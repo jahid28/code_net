@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Link from "next/link";
@@ -22,21 +22,22 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 
-// import nodemailer from "nodemailer"
-// import {Resend} from "resend"
+import { useDispatch } from "react-redux";
+import { getEmailActionFunc } from "@/redux/actions";
 
-const SignupPage = () => {
+const SignupPage: React.FC = () => {
   const router = useRouter();
-  const [captchaValue, setCaptchaValue] = useState(false);
-  const [userOTP, setUserOTP] = useState("");
-  const [otp, setOTP] = useState(0);
-  const [otpPopup, setotpPopup] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [captchaValue, setCaptchaValue] = useState<boolean>(false);
+  const [userOTP, setUserOTP] = useState<string>("");
+  const [otp, setOTP] = useState<number>(0);
+  const [otpPopup, setotpPopup] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const [email, setEmail] = useState<string>("");
-  // let otp:number
 
-  async function submit(e: any) {
+  const dispatch = useDispatch();
+
+  async function submit(e: FormEvent): Promise<void> {
     e.preventDefault();
 
     try {
@@ -44,17 +45,17 @@ const SignupPage = () => {
         toast.error("Fill the captcha");
         return;
       }
-      setLoading(true)
-      const oo = Math.floor(Math.random() * 900000) + 100000;
-      setOTP(oo);
-      const response = await fetch("/api/send", {
+      setLoading(true);
+      const ranDomOTP: number = Math.floor(Math.random() * 900000) + 100000;
+      setOTP(ranDomOTP);
+      const response: Response = await fetch("/api/send", {
         method: "POST",
         headers: {
           "Content-type": "application/json",
         },
         body: JSON.stringify({
           email,
-          otp: oo,
+          otp: ranDomOTP,
         }),
       });
       const data = await response.json();
@@ -64,18 +65,19 @@ const SignupPage = () => {
       } else {
         toast.error(data.msg);
       }
-      
-      setLoading(false)
+
+      setLoading(false);
     } catch (error) {
-      setLoading(false)
+      setLoading(false);
       toast.error("Something went wrong!");
     }
   }
 
-  function submitOTP() {
+  function submitOTP(e: React.FormEvent): void {
+    e.preventDefault();
     if (otp == parseInt(userOTP)) {
-      router.replace(`/resetPassword?email=${email}`);
-      // toast.success("Correct OTP")
+      dispatch(getEmailActionFunc(email));
+      router.replace(`/resetPassword`);
     } else {
       toast.error("Incorrect OTP");
     }
@@ -83,7 +85,12 @@ const SignupPage = () => {
 
   return (
     <div className="grid place-items-center">
-                          <ClipLoader className="absolute top-[45vh] z-30" color="#e94154" loading={loading} size={100}/>
+      <ClipLoader
+        className="absolute top-[45vh] z-30"
+        color="#e94154"
+        loading={loading}
+        size={100}
+      />
 
       <div>
         <div className="w-[90vw] md:w-[50vw] lg:w-[30vw] bg-dark-color   rounded-lg p-8 mt-10 mb-10 relative z-10 shadow-md">
@@ -95,39 +102,41 @@ const SignupPage = () => {
                 Email
               </label>
               <input
-              placeholder="johndoe@gmail.com"
+                placeholder="johndoe@gmail.com"
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
                 required
                 type="email"
                 id="email"
                 name="email"
-                className="w-full bg-white rounded border border-gray-300 focus:border-neutral-400 focus:ring-2 focus:ring-neutral-400 text-base outline-none text-black py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                className="w-full text-color bg-transparent rounded border-2 border-gray-600 focus:ring-2 focus:ring-gray-600 text-base outline-none text-black py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
               />
             </div>
 
             <ReCAPTCHA
               sitekey={`${process.env.NEXT_PUBLIC_REACT_APP_RECAPTCHA}`}
-              onChange={(value: boolean) => setCaptchaValue(value)}
-              domain="ecommerce-both-frontend.onrender.com"
+              onChange={(value: any) => {
+                setCaptchaValue(value);
+              }}
+              // domain="ecommerce-both-frontend.onrender.com"
             />
 
             <input
-              className="w-full mt-3 cursor-pointer text-white py-2 px-6 focus:outline-none bg-red-500 hover:bg-red-600 rounded text-lg"
+              className="w-full mt-3 cursor-pointer text-white py-2 px-6 focus:outline-none bg-ascent rounded text-lg"
               type="submit"
               value="Submit"
             />
           </form>
 
-          <p className="w-fit cursor-pointer text-base text-red-500 mt-3">
-            <Link href={"/login"}>Go back</Link>{" "}
+          <p className="w-fit cursor-pointer text-base text-ascent mt-3">
+            <Link href={"/login"}>Go back</Link>
           </p>
         </div>
 
         {otpPopup ? (
           <Dialog>
             <DialogTrigger>
-              <p className="w-full mt-3 cursor-pointer text-white py-2 px-6 focus:outline-none hover:bg-red-600 rounded text-lg">
+              <p className="w-full mt-3 cursor-pointer text-white py-2 px-6 focus:outline-none bg-ascent rounded text-lg">
                 Enter OTP
               </p>
             </DialogTrigger>
@@ -159,7 +168,7 @@ const SignupPage = () => {
 
                   <button
                     onClick={submitOTP}
-                    className="w-full mt-3 cursor-pointer text-white bg-red-500 py-2 px-6 focus:outline-none hover:bg-red-600 rounded text-lg"
+                    className="w-full mt-3 cursor-pointer text-white bg-ascent py-2 px-6 focus:outline-none rounded text-lg"
                   >
                     Submit
                   </button>

@@ -18,35 +18,59 @@ import DeleteComponent from "./DeleteComponent";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { darcula } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { languageMap } from "@/lib/interfaces";
+import { postInterface } from "@/lib/interfaces";
+import { useSelector } from "react-redux";
+import share from "@/icons/share.json";
 
-const SinglePost = (props: any) => {
-  const data = props.data;
+interface getPostInterface extends postInterface {
+  _id: string;
+}
+
+interface propsInterface {
+  data: getPostInterface;
+}
+
+const SinglePost: React.FC<propsInterface> = (props: propsInterface) => {
+  const data: getPostInterface = props.data;
+  const [myName, setMyName] = useState<string>("");
+  const [followingList, setFollowingList] = useState<string[]>([]);
+  const dateInstance: Date = new Date(data.date);
 
   const playerRefShare = useRef<Player>(null);
-  const share = require("@/icons/share.json");
 
-  const dateInstance = new Date(data.date);
+  const daysOfWeek: Array<string> = [
+    "Sun",
+    "Mon",
+    "Tue",
+    "Wed",
+    "Thu",
+    "Fri",
+    "Sat",
+  ];
+  const dayOfWeek: string = daysOfWeek[dateInstance.getDay()];
 
-  const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-  const dayOfWeek = daysOfWeek[dateInstance.getDay()];
-  const day = String(dateInstance.getUTCDate()).padStart(2, "0");
-  const month = String(dateInstance.getUTCMonth() + 1).padStart(2, "0"); // Months are zero-indexed
-  const year = dateInstance.getUTCFullYear();
+  let options = { timeZone: 'Asia/Kolkata' };
 
-  type LanguageKey = keyof typeof languageMap;
-  const langObj: { lang: LanguageKey } = { lang: data.lang };
+  const day: string = dateInstance.toLocaleString('en-IN', { ...options, day: '2-digit' });
+  const month: string = dateInstance.toLocaleString('en-IN', { ...options, month: '2-digit' });
+  const year: string = dateInstance.toLocaleString('en-IN', { ...options, year: 'numeric' });
+  // const day: string = String(dateInstance.getUTCDate()).padStart(2, "0");
+  // const month: string = String(dateInstance.getUTCMonth() + 1).padStart(2, "0");
+  // const year: number = dateInstance.getUTCFullYear();
+
+  const currentUserDetails = useSelector(
+    (state: any) => state.reducer1.currentUserDetails
+  );
+
+  useEffect(() => {
+    setMyName(currentUserDetails.userName);
+    setFollowingList(currentUserDetails.following);
+  }, [currentUserDetails]);
 
   return (
     <div>
       <div className="flex items-center mb-3">
         <Link className="flex items-center" href={`/account/${data.userName}`}>
-          {/* <Image
-            className="rounded-full"
-            src={data.profilePic}
-            width={40}
-            height={40}
-            alt="profile pic"
-          /> */}
           <div className="relative w-10 h-10 rounded-full overflow-hidden">
             <Image
               src={data.profilePic}
@@ -59,9 +83,9 @@ const SinglePost = (props: any) => {
         </Link>
 
         <FollowComponent
-          followingList={props.followingList}
+          // followingList={followingList}
           userToFollow={data.userName}
-          myName={props.myName}
+          myName={myName}
         />
 
         <p className="ml-auto">
@@ -77,7 +101,6 @@ const SinglePost = (props: any) => {
       {data.code != " " && (
         <div className="p-2 bg-dark-color rounded-md ">
           <div className="flex">
-            {/* <p className="px-1 bg-color rounded-md">Type : {data.codeType}</p> */}
             <p className="px-1 bg-color rounded-md ml-2 mb-2">{data.lang}</p>
             <p
               className="ml-auto cursor-pointer text-lg"
@@ -98,7 +121,7 @@ const SinglePost = (props: any) => {
 
           <div className="max-h-[60vh] overflow-y-auto">
             <SyntaxHighlighter
-              language={languageMap[langObj.lang]}
+              language={languageMap[data.lang]}
               style={darcula}
               showLineNumbers={true}
             >
@@ -125,10 +148,10 @@ const SinglePost = (props: any) => {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <div className="text-red-500">
+            <div className="text-ascent">
               <CarouselPrevious />
             </div>
-            <div className="text-red-500">
+            <div className="text-ascent">
               <CarouselNext />
             </div>
           </Carousel>
@@ -139,7 +162,7 @@ const SinglePost = (props: any) => {
           _id={data._id}
           likeArr={data.likedBy}
           likeNum={data.likedBy.length}
-          userName={props.myName}
+          userName={myName}
         />
 
         <CommentBox postId={data._id} comments={data.comments} />
@@ -148,7 +171,7 @@ const SinglePost = (props: any) => {
           onMouseEnter={() => playerRefShare.current?.playFromBeginning()}
           onClick={() => {
             navigator.clipboard
-              .writeText(`localhost:3000/post/${data._id}`)
+              .writeText(`${process.env.NEXT_PUBLIC_WEBSITE_URL}/post/${data._id}`)
               .then(() => {
                 toast.success("Post link copied!");
               })
@@ -159,14 +182,14 @@ const SinglePost = (props: any) => {
           className="ml-[10vw] md:ml-16 cursor-pointer"
         >
           <Player
-            colorize={"var(--icon-color)"}
+            colorize={"var(--p-color)"}
             ref={playerRefShare}
             size={30}
             icon={share}
           />
         </div>
 
-        {props.myName == data.userName && <DeleteComponent _id={data._id} />}
+        {myName == data.userName && <DeleteComponent _id={data._id} />}
       </div>
       <br />
       <hr />

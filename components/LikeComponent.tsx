@@ -3,21 +3,26 @@ import { Player } from "@lordicon/react";
 import { useRef } from "react";
 import { like } from "@/lib/likeFunc";
 import { dislike } from "@/lib/dislikeFunc";
-import { set } from "mongoose";
-// useEffect
-// useState
-const LikeComponent = (props: any) => {
+import heart from "@/icons/heart.json";
+import solidHeart from "@/icons/solidHeart.json";
+
+interface propsInterface {
+  likeNum: number;
+  likeArr: string[];
+  _id: string;
+  userName: string;
+}
+
+const LikeComponent: React.FC<propsInterface> = (props: propsInterface) => {
   const [liked, setLiked] = useState<boolean>(false);
   const [likeNum, setLikeNum] = useState<number>(props.likeNum);
-  useEffect(() => {
+  useEffect((): void => {
     if (props.likeArr.includes(props.userName)) {
       setLiked(true);
     }
   }, [props.likeArr, props.userName]);
   const playerRefHeart = useRef<Player>(null);
-  const heart = require("@/icons/heart.json");
   const playerRefSolidHeart = useRef<Player>(null);
-  const solidHeart = require("@/icons/solidHeart.json");
   return (
     <div>
       {!liked ? (
@@ -31,7 +36,7 @@ const LikeComponent = (props: any) => {
           className="cursor-pointer flex align-middle text-xl mr-[10vw] md:mr-16"
         >
           <Player
-            colorize={"var(--icon-color)"}
+            colorize={"var(--p-color)"}
             ref={playerRefHeart}
             size={30}
             icon={heart}

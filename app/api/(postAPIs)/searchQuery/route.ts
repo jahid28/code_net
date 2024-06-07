@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
 
         // );
 
-        const regexQueries = queryArray.map((query: any) => new RegExp(query, 'i')); // 'i' flag for case-insensitive search
+        const regexQueries = queryArray.map((query: string) => new RegExp(query, 'i')); // 'i' flag for case-insensitive search
         const nuArray = await normalUser.find(
             {
                 $or: [

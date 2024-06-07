@@ -2,33 +2,40 @@ import { connectToMongo } from "@/utils/mongo";
 import post from "@/models/post";
 import { NextRequest, NextResponse } from "next/server";
 import { jwtTokenInterface } from "@/lib/interfaces";
-const jwt=require("jsonwebtoken")
- 
+import jwt from "jsonwebtoken";
+
 export async function POST(req: NextRequest) {
     try {
-        const token=req.cookies.get("token")?.value
-        const verify:jwtTokenInterface=jwt.verify(token,`${process.env.NEXTAUTH_SECRET}`)
-        
-        // const userName =  verify.userName
-        // if(userName===undefined){
-        //     return NextResponse.json({ success: false, msg: "Please login to continue" }, { status: 400 })
-        // }
-        const { _id } = await req.json()
-        await connectToMongo()        
+        const token = req.cookies.get("token")?.value
 
-        const data = await post.find({ _id})
 
-        if(data.length===0){
-            return NextResponse.json({ success: false, msg: "Post doesnot exist!" }, { status: 400 })
+        let verify: jwtTokenInterface | undefined = undefined;
+
+        if (token) {
+            try {
+                verify = jwt.verify(token, process.env.NEXTAUTH_SECRET as string) as jwtTokenInterface;
+            } catch (err) {
+                verify = undefined;
+            }
         }
 
-        // data[0].likes+=1
+        if (verify === undefined) {
+            return NextResponse.json({ success: false, msg: "Token not found!" }, { status: 200 })
+        }
 
-        // data[0].likedBy.push(verify.userName)
-// let valueToRemove = 3;
-let newArray =  data[0].likedBy.filter((item:string) =>item !== verify.userName);
 
-        // await post.updateOne({ _id }, { likes: data[0].likes })
+
+        const { _id } = await req.json()
+        await connectToMongo()
+
+        const data = await post.find({ _id })
+
+        if (data.length === 0) {
+            return NextResponse.json({ success: false, msg: "Post doesnot exist!" }, { status: 200 })
+        }
+
+        let newArray = data[0].likedBy.filter((item: string) => item !== verify.userName);
+
 
         await post.updateOne({ _id }, { likedBy: newArray })
 

@@ -1,18 +1,17 @@
 @tailwind base;
-  @tailwind components;
-  @tailwind utilities;
-  *::selection{
-    color: #ffffff;
-    background-color:  #e53e3e;
-  }
-  *{
-    margin: 0;
-    padding: 0;
-  }
-  /* :root {
-    --icon-color: white;
+@tailwind components;
+@tailwind utilities;
+*::selection {
+  color: #ffffff;
+  background-color: #e53e3e;
+}
+* {
+  margin: 0;
+  padding: 0;
+}
+/* :root {
   } */
-  /* ::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
     width: 15px; 
     padding: 5px;
   }
@@ -25,40 +24,76 @@
     background: var(--bg-color);
     border-radius: 10px; 
   } */
-  
 
-  body{
-    overflow-x: hidden;
-    background-color: var(--bg-color);
+body {
+  overflow-x: hidden;
+  background-color: var(--bg-color);
+}
+
+/* .darkmode {
+  --p-color: rgb(255, 255, 255);
+  --bg-color: rgb(98, 81, 59);
+  --bg-dark: rgb(44, 36, 22);
+}
+
+.lightmode {
+  --p-color: rgb(34, 34, 34);
+  --bg-color: rgb(245, 245, 245);
+  --bg-dark: rgb(188, 188, 188);
+} */
+.darkmode {
+  --p-color: rgb(255, 255, 255);
+  --bg-color: rgb(54, 53, 53);
+  --bg-dark: rgb(44, 44, 44);
+}
+
+.lightmode {
+  --p-color: rgb(35, 35, 35);
+  --bg-color: rgb(245, 245, 245);
+  --bg-dark: rgb(224, 224, 224);
+}
+
+.bg-color {
+  background-color: var(--bg-color);
+}
+.bg-dark-color {
+  background-color: var(--bg-dark);
+}
+.text-color {
+  color: var(--p-color);
+}
+.inp-border {
+  border: 1px solid var(--p-color);
+}
+
+.bg-ascent{
+  color: white;
+  background-color: rgb(107, 196, 111);
+}
+.bg-ascent:hover{
+  /* color: white; */
+  background-color: rgb(78, 126, 63);
+}
+.text-ascent{
+  color: rgb(107, 196, 111);
+  /* color: var(--ascent); */
+}
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
   }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
 
-    .darkmode {
-      --p-color: rgb(255, 255, 255);
-      --bg-color: rgb(54, 53, 53);
-      --bg-dark:rgb(10, 10, 10);
-      --icon-color: white;
-
-    }
-   
-    .lightmode {
-      --p-color: rgb(0, 0, 0);
-      --bg-color: rgb(245, 245, 245);
-      --bg-dark:rgb(188, 188, 188);
-      --icon-color: rgb(0, 0, 0);
-
-    }
-  
-    .bg-color{
-      background-color: var(--bg-color);
-    }
-    .bg-dark-color{
-      background-color: var(--bg-dark);
-    }
-    .text-color{
-      color: var(--p-color);
-    }
-    .inp-border{
-      border: 1px solid var(--p-color);
-      
-    }
-    
+.bg-gr {
+  background: linear-gradient(45deg, #cd4949,#b25897, #9cdb68);
+  -webkit-background-clip: text;
+  background-size: 400%;
+  -webkit-text-fill-color: transparent;
+  animation: gradientAnimation 10s ease infinite;
+}

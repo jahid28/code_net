@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
         const check = await normalUser.find({ email })
 
         if (check.length <= 0) {
-            return NextResponse.json({ success: false, msg: "Email is not registered" }, { status: 400 })
+            return NextResponse.json({ success: false, msg: "Email is not registered" }, { status: 200 })
 
         }
         const transporter = nodemailer.createTransport({

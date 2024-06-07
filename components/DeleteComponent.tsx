@@ -2,25 +2,25 @@ import React, { useEffect, useState } from "react";
 import { Player } from "@lordicon/react";
 import { useRef } from "react";
 import { toast } from "sonner";
+import trash from "@/icons/trash.json";
 
-const LikeComponent = (props: any) => {
+const LikeComponent:React.FC<{_id:string}> = (props: {_id:string}) => {
   const playerRefTrash = useRef<Player>(null);
-  const trash = require("@/icons/trash.json");
 
-  async function deletePost(_id: string) {
+  async function deletePost(_id: string):Promise<void> {
     try {
-      const confirmDel = confirm("Are you sure you want to delete this post?");
+      const confirmDel:boolean = confirm("Are you sure you want to delete this post?");
       if (!confirmDel) {
         return;
       }
-      const res = await fetch("/api/deletePost", {
+      const res:Response = await fetch("/api/deletePost", {
         method: "POST",
         headers: {
           "Content-type": "application/json",
         },
         body: JSON.stringify({ _id }),
       });
-      const data = await res.json();
+      const data:{success:boolean,msg:string} = await res.json();
       if (data.success == false) {
         toast.error(data.msg);
         return;
@@ -41,7 +41,7 @@ const LikeComponent = (props: any) => {
         className="cursor-pointer flex align-middle text-xl"
       >
         <Player
-          colorize={"#e94154"}
+          colorize={"var(--ascent-color)"}
           ref={playerRefTrash}
           size={30}
           icon={trash}

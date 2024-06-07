@@ -2,24 +2,39 @@ import { connectToMongo } from "@/utils/mongo";
 import post from "@/models/post";
 import { NextRequest, NextResponse } from "next/server";
  import { jwtTokenInterface } from "@/lib/interfaces";
-const jwt=require("jsonwebtoken")
+import jwt from "jsonwebtoken";
 
 export async function POST(req: NextRequest) {
     try {
         const token=req.cookies.get("token")?.value
-        const verify:jwtTokenInterface=jwt.verify(token,`${process.env.NEXTAUTH_SECRET}`)
+        // const verify:jwtTokenInterface=jwt.verify(token,`${process.env.NEXTAUTH_SECRET}`)
+
+        let verify: jwtTokenInterface | undefined = undefined;
+
+        if (token) {
+            console.log("jwtToken", token)
+            try {
+                verify = jwt.verify(token, process.env.NEXTAUTH_SECRET as string) as jwtTokenInterface;
+                console.log("verify", verify)
+            } catch (err) {
+                verify = undefined;
+            }
+        }
+
+        if (verify === undefined) {
+            return NextResponse.json({ success: false, msg: "Token not found!" }, { status: 200 })
+        }
+
         const userName = verify.userName
         
-        // if(userName===undefined){
-        //     return NextResponse.json({ success: false, msg: "Please login to continue" }, { status: 400 })
-        // }
+      
         await connectToMongo()        
         const { _id } = await req.json()
 
         const data = await post.find({ _id})
 
         if(data.length===0){
-            return NextResponse.json({ success: false, msg: "Post doesnot exist!" }, { status: 400 })
+            return NextResponse.json({ success: false, msg: "Post doesnot exist!" }, { status: 200 })
         }
 
         // data[0].likes+=1
@@ -30,7 +45,7 @@ export async function POST(req: NextRequest) {
 
         await data[0].save()
 
-        return NextResponse.json({ success: true, msg: "Liked!" }, { status: 201 })
+        return NextResponse.json({ success: true, msg: "Liked!" }, { status: 200 })
 
     } catch (error) {
 

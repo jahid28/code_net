@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
         if (myself.length === 0) {
             myself = await googleUser.find({ userName: myName });
             if(myself.length===0){
-                return NextResponse.json({ success: false, msg: "User donot exist!" }, { status: 400 });
+                return NextResponse.json({ success: false, msg: "User donot exist!" }, { status: 200 });
             }
         }
 
@@ -22,11 +22,11 @@ export async function POST(req: NextRequest) {
         if (other.length === 0) {
             other = await googleUser.find({ userName: userToFollow });
             if(other.length===0){
-                return NextResponse.json({ success: false, msg: "User donot exist!" }, { status: 400 });
+                return NextResponse.json({ success: false, msg: "User donot exist!" }, { status: 200 });
             }
         }
         if(myself[0].following.includes(userToFollow) || other[0].followers.includes(myName)){
-            return NextResponse.json({ success: false, msg: "Already following!" }, { status: 400 });
+            return NextResponse.json({ success: false, msg: "Already following!" }, { status: 200 });
         
         }
 
@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
         await other[0].save();
 
        return NextResponse.json({ success: true, msg: "Followed!" });
-    } catch (error: any) {
-        return NextResponse.json({ success: false, msg: "Something went wrong!" }, { status: 500 });
+    } catch (error) {
+        return NextResponse.json({ success: false, msg: "Something went wrong!" }, { status: 400 });
     }
 }

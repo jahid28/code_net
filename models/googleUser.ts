@@ -1,13 +1,6 @@
 import { Schema, model,models, Model, HydratedDocumentFromSchema, InferSchemaType } from 'mongoose';
-// import { googleUserInterface } from '@/lib/interfaces';
-// Interface for the user document type (without Mongoose methods)
-// interface IUser {
-//   name: string;
-//   email: string;
-//   profilePic:string
-// }
 
-const collectionName:string="GoogleUserPls"
+const collectionName:string="google_user"
 
 // User schema with type safety
 const UserSchema = new Schema({
@@ -21,4 +14,4 @@ const UserSchema = new Schema({
 
 
 
-export default models.GoogleUserPls || model(collectionName, UserSchema);
+export default models.google_user || model(collectionName, UserSchema);

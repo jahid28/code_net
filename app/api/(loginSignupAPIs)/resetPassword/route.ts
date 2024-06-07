@@ -13,10 +13,7 @@ export async function POST(req: NextRequest) {
         await connectToMongo()
         // const check = await normalUser.find({ email })
         
-        // if(check.length<=0){
-        //     return NextResponse.json({ success: false,msg:"Email is not registered" }, { status: 400 })
-            
-        // }
+        
         
         // const compare = await bcrypt.compare(password, check[0].password);
         

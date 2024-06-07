@@ -12,21 +12,28 @@ import {
 
 import { Player } from "@lordicon/react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import ClipLoader from "react-spinners/ClipLoader";
 import Link from "next/link";
 import { commentSchema } from "@/lib/zodSchemas";
+import { commentInterface } from "@/lib/interfaces";
+import arrow from "@/icons/arrow.json";
+import commentIcon from "@/icons/comment.json";
+interface propsInterface {
+  postId: string;
+  comments: commentInterface[];
+}
 
-const CommentBox = (props: any) => {
+const CommentBox: React.FC<propsInterface> = (props: propsInterface) => {
   const playerRefComment = useRef<Player>(null);
-  const commentIcon = require("@/icons/comment.json");
+  // const commentIcon = require("@/icons/comment.json");
   const playerRefArrow = useRef<Player>(null);
-  const arrow = require("@/icons/arrow.json");
+  // const arrow = require("@/icons/arrow.json");
 
-  const [loading, setLoading] = useState(false);
-  const [comment, setComment] = useState("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [comment, setComment] = useState<string>("");
 
-  async function submit() {
+  async function submit(e:React.FormEvent): Promise<void> {
+    e.preventDefault();
     try {
       setLoading(true);
 
@@ -37,7 +44,7 @@ const CommentBox = (props: any) => {
         return;
       }
 
-      const res = await fetch("/api/postComment", {
+      const res: Response = await fetch("/api/postComment", {
         method: "POST",
         headers: {
           "Content-type": "application/json",
@@ -47,7 +54,7 @@ const CommentBox = (props: any) => {
           comment: result.data,
         }),
       });
-      const data = await res.json();
+      const data: { success: boolean; msg: string } = await res.json();
       setLoading(false);
       setComment("");
       if (data.success === false) {
@@ -55,8 +62,8 @@ const CommentBox = (props: any) => {
       } else {
         toast.success(data.msg);
       }
-    } catch (error: any) {
-      toast.error(error);
+    } catch (error) {
+      toast.error(String(error));
     }
   }
 
@@ -68,7 +75,7 @@ const CommentBox = (props: any) => {
           onMouseEnter={() => playerRefComment.current?.playFromBeginning()}
         >
           <Player
-            colorize={"var(--icon-color)"}
+            colorize={"var(--p-color)"}
             ref={playerRefComment}
             size={30}
             icon={commentIcon}
@@ -94,10 +101,8 @@ const CommentBox = (props: any) => {
 
           <div
             onMouseEnter={() => playerRefArrow.current?.playFromBeginning()}
-            onClick={() => {
-              submit();
-            }}
-            className="flex bg-red-500 mt-2 hover:bg-red-600 align-middle text-white px-2 py-.05 rounded-xl cursor-pointer text-lg ml-auto"
+            onClick={submit}
+            className="flex bg-ascent align-middle text-white px-2 py-.05 rounded-xl cursor-pointer text-lg ml-auto"
           >
             <p className="mr-2 text-xl">Comment</p>
 
@@ -119,20 +124,13 @@ const CommentBox = (props: any) => {
 
               <div className="w-full grid place-items-center mb-4">
                 <div className="max-h-[50vh] w-full overflow-y-auto">
-                  {props.comments.map((e: any) => {
+                  {props.comments.map((e: commentInterface, index: number) => {
                     return (
-                      <div className="w-full">
+                      <div key={index} className="w-full">
                         <Link
                           className="flex w-fit"
                           href={`/account/${e.user}`}
                         >
-                          {/* <Image
-                            className="rounded-full"
-                            src={e.profilePic}
-                            width={30}
-                            height={30}
-                            alt="profile pic"
-                          /> */}
                           <div className="relative w-8 h-8 rounded-full overflow-hidden cursor-pointer">
                             <Image
                               src={e.profilePic}
@@ -161,15 +159,15 @@ const CommentBox = (props: any) => {
 
           {!loading && props.comments.length == 0 && (
             <div className="grid place-items-center ">
-            <Image
-              className="mt-10 mb-4"
-              src="/empty.png"
-              width={150}
-              height={150}
-              alt="404"
-            />
-            <p className="text-2xl font-bold">No Comments yet!</p>
-          </div>
+              <Image
+                className="mt-10 mb-4"
+                src="/empty.png"
+                width={150}
+                height={150}
+                alt="404"
+              />
+              <p className="text-2xl font-bold">No Comments yet!</p>
+            </div>
           )}
         </DialogHeader>
       </DialogContent>

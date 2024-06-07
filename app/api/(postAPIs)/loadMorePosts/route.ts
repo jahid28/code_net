@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
         
         await connectToMongo()        
         
-        for(let i=loadNumber*10+1;i<loadNumber*10+10;i++){
+        for(let i=loadNumber*10+1;i<=loadNumber*10+10;i++){
             const postFromMongo=await post.findOne({_id:redisPostList[i]})
             if(postFromMongo){
                 data.push(postFromMongo)

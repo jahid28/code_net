@@ -1,18 +1,17 @@
-import React, { useRef, useState,KeyboardEvent } from "react";
+import React, { useRef, useState, KeyboardEvent } from "react";
 import { Player } from "@lordicon/react";
 import { useRouter } from "next/navigation";
+import search from "@/icons/search.json";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
-// useRef
-// useState
-const SearchBar = () => {
-  const router = useRouter();
+const SearchBar: React.FC = () => {
+  const router: AppRouterInstance = useRouter();
 
   const playerRefSearchPC = useRef<Player>(null);
-  const search = require("@/icons/search.json");
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState<string>("");
 
-  function pushQuery() {
-    let finalQuery = query.trim();
+  function pushQuery(): void {
+    let finalQuery: string = query.trim();
     if (finalQuery == "") {
       return;
     }
@@ -24,7 +23,7 @@ const SearchBar = () => {
     router.push(`/searchPage?query=${finalQuery}`);
   }
 
-  function handleKeyDown(event:KeyboardEvent<HTMLInputElement>) {
+  function handleKeyDown(event: KeyboardEvent<HTMLInputElement>): void {
     if (event.key === "Enter") {
       pushQuery();
     }
@@ -45,7 +44,7 @@ const SearchBar = () => {
         onMouseEnter={() => playerRefSearchPC.current?.playFromBeginning()}
       >
         <Player
-          colorize={"var(--icon-color)"}
+          colorize={"var(--p-color)"}
           ref={playerRefSearchPC}
           size={40}
           icon={search}

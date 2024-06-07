@@ -1,12 +1,4 @@
 import { Schema, model,models, Model, HydratedDocumentFromSchema, InferSchemaType } from 'mongoose';
-// import { postInterface } from '@/lib/interfaces';
-// Interface for the user document type (without Mongoose methods)
-// interface IUser {
-//   name: string;
-//   email: string;
-//   profilePic:string,
-//   password:string
-// }
 interface commentInterface{
     name:string,
     user:string,

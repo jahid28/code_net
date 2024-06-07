@@ -1,7 +1,14 @@
-import React from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
-const SingleProfile = (props:any) => {
+import React from "react";
+import Image from "next/image";
+import Link from "next/link";
+interface propsInterface {
+  name: string;
+  userName: string;
+  profilePic: string;
+
+}
+  const SingleProfile: React.FC<propsInterface> = (props: propsInterface) => {
+
   return (
     <div>
       <div className="flex items-center">
@@ -16,13 +23,13 @@ const SingleProfile = (props:any) => {
           <p className="ml-2 text-lg w-fit">{props.name}</p>
           <p className="ml-1 text-lg w-fit opacity-50">@{props.userName}</p>
         </Link>
-        </div>
+      </div>
 
-        <br />
-        <hr />
-        <br />
+      <br />
+      <hr />
+      <br />
     </div>
-  )
-}
+  );
+};
 
-export default SingleProfile
+export default SingleProfile;

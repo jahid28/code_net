@@ -1,5 +1,4 @@
-"use client";
-import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
+// "use client";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -10,37 +9,56 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-type Checked = DropdownMenuCheckboxItemProps["checked"];
 import React, { useEffect, useRef, useState } from "react";
 import { Player } from "@lordicon/react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import { IoIosArrowDown } from "react-icons/io";
 import { MdOutlineCancel } from "react-icons/md";
 import { useRouter } from "next/navigation";
-// useState
-// useRef
-const Tags = () => {
-  const router = useRouter();
+import tag from "@/icons/tag.json";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+
+interface msgTypeObjInterface {
+  "Random Fact": boolean;
+  Question: boolean;
+  "Code to share": boolean;
+}
+
+interface langObjInterface {
+  Python: boolean;
+  Javascript: boolean;
+  JSX: boolean;
+  Typescript: boolean;
+  TSX: boolean;
+  HTML: boolean;
+  CSS: boolean;
+  Java: boolean;
+  C: boolean;
+  "C++": boolean;
+  Ruby: boolean;
+  PHP: boolean;
+  "C#": boolean;
+  Go: boolean;
+  Swift: boolean;
+  Kotlin: boolean;
+  Rust: boolean;
+  SQL: boolean;
+}
+
+const Tags: React.FC = () => {
+  const router: AppRouterInstance = useRouter();
+
   const playerRefTag = useRef<Player>(null);
-  const tag = require("@/icons/tag.json");
-  const playerRefCross = useRef<Player>(null);
-  const cross = require("@/icons/cross.json");
 
   const [tagsArr, setTagsArr] = useState<Array<string>>([]);
 
-  const [msgTypeObj, setMsgTypeObj] = useState<any>({
+  const [msgTypeObj, setMsgTypeObj] = useState<msgTypeObjInterface>({
     "Random Fact": false,
     Question: false,
     "Code to share": false,
   });
 
-  const [langObj, setLangObj] = useState<any>({
+  const [langObj, setLangObj] = useState<langObjInterface>({
     Python: false,
     Javascript: false,
     JSX: false,
@@ -61,19 +79,16 @@ const Tags = () => {
     SQL: false,
   });
 
-  function pushQuery() {
-    let finalQuery = ""
-   for(let i=0;i<tagsArr.length;i++){
-      finalQuery += tagsArr[i] + "-"
-   }
-    // finalQuery = finalQuery.replace(/\s+/g, " ");
-
-    // finalQuery = finalQuery.replace(/ /g, "+");
+  function pushQuery(): void {
+    let finalQuery: string = "";
+    for (let i = 0; i < tagsArr.length; i++) {
+      finalQuery += tagsArr[i] + "-";
+    }
 
     router.push(`/tagSearch?tags=${finalQuery.slice(0, -1)}`);
   }
 
-  useEffect(() => {
+  useEffect((): void => {
     if (tagsArr.length > 0) {
       pushQuery();
     }
@@ -83,19 +98,16 @@ const Tags = () => {
   }, [tagsArr]);
 
   return (
-    <div className="border-red-500 border-2 text-color">
-      <div
-        id="allTags"
-        className="flex items-center border-yellow-500 border-2"
-      >
+    <div className="text-color mb-6">
+      <div id="allTags" className="flex items-center">
         <div
           onMouseEnter={() => playerRefTag.current?.playFromBeginning()}
-          className="text-3xl ml-2 flex w-fit font-bold items-center border-green-500 border-2"
+          className="text-3xl ml-2 flex w-fit font-bold items-center"
         >
           <p className="mr-2">Tags</p>
 
           <Player
-            colorize={"var(--icon-color)"}
+            colorize={"var(--p-color)"}
             ref={playerRefTag}
             size={30}
             icon={tag}
@@ -110,8 +122,6 @@ const Tags = () => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
-              {/* <DropdownMenuLabel>Appearance</DropdownMenuLabel>
-            <DropdownMenuSeparator /> */}
               <DropdownMenuCheckboxItem
                 checked={msgTypeObj["Random Fact"]}
                 onCheckedChange={() => {
@@ -174,8 +184,6 @@ const Tags = () => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
-              {/* <DropdownMenuLabel>Appearance</DropdownMenuLabel>
-            <DropdownMenuSeparator /> */}
               <DropdownMenuCheckboxItem
                 checked={langObj["Python"]}
                 onCheckedChange={() => {
@@ -183,7 +191,7 @@ const Tags = () => {
                     ...langObj,
                     Python: !langObj["Python"],
                   });
-                  !msgTypeObj["Python"]
+                  !langObj["Python"]
                     ? setTagsArr([...tagsArr, "Python"])
                     : setTagsArr(
                         tagsArr.filter((tag: string) => tag !== "Python")
@@ -461,21 +469,16 @@ const Tags = () => {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-
-        {tagsArr.length > 0 && (
-          <button className="ml-2 text-white bg-red-500 py-1 px-2 rounded-lg text-lg">
-            Search
-          </button>
-        )}
       </div>
 
       {tagsArr.length > 0 && (
         <div
           id="selectedTags"
-          className="border-red-400 border-2 mt-2 mb-2 flex items-center flex-wrap"
+          className="mt-2 mb-2 flex items-center flex-wrap"
         >
-          {tagsArr.map((e) => (
+          {tagsArr.map((e: string, index: number) => (
             <div
+              key={index}
               className="bg-dark-color flex items-center rounded-lg py-1 px-2 mr-2 cursor-pointer"
               onClick={() => {
                 setTagsArr(() => tagsArr.filter((tag: string) => tag !== e));
@@ -492,13 +495,11 @@ const Tags = () => {
                 }
               }}
             >
-              <p>
-              {e}
-              </p>
+              <p>{e}</p>
 
-            <div>
-            <MdOutlineCancel className="ml-2 text-lg"/>
-            </div>
+              <div>
+                <MdOutlineCancel className="ml-2 text-lg" />
+              </div>
             </div>
           ))}
         </div>

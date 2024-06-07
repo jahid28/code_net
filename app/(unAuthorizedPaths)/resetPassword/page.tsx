@@ -4,24 +4,24 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import ClipLoader from "react-spinners/ClipLoader";
 import { resetPassSchema } from "@/lib/zodSchemas";
+import { useSelector } from "react-redux";
 
-const ResetPassword = ({ searchParams }: { searchParams: any }) => {
+const ResetPassword: React.FC = () => {
   const router = useRouter();
-  // const [captchaValue, setCaptchaValue] = useState(false);
-  // const [userOTP, setUserOTP] = useState("");
-  // const [otp, setOTP] = useState(0);
-  // const [otpPopup, setotpPopup] = useState(false);
-  const [loading, setLoading] = useState(false);
-
+  const [loading, setLoading] = useState<boolean>(false);
   const [pass, setPass] = useState<string>("");
   const [cpass, setCpass] = useState<string>("");
-  // let otp:number
 
-  async function submit(e: any) {
+  const email: string = useSelector((state: any) => state.reducer1.email);
+
+  if (email == "") {
+    router.replace("/login");
+  }
+
+  async function submit(e: React.FormEvent): Promise<void> {
     e.preventDefault();
 
     try {
-      const email = searchParams.email;
       const resetPassDetails = {
         pass,
         cpass,
@@ -41,7 +41,7 @@ const ResetPassword = ({ searchParams }: { searchParams: any }) => {
         return;
       }
       setLoading(true);
-      const response = await fetch("/api/resetPassword", {
+      const response: Response = await fetch("/api/resetPassword", {
         method: "POST",
         headers: {
           "Content-type": "application/json",
@@ -86,7 +86,8 @@ const ResetPassword = ({ searchParams }: { searchParams: any }) => {
               type="password"
               id="password"
               name="password"
-              className="w-full bg-white rounded border border-gray-300 focus:border-neutral-400 focus:ring-2 focus:ring-neutral-400 text-base outline-none text-black py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+              placeholder="******"
+              className="w-full bg-transparent rounded border-2 border-gray-600 focus:ring-2 focus:ring-gray-600 text-base outline-none text-black py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
             />
           </div>
 
@@ -101,12 +102,13 @@ const ResetPassword = ({ searchParams }: { searchParams: any }) => {
               type="password"
               id="cpassword"
               name="cpassword"
-              className="w-full bg-white rounded border border-gray-300 focus:border-neutral-400 focus:ring-2 focus:ring-neutral-400 text-base outline-none text-black py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+              placeholder="******"
+              className="w-full bg-transparent rounded border-2 border-gray-600 focus:ring-2 focus:ring-gray-600 text-base outline-none text-black py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
             />
           </div>
 
           <input
-            className="w-full mt-3 cursor-pointer text-white py-2 px-6 focus:outline-none bg-red-500 hover:bg-red-600 rounded text-lg"
+            className="w-full mt-3 cursor-pointer text-white py-2 px-6 focus:outline-none bg-ascent rounded text-lg"
             type="submit"
             value="Submit"
           />
