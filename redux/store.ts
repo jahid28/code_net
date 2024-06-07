@@ -1,8 +1,9 @@
-import { createStore, applyMiddleware, Store } from 'redux';
-import createSagaMiddleware, { Task } from 'redux-saga';
-import { createWrapper, MakeStore } from 'next-redux-wrapper';
+import { createStore, applyMiddleware } from 'redux';
+import createSagaMiddleware from 'redux-saga';
 import mySaga from './saga';
 import  combineReducers  from '../rootReducer';
+import { configureStore } from '@reduxjs/toolkit';
+// import { reducer1 } from './reducers';
 
 
 // const makeStore: MakeStore<SagaStore> = () => {
@@ -13,7 +14,14 @@ import  combineReducers  from '../rootReducer';
 // };
 
 
-const store = createStore(combineReducers, applyMiddleware(sagaMiddleware));
+// const store = createStore(combineReducers, applyMiddleware(sagaMiddleware));
+
+const store = configureStore({
+    reducer: combineReducers,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({ thunk: false }).concat(sagaMiddleware),
+  });
+
 sagaMiddleware.run(mySaga);
 export default store;
 
