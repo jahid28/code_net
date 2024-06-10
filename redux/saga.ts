@@ -34,9 +34,8 @@ function* getCurrentUserDetailsSagaFunc() {
   if (data.success) {
     yield put({ type: 'getCurrentUserDetailsReducer', payload: data });
   }
-  else {
-    console.log("no success in getCurrentUserDetailsSagaFunc")
-  }
+  // else {
+  // }
   //   if (data.success) {
   //     setIsNoti(data.noti);
   //     setprofilePic(data.profilePic);

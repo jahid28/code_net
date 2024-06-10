@@ -68,14 +68,14 @@ body {
 
 .bg-ascent{
   color: white;
-  background-color: rgb(107, 196, 111);
+  background-color: #ef4444;
 }
 .bg-ascent:hover{
   /* color: white; */
-  background-color: rgb(78, 126, 63);
+  background-color: #dc2626
 }
 .text-ascent{
-  color: rgb(107, 196, 111);
+  color: #ef4444
   /* color: var(--ascent); */
 }
 @keyframes gradientAnimation {
@@ -97,3 +97,4 @@ body {
   -webkit-text-fill-color: transparent;
   animation: gradientAnimation 10s ease infinite;
 }
+

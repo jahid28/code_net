@@ -10,24 +10,20 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-import { Player } from "@lordicon/react";
 import { toast } from "sonner";
 import ClipLoader from "react-spinners/ClipLoader";
 import Link from "next/link";
 import { commentSchema } from "@/lib/zodSchemas";
 import { commentInterface } from "@/lib/interfaces";
-import arrow from "@/icons/arrow.json";
-import commentIcon from "@/icons/comment.json";
+import { BsArrowRight,BsChatRightText } from "react-icons/bs";
+
 interface propsInterface {
   postId: string;
   comments: commentInterface[];
 }
 
 const CommentBox: React.FC<propsInterface> = (props: propsInterface) => {
-  const playerRefComment = useRef<Player>(null);
-  // const commentIcon = require("@/icons/comment.json");
-  const playerRefArrow = useRef<Player>(null);
-  // const arrow = require("@/icons/arrow.json");
+
 
   const [loading, setLoading] = useState<boolean>(false);
   const [comment, setComment] = useState<string>("");
@@ -71,15 +67,10 @@ const CommentBox: React.FC<propsInterface> = (props: propsInterface) => {
     <Dialog>
       <DialogTrigger>
         <div
-          className="flex cursor-pointer text-xl"
-          onMouseEnter={() => playerRefComment.current?.playFromBeginning()}
+          className="flex items-center cursor-pointer text-xl"
         >
-          <Player
-            colorize={"var(--p-color)"}
-            ref={playerRefComment}
-            size={30}
-            icon={commentIcon}
-          />
+         
+          <p className="text-2xl"><BsChatRightText/></p>
           <p className="ml-2">{props.comments.length}</p>
         </div>
       </DialogTrigger>
@@ -100,18 +91,13 @@ const CommentBox: React.FC<propsInterface> = (props: propsInterface) => {
           ></textarea>
 
           <div
-            onMouseEnter={() => playerRefArrow.current?.playFromBeginning()}
             onClick={submit}
             className="flex bg-ascent align-middle text-white px-2 py-.05 rounded-xl cursor-pointer text-lg ml-auto"
           >
             <p className="mr-2 text-xl">Comment</p>
 
-            <Player
-              colorize="white"
-              ref={playerRefArrow}
-              size={32}
-              icon={arrow}
-            />
+            <p className="text-2xl"><BsArrowRight/></p>
+
           </div>
 
           <div className="w-full grid place-items-center absolute top-40%">

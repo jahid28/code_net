@@ -1,13 +1,11 @@
 import React, { useRef, useState, KeyboardEvent } from "react";
-import { Player } from "@lordicon/react";
 import { useRouter } from "next/navigation";
-import search from "@/icons/search.json";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { BsSearch } from "react-icons/bs";
 
 const SearchBar: React.FC = () => {
   const router: AppRouterInstance = useRouter();
 
-  const playerRefSearchPC = useRef<Player>(null);
   const [query, setQuery] = useState<string>("");
 
   function pushQuery(): void {
@@ -41,14 +39,8 @@ const SearchBar: React.FC = () => {
       <div
         className="cursor-pointer ml-2 mb-1"
         onClick={pushQuery}
-        onMouseEnter={() => playerRefSearchPC.current?.playFromBeginning()}
       >
-        <Player
-          colorize={"var(--p-color)"}
-          ref={playerRefSearchPC}
-          size={40}
-          icon={search}
-        />
+        <p className="text-2xl"><BsSearch/></p>
       </div>
     </div>
   );

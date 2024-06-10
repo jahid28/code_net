@@ -20,7 +20,6 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   const pathname:string = usePathname();
-  console.log("layout")
   return (
     <html lang="en">
       <body className={inter.className}>

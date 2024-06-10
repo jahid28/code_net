@@ -12,10 +12,8 @@ export async function POST(req: NextRequest) {
         let verify: jwtTokenInterface | undefined = undefined;
 
         if (token) {
-            console.log("jwtToken", token)
             try {
                 verify = jwt.verify(token, process.env.NEXTAUTH_SECRET as string) as jwtTokenInterface;
-                console.log("verify", verify)
             } catch (err) {
                 verify = undefined;
             }

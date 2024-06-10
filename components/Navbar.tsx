@@ -3,7 +3,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { signIn, signOut, useSession, getProviders } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { Player } from "@lordicon/react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,24 +12,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { deleteCookie, getCookie, setCookie } from "cookies-next";
-import { FiSun, FiMoon } from "react-icons/fi";
 import SearchBar from "./SearchBar";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { getCurrentUserDetailsActionFunc } from "@/redux/actions";
-import home from "@/icons/home.json";
-import search from "@/icons/search.json";
-import noti from "@/icons/noti.json";
-import profile from "@/icons/profile.json";
-import code from "@/icons/code.json";
+
+import { BsSearch,BsBell,BsHouse,BsPerson,BsMoon,BsSun,BsCodeSlash } from "react-icons/bs";
 
 const Navbar: React.FC = () => {
-  const playerRefHome = useRef<Player>(null);
-  const playerRefSearch = useRef<Player>(null);
-  const playerRefNoti = useRef<Player>(null);
-  const playerRefNotiPC = useRef<Player>(null);
-  const playerRefProfile = useRef<Player>(null);
-  const playerRefCode = useRef<Player>(null);
 
   const [isEmail, setIsEmail] = useState<boolean>(false);
   const [profilePic, setprofilePic] = useState<string | undefined>("");
@@ -45,11 +34,9 @@ const Navbar: React.FC = () => {
   );
 
   useEffect(() => {
-    console.log("currentUserDetails from nav", currentUserDetails);
 
     if (currentUserDetails.name === "") {
       dispatch(getCurrentUserDetailsActionFunc());
-      console.log("currentUserDetails from nav after", currentUserDetails);
     } else {
       setIsNoti(currentUserDetails.noti);
       setIsEmail(true);
@@ -58,30 +45,9 @@ const Navbar: React.FC = () => {
     }
   }, [currentUserDetails]);
 
-  // async function checkNoti():Promise<void> {
-  //   try {
-  //     const res:Response = await fetch("/api/checkNotiAndGetDetails", {
-  //       method: "GET",
-  //       headers: {
-  //         "Content-type": "application/json",
-  //       },
-  //       // body: JSON.stringify(result),
-  //     });
-  //     const data = await res.json();
-  //     if (data.success) {
-  //       setIsNoti(data.noti);
-  //       setprofilePic(data.profilePic);
-  //       setIsEmail(true);
-  //       setUserName(data.userName);
-  //     }
-  //   } catch (error) {
-  //     toast.error("Something went wrong in fetching noti");
-  //   }
-  // }
 
   useEffect((): void => {
     document.body.className = "darkmode";
-    // checkNoti();
     return;
   }, []);
 
@@ -90,8 +56,6 @@ const Navbar: React.FC = () => {
     if (res) {
       signOut();
       deleteCookie("token");
-      // deleteCookie("name");
-      // deleteCookie("profilePic");
     }
   }
 
@@ -99,18 +63,14 @@ const Navbar: React.FC = () => {
     <div className="sticky text-color top-0 w-[100vw] z-50  mb-4">
       <nav className="bg-dark-color flex p-2 w-full items-center">
         <Link
-          onMouseEnter={() => playerRefCode.current?.playFromBeginning()}
           className="flex items-center"
           href={"/"}
         >
           <h2 className="mr-2 font-extrabold text-4xl">CodeNet</h2>
 
-          <Player
-            colorize={"var(--p-color)"}
-            ref={playerRefCode}
-            size={50}
-            icon={code}
-          />
+          <p className="text-4xl"><BsCodeSlash/></p>
+
+        
         </Link>
 
         <div className="ml-auto hidden md:flex items-center">
@@ -120,14 +80,10 @@ const Navbar: React.FC = () => {
             href={"/notifications"}
             onClick={() => setIsNoti(false)}
             className="cursor-pointer ml-2 flex"
-            onMouseEnter={() => playerRefNotiPC.current?.playFromBeginning()}
           >
-            <Player
-              colorize={"var(--p-color)"}
-              ref={playerRefNotiPC}
-              size={40}
-              icon={noti}
-            />
+           
+            <p className="text-4xl"><BsCodeSlash/></p>
+
             {isNoti && <p className="w-3 h-3 rounded-full bg-ascent"></p>}
           </Link>
         </div>
@@ -141,7 +97,7 @@ const Navbar: React.FC = () => {
               }}
               className="text-3xl ml-2 cursor-pointer"
             >
-              <FiSun />
+              <BsSun />
             </div>
           ) : (
             <div
@@ -151,7 +107,7 @@ const Navbar: React.FC = () => {
               }}
               className="text-3xl ml-2 cursor-pointer"
             >
-              <FiMoon />
+             <p className="text-2xl"> <BsMoon /></p>
             </div>
           )}
 
@@ -159,10 +115,7 @@ const Navbar: React.FC = () => {
             <div className="ml-4">
               <DropdownMenu>
                 <DropdownMenuTrigger>
-                  {/* <Image
-                    className="rounded-full border-red-500 border-2 mr-4 cursor-pointer object-cover"
-                    alt="profilePic"
-                  /> */}
+                  
                   <div className="relative w-10 h-10 rounded-full overflow-hidden mr-4 cursor-pointer">
                     <Image
                       src={`${profilePic}`}
@@ -177,7 +130,6 @@ const Navbar: React.FC = () => {
                   </div>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  {/* <DropdownMenuLabel>My Account</DropdownMenuLabel> */}
                   <Link
                     href={`/account/${userName}`}
                     className="cursor-pointer"
@@ -219,30 +171,22 @@ const Navbar: React.FC = () => {
           <div className="w-1/4 grid place-items-center">
             <Link
               href={"/"}
-              className="cursor-pointer ml-[4vw]"
-              onMouseEnter={() => playerRefHome.current?.playFromBeginning()}
+              className="cursor-pointer"
             >
-              <Player
-                colorize={"var(--p-color)"}
-                ref={playerRefHome}
-                size={35}
-                icon={home}
-              />
+           
+              <p className="text-2xl iconHover"><BsHouse />
+              </p>
             </Link>
           </div>
 
           <div className="w-1/4 grid place-items-center">
             <div
               onClick={() => setSearchToggle(!searchToggle)}
-              className="cursor-pointer ml-[4vw]"
-              onMouseEnter={() => playerRefSearch.current?.playFromBeginning()}
+              className="cursor-pointer"
             >
-              <Player
-                colorize={"var(--p-color)"}
-                ref={playerRefSearch}
-                size={35}
-                icon={search}
-              />
+             
+              <p className="text-2xl iconHover"><BsSearch />
+              </p>
             </div>
           </div>
 
@@ -250,15 +194,11 @@ const Navbar: React.FC = () => {
             <Link
               href={"/notifications"}
               onClick={() => setIsNoti(false)}
-              className="cursor-pointer ml-[4vw] flex"
-              onMouseEnter={() => playerRefNoti.current?.playFromBeginning()}
+              className="cursor-pointer flex"
             >
-              <Player
-                colorize={"var(--p-color)"}
-                ref={playerRefNoti}
-                size={35}
-                icon={noti}
-              />
+             
+              <p className="text-2xl iconHover"><BsBell />
+              </p>
               {isNoti && <p className="w-2 h-2 rounded-full bg-ascent"></p>}
             </Link>
           </div>
@@ -266,15 +206,11 @@ const Navbar: React.FC = () => {
           <div className="w-1/4 grid place-items-center">
             <Link
               href={`/account/${userName}`}
-              className="cursor-pointer ml-[4vw]"
-              onMouseEnter={() => playerRefProfile.current?.playFromBeginning()}
+              className="cursor-pointer"
             >
-              <Player
-                colorize={"var(--p-color)"}
-                ref={playerRefProfile}
-                size={35}
-                icon={profile}
-              />
+             
+              <p className="text-3xl iconHover"><BsPerson />
+              </p>
             </Link>
           </div>
         </div>

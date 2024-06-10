@@ -27,7 +27,6 @@ const FollowComponent:React.FC<propsInterface> = (props: propsInterface) => {
 
 
   useEffect(() => {
-    console.log("currentUserDetails from follow", currentUserDetails.following)
     if (currentUserDetails.following.includes(props.userToFollow)) {
       setFollowed(true);
     }

@@ -5,12 +5,12 @@ import { postInterface } from "@/lib/interfaces";
 import SinglePost from "@/components/SinglePost";
 import PostSkeleton from "@/components/PostSkeleton";
 import Image from "next/image";
-import { Player } from "@lordicon/react";
 import FollowComponent from "@/components/FollowComponent";
 import ProfileSkeleton from "@/components/ProfileSkeleton";
 import { googleUserInterface } from "@/lib/interfaces";
-import share from "@/icons/share.json";
-import at from "@/icons/at.json";
+
+import { BsShareFill } from "react-icons/bs";
+
 interface userDetailInterface extends googleUserInterface {
   password?: string;
 }
@@ -24,13 +24,9 @@ const AccountPage: React.FC<PageProps> = ({ params }) => {
     _id: string;
   }
 
-  const playerRefShare = useRef<Player>(null);
-
-  const playerRefAt = useRef<Player>(null);
-
+ 
   const [loading, setLoading] = useState<boolean>(false);
   const [posts, setPosts] = useState<getPostInterface[]>([]);
-  // const [followingList, setFollowingList] = useState<string[]>([]);
   const [myName, setMyname] = useState<string>("");
   const [userDetails, setUserDetails] = useState<userDetailInterface>({
     name: "",
@@ -59,7 +55,6 @@ const AccountPage: React.FC<PageProps> = ({ params }) => {
         return;
       }
       setPosts(data.data);
-      // setFollowingList(data.followingList);
       setMyname(data.myName);
       setUserDetails(data.userDetails);
       setLoading(false);
@@ -110,19 +105,13 @@ const AccountPage: React.FC<PageProps> = ({ params }) => {
             />
           </div>
 
-          <div onMouseEnter={() => playerRefAt.current?.playFromBeginning()}>
+          <div>
             <p className="text-2xl font-bold">{userDetails.name}</p>
             <div className="text-xl opacity-50 flex">
-              <Player
-                colorize={"var(--p-color)"}
-                ref={playerRefAt}
-                size={26}
-                icon={at}
-              />
-              <p> {userDetails.userName}</p>
+              <p>@{userDetails.userName}</p>
             </div>
           </div>
-          <div className="flex justify-center flex-wrap text-lg lg:text-2xl mt-2 lg:mt-0 font-bold">
+          <div className="flex justify-center items-center flex-wrap text-lg lg:text-2xl mt-2 lg:mt-0 font-bold">
             <p className="ml-[6vw] mb-2">
               Followers : {userDetails.followers.length}
             </p>
@@ -132,16 +121,16 @@ const AccountPage: React.FC<PageProps> = ({ params }) => {
             <p className="ml-[6vw] mr-[4vw] mb-2">{posts.length} Posts</p>
 
             <FollowComponent
-              // followingList={followingList}
               userToFollow={userName}
               myName={myName}
             />
 
             <div
-              onMouseEnter={() => playerRefShare.current?.playFromBeginning()}
               onClick={() => {
                 navigator.clipboard
-                  .writeText(`${process.env.NEXT_PUBLIC_WEBSITE_URL}/account/${userName}`)
+                  .writeText(
+                    `${process.env.NEXT_PUBLIC_WEBSITE_URL}/account/${userName}`
+                  )
                   .then(() => {
                     toast.success("Profile link copied!");
                   })
@@ -149,14 +138,12 @@ const AccountPage: React.FC<PageProps> = ({ params }) => {
                     toast.error(err);
                   });
               }}
-              className="ml-[6vw] cursor-pointer"
+              className="ml-[6vw] cursor-pointer mb-2"
             >
-              <Player
-                colorize={"var(--p-color)"}
-                ref={playerRefShare}
-                size={30}
-                icon={share}
-              />
+              
+              <p className="text-xl">
+                <BsShareFill />
+              </p>
             </div>
           </div>
         </div>

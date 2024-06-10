@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Player } from "@lordicon/react";
-import { useRef } from "react";
 import { toast } from "sonner";
-import trash from "@/icons/trash.json";
+import { BsTrash3 } from "react-icons/bs";
 
 const LikeComponent:React.FC<{_id:string}> = (props: {_id:string}) => {
-  const playerRefTrash = useRef<Player>(null);
 
   async function deletePost(_id: string):Promise<void> {
     try {
@@ -34,18 +31,12 @@ const LikeComponent:React.FC<{_id:string}> = (props: {_id:string}) => {
   return (
     <div className="ml-[10vw] md:ml-16 w-fit">
       <div
-        onMouseEnter={() => playerRefTrash.current?.playFromBeginning()}
         onClick={() => {
           deletePost(props._id);
         }}
         className="cursor-pointer flex align-middle text-xl"
       >
-        <Player
-          colorize={"var(--ascent-color)"}
-          ref={playerRefTrash}
-          size={30}
-          icon={trash}
-        />
+       <p className="text-2xl text-red-500"><BsTrash3/></p>
       </div>
     </div>
   );

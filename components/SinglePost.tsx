@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/carousel";
 import CommentBox from "./CommentBox";
 import LikeComponent from "./LikeComponent";
-import { Player } from "@lordicon/react";
 import FollowComponent from "./FollowComponent";
 import DeleteComponent from "./DeleteComponent";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -20,7 +19,7 @@ import { darcula } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { languageMap } from "@/lib/interfaces";
 import { postInterface } from "@/lib/interfaces";
 import { useSelector } from "react-redux";
-import share from "@/icons/share.json";
+import { BsShareFill } from "react-icons/bs";
 
 interface getPostInterface extends postInterface {
   _id: string;
@@ -33,10 +32,8 @@ interface propsInterface {
 const SinglePost: React.FC<propsInterface> = (props: propsInterface) => {
   const data: getPostInterface = props.data;
   const [myName, setMyName] = useState<string>("");
-  const [followingList, setFollowingList] = useState<string[]>([]);
   const dateInstance: Date = new Date(data.date);
 
-  const playerRefShare = useRef<Player>(null);
 
   const daysOfWeek: Array<string> = [
     "Sun",
@@ -49,11 +46,20 @@ const SinglePost: React.FC<propsInterface> = (props: propsInterface) => {
   ];
   const dayOfWeek: string = daysOfWeek[dateInstance.getDay()];
 
-  let options = { timeZone: 'Asia/Kolkata' };
+  let options = { timeZone: "Asia/Kolkata" };
 
-  const day: string = dateInstance.toLocaleString('en-IN', { ...options, day: '2-digit' });
-  const month: string = dateInstance.toLocaleString('en-IN', { ...options, month: '2-digit' });
-  const year: string = dateInstance.toLocaleString('en-IN', { ...options, year: 'numeric' });
+  const day: string = dateInstance.toLocaleString("en-IN", {
+    ...options,
+    day: "2-digit",
+  });
+  const month: string = dateInstance.toLocaleString("en-IN", {
+    ...options,
+    month: "2-digit",
+  });
+  const year: string = dateInstance.toLocaleString("en-IN", {
+    ...options,
+    year: "numeric",
+  });
   // const day: string = String(dateInstance.getUTCDate()).padStart(2, "0");
   // const month: string = String(dateInstance.getUTCMonth() + 1).padStart(2, "0");
   // const year: number = dateInstance.getUTCFullYear();
@@ -64,7 +70,6 @@ const SinglePost: React.FC<propsInterface> = (props: propsInterface) => {
 
   useEffect(() => {
     setMyName(currentUserDetails.userName);
-    setFollowingList(currentUserDetails.following);
   }, [currentUserDetails]);
 
   return (
@@ -83,7 +88,6 @@ const SinglePost: React.FC<propsInterface> = (props: propsInterface) => {
         </Link>
 
         <FollowComponent
-          // followingList={followingList}
           userToFollow={data.userName}
           myName={myName}
         />
@@ -168,10 +172,11 @@ const SinglePost: React.FC<propsInterface> = (props: propsInterface) => {
         <CommentBox postId={data._id} comments={data.comments} />
 
         <div
-          onMouseEnter={() => playerRefShare.current?.playFromBeginning()}
           onClick={() => {
             navigator.clipboard
-              .writeText(`${process.env.NEXT_PUBLIC_WEBSITE_URL}/post/${data._id}`)
+              .writeText(
+                `${process.env.NEXT_PUBLIC_WEBSITE_URL}/post/${data._id}`
+              )
               .then(() => {
                 toast.success("Post link copied!");
               })
@@ -179,14 +184,11 @@ const SinglePost: React.FC<propsInterface> = (props: propsInterface) => {
                 toast.error(err);
               });
           }}
-          className="ml-[10vw] md:ml-16 cursor-pointer"
+          className="ml-[10vw] mt-1 md:ml-16 cursor-pointer"
         >
-          <Player
-            colorize={"var(--p-color)"}
-            ref={playerRefShare}
-            size={30}
-            icon={share}
-          />
+          <p className="text-xl iconHover">
+            <BsShareFill />
+          </p>
         </div>
 
         {myName == data.userName && <DeleteComponent _id={data._id} />}

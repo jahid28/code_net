@@ -10,13 +10,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import React, { useEffect, useRef, useState } from "react";
-import { Player } from "@lordicon/react";
 
 import { IoIosArrowDown } from "react-icons/io";
-import { MdOutlineCancel } from "react-icons/md";
 import { useRouter } from "next/navigation";
-import tag from "@/icons/tag.json";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { BsTags, BsXCircle } from "react-icons/bs";
 
 interface msgTypeObjInterface {
   "Random Fact": boolean;
@@ -47,8 +45,6 @@ interface langObjInterface {
 
 const Tags: React.FC = () => {
   const router: AppRouterInstance = useRouter();
-
-  const playerRefTag = useRef<Player>(null);
 
   const [tagsArr, setTagsArr] = useState<Array<string>>([]);
 
@@ -100,18 +96,12 @@ const Tags: React.FC = () => {
   return (
     <div className="text-color mb-6">
       <div id="allTags" className="flex items-center">
-        <div
-          onMouseEnter={() => playerRefTag.current?.playFromBeginning()}
-          className="text-3xl ml-2 flex w-fit font-bold items-center"
-        >
+        <div className="text-3xl ml-2 flex w-fit font-bold items-center">
           <p className="mr-2">Tags</p>
 
-          <Player
-            colorize={"var(--p-color)"}
-            ref={playerRefTag}
-            size={30}
-            icon={tag}
-          />
+          <p className="text-2xl">
+            <BsTags />
+          </p>
         </div>
 
         <div className="ml-2">
@@ -498,7 +488,7 @@ const Tags: React.FC = () => {
               <p>{e}</p>
 
               <div>
-                <MdOutlineCancel className="ml-2 text-lg" />
+                <BsXCircle className="ml-2 text-lg" />
               </div>
             </div>
           ))}

@@ -6,7 +6,6 @@ export const connectToMongo = async () => {
   // mongoose.set("strictQuery", true);
 
   if (isConnected) {
-    console.log("MongoDB is already connected");
     return;
   }
 
@@ -15,8 +14,6 @@ export const connectToMongo = async () => {
 
     isConnected = true;
 
-    console.log("MongoDB connected");
   } catch (error) {
-    console.log(error);
   }
 };

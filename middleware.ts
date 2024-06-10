@@ -12,23 +12,6 @@ export function middleware(req: NextRequest) {
 
         const jwtToken: string | undefined = req.cookies.get("token")?.value
 
-// const dispatch = useDispatch();
-
-        // let verify: any | undefined = undefined;
-
-        // if (jwtToken) {
-        //     try {
-        //         verify = jwt.verify(jwtToken, `${process.env.NEXTAUTH_SECRET}`);
-        //     } catch (err) {
-        //         // console.error("Invalid token", err);
-        //         // handle the error or set verify to undefined
-        //         verify = undefined;
-        //     }
-        // }
-
-        // if (verifiedPath && jwtToken) {
-        //     // return NextResponse.redirect(new URL('/', req.nextUrl))
-        // }
         if (unverifiedPath && jwtToken) {
             return NextResponse.redirect(new URL('/', req.nextUrl))
         }

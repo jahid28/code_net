@@ -68,9 +68,9 @@ const handler = NextAuth({
           randomUserName=checkEmail[0].userName
         }
 
-        const token= jwt.sign({ name: user.name, userName: randomUserName, email: user.email, profilePic: user.image }, `${process.env.NEXTAUTH_SECRET}`, { expiresIn: '1d' });
+        const token= jwt.sign({ name: user.name, userName: randomUserName, email: user.email, profilePic: user.image }, `${process.env.NEXTAUTH_SECRET}`, { expiresIn: '7d' });
         
-        cookies().set('token', `${token}`, { maxAge: 60 * 60 * 24 })
+        cookies().set('token', `${token}`, { maxAge: 60 * 60 * 24*7 })
         
         return true
       }

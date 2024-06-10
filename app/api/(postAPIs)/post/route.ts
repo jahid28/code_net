@@ -52,7 +52,6 @@ export async function POST(req: NextRequest) {
         let verify: jwtTokenInterface | undefined = undefined;
 
         if (token) {
-            // console.log("jwtToken", jwtToken)
             try {
                 verify = jwt.verify(token, process.env.NEXTAUTH_SECRET as string) as jwtTokenInterface;
             } catch (err) {
@@ -92,55 +91,55 @@ export async function POST(req: NextRequest) {
         }
 
 
-        // const apiKey = process.env.GEMINI_API_KEY!;
-        // const genAI = new GoogleGenerativeAI(apiKey);
+        const apiKey = process.env.GEMINI_API_KEY!;
+        const genAI = new GoogleGenerativeAI(apiKey);
 
-        // const model = genAI.getGenerativeModel({
-        //     model: "gemini-1.5-flash",
-        // });
+        const model = genAI.getGenerativeModel({
+            model: "gemini-1.5-flash",
+        });
 
-        // const generationConfig = {
-        //     temperature: 1,
-        //     topP: 0.95,
-        //     topK: 64,
-        //     maxOutputTokens: 8192,
-        //     responseMimeType: "text/plain",
-        // };
+        const generationConfig = {
+            temperature: 1,
+            topP: 0.95,
+            topK: 64,
+            maxOutputTokens: 8192,
+            responseMimeType: "text/plain",
+        };
 
-        // const safetySettings = [
-        //     {
-        //         category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-        //         threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-        //     },
-        //     {
-        //         category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
-        //         threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-        //     },
-        //     {
-        //         category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
-        //         threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-        //     },
-        //     {
-        //         category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
-        //         threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-        //     },
-        // ];
+        const safetySettings = [
+            {
+                category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+                threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+            },
+            {
+                category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+                threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+            },
+            {
+                category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+                threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+            },
+            {
+                category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+                threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+            },
+        ];
 
-        // const chatSession = model.startChat({
-        //     generationConfig,
-        //     safetySettings,
-        //     history: [
-        //     ],
-        // });
+        const chatSession = model.startChat({
+            generationConfig,
+            safetySettings,
+            history: [
+            ],
+        });
 
-        // const result = await chatSession.sendMessage(
-        //     `"${msg}"
-        // Is this message about programming/coding/tech? yes or no`
-        // );
+        const result = await chatSession.sendMessage(
+            `"${msg}"
+        Is this message about programming/coding/tech? yes or no`
+        );
 
-        // if (result.response.text().toLowerCase().includes("no")) {
-        //     return NextResponse.json({ success: false, msg: "Please post something related to programming, coding or tech" }, { status: 200 })
-        // }
+        if (result.response.text().toLowerCase().includes("no")) {
+            return NextResponse.json({ success: false, msg: "Please post something related to programming, coding or tech" }, { status: 200 })
+        }
 
 
         await connectToMongo()

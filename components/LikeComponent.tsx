@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Player } from "@lordicon/react";
-import { useRef } from "react";
 import { like } from "@/lib/likeFunc";
 import { dislike } from "@/lib/dislikeFunc";
-import heart from "@/icons/heart.json";
-import solidHeart from "@/icons/solidHeart.json";
+import { BsHeart, BsHeartFill } from "react-icons/bs";
 
 interface propsInterface {
   likeNum: number;
@@ -21,44 +18,34 @@ const LikeComponent: React.FC<propsInterface> = (props: propsInterface) => {
       setLiked(true);
     }
   }, [props.likeArr, props.userName]);
-  const playerRefHeart = useRef<Player>(null);
-  const playerRefSolidHeart = useRef<Player>(null);
   return (
     <div>
       {!liked ? (
         <div
-          onMouseEnter={() => playerRefHeart.current?.playFromBeginning()}
           onClick={() => {
             setLiked(true);
             setLikeNum((prev) => prev + 1);
             like(props._id);
           }}
-          className="cursor-pointer flex align-middle text-xl mr-[10vw] md:mr-16"
+          className="cursor-pointer flex items-center align-middle text-xl mr-[10vw] md:mr-16"
         >
-          <Player
-            colorize={"var(--p-color)"}
-            ref={playerRefHeart}
-            size={30}
-            icon={heart}
-          />
+          <p className="text-2xl iconHover">
+            <BsHeart />
+          </p>
           <p className="ml-1">{likeNum}</p>
         </div>
       ) : (
         <div
-          onMouseEnter={() => playerRefSolidHeart.current?.playFromBeginning()}
           onClick={() => {
             setLiked(false);
             setLikeNum((prev) => prev - 1);
             dislike(props._id);
           }}
-          className="cursor-pointer flex align-middle text-xl mr-16"
+          className="cursor-pointer flex items-center align-middle text-xl mr-16"
         >
-          <Player
-            colorize={"#ef4444"}
-            ref={playerRefSolidHeart}
-            size={30}
-            icon={solidHeart}
-          />
+          <p className="text-2xl iconHover text-red-500">
+            <BsHeartFill />
+          </p>
           <p className="ml-1">{likeNum}</p>
         </div>
       )}

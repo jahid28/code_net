@@ -28,7 +28,6 @@ export const reducer1 = (state = initialState, action: {type:string,payload?:str
     // case 'decActiontype':
     //   return { ...state, age: action.data - 1 };
     default:
-      console.log("default reducer called ")
       return state;
   }
   // return "abcccc"

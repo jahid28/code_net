@@ -52,9 +52,9 @@ export async function POST(req: NextRequest) {
         // cookies().set('name', `${data.name}`, { maxAge: 60 * 60 * 24 })
         // cookies().set('profilePic', `${data.profilePic}`, { maxAge: 60 * 60 * 24 }).
 
-        const token= jwt.sign({ name, userName, email, profilePic:data.profilePic }, `${process.env.NEXTAUTH_SECRET}`, { expiresIn: '1d' });
+        const token= jwt.sign({ name, userName, email, profilePic:data.profilePic }, `${process.env.NEXTAUTH_SECRET}`, { expiresIn: '7d' });
         
-        cookies().set('token', `${token}`, { maxAge: 60 * 60 * 24 })
+        cookies().set('token', `${token}`, { maxAge: 60 * 60 * 24*7 })
         
 
         return NextResponse.json({ success: true, msg: "Successfully registered" }, { status: 200 })

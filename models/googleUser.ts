@@ -1,4 +1,4 @@
-import { Schema, model,models, Model, HydratedDocumentFromSchema, InferSchemaType } from 'mongoose';
+import { Schema, model,models } from 'mongoose';
 
 const collectionName:string="google_user"
 

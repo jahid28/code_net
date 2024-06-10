@@ -75,7 +75,9 @@ const AllPosts: React.FC = () => {
   };
 
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
+    if(loading === false){
+      window.addEventListener("scroll", handleScroll);
+    }
 
     return () => {
       window.removeEventListener("scroll", handleScroll);

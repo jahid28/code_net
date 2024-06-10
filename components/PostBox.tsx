@@ -25,7 +25,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { Player } from "@lordicon/react";
 import { toast } from "sonner";
 import { imageDb } from "@/Firebase/Config";
 import {
@@ -38,15 +37,13 @@ import {
 import { v4 } from "uuid";
 import ClipLoader from "react-spinners/ClipLoader";
 import { postSchema } from "@/lib/zodSchemas";
-import check from "@/icons/check.json";
-import upload from "@/icons/upload.json";
-import arrow from "@/icons/arrow.json";
+
+
+import { BsSend,BsCardImage,BsArrowRight } from "react-icons/bs";
+
 
 const PostBox: React.FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const playerRefCheck = useRef<Player>(null);
-  const playerRefUpload = useRef<Player>(null);
-  const playerRefArrow = useRef<Player>(null);
 
   const [imagesToUload, setImagesToUload] = useState<File[]>([]);
   const [images, setImages] = useState<string[]>([]);
@@ -156,27 +153,17 @@ const PostBox: React.FC = () => {
     <Dialog>
       <DialogTrigger asChild>
         <div
-          className="flex cursor-pointer text-white bg-ascent font-bold rounded-lg text-2xl p-2"
-          onMouseEnter={() => playerRefCheck.current?.playFromBeginning()}
+          className="flex items-center cursor-pointer text-white bg-ascent font-bold rounded-lg text-2xl p-2"
         >
           Post
-          <div className="ml-2">
-            <Player
-              colorize="white"
-              ref={playerRefCheck}
-              size={32}
-              icon={check}
-            />
-          </div>
+            <p className="text-2xl ml-2"><BsSend/></p>
         </div>
       </DialogTrigger>
       <DialogContent>
         <div className="max-h-[90vh] max-w-[90vw] overflow-y-auto">
           <DialogHeader>
             <div className="w-full mb-4">
-              {/* <DialogTitle>
-                <p className="text-2xl">Write a message :</p>
-              </DialogTitle> */}
+             
 
               <p className="text-2xl mt-3 font-bold">Write a message :</p>
 
@@ -310,38 +297,24 @@ const PostBox: React.FC = () => {
                   onChange={handleImageChange}
                 />
                 <div
-                  onMouseEnter={() =>
-                    playerRefUpload.current?.playFromBeginning()
-                  }
+                  
                   onClick={inputClicked}
-                  className=" w-fit cursor-pointer flex text-ascent"
+                  className="w-fit cursor-pointer flex items-center text-ascent"
                 >
-                  <p className="mr-2 text-xl">Insert image(s)</p>
-                  <Player
-                    colorize="#f44336"
-                    ref={playerRefUpload}
-                    size={32}
-                    icon={upload}
-                  />
+                  <p className="mr-2 text-xl mb-1">Insert image(s)</p>
+                  <p className="text-2xl"><BsCardImage/></p>
                 </div>
 
                 <div
-                  onMouseEnter={() =>
-                    playerRefArrow.current?.playFromBeginning()
-                  }
+                  
                   onClick={() => {
                     submit();
                   }}
-                  className="flex bg-ascent align-middle text-white px-2 py-.05 rounded-xl cursor-pointer text-lg ml-auto"
+                  className="flex items-center bg-ascent text-white px-2 py-.05 rounded-lg cursor-pointer ml-auto"
                 >
                   <p className="mr-2 text-xl">Post</p>
 
-                  <Player
-                    colorize="white"
-                    ref={playerRefArrow}
-                    size={32}
-                    icon={arrow}
-                  />
+                  <p className="text-2xl"><BsArrowRight/></p>
                 </div>
               </div>
             </div>

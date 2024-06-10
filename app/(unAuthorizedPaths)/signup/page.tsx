@@ -14,12 +14,12 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { Player } from "@lordicon/react";
 import { imageDb } from "@/Firebase/Config";
 import { v4 } from "uuid";
 import { ref, uploadBytes, listAll, getDownloadURL } from "firebase/storage";
 import Image from "next/image";
-import photo from "@/icons/photo.json";
+import { FaRegImage } from "react-icons/fa6";
+
 interface formInter {
   email: string;
   password: string;
@@ -29,7 +29,6 @@ interface formInter {
 const SignupPage: React.FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const playerRefPhoto = useRef<Player>(null);
   const [imagesToUload, setImagesToUload] = useState<File[]>([]);
   const [images, setImages] = useState<string[]>([]);
 
@@ -275,17 +274,13 @@ const SignupPage: React.FC = () => {
             onChange={handleImageChange}
           />
           <div
-            onMouseEnter={() => playerRefPhoto.current?.playFromBeginning()}
             onClick={inputClicked}
-            className=" w-fit cursor-pointer flex text-ascent mt-1 mb-2"
+            className=" w-fit cursor-pointer flex items-center text-ascent mt-1 mb-2"
           >
             <p className="mr-2 text-xl">Profile Pic(optional)</p>
-            <Player
-              colorize="#f44336"
-              ref={playerRefPhoto}
-              size={32}
-              icon={photo}
-            />
+           
+            <p className="text-2xl"><FaRegImage />
+            </p>
           </div>
 
           <ReCAPTCHA
