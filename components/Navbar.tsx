@@ -79,10 +79,10 @@ const Navbar: React.FC = () => {
           <Link
             href={"/notifications"}
             onClick={() => setIsNoti(false)}
-            className="cursor-pointer ml-2 flex"
+            className="cursor-pointer ml-2 mr-2 flex"
           >
            
-            <p className="text-4xl"><BsCodeSlash/></p>
+            <p className="text-3xl"><BsBell/></p>
 
             {isNoti && <p className="w-3 h-3 rounded-full bg-ascent"></p>}
           </Link>
