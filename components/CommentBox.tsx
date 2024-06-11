@@ -92,9 +92,9 @@ const CommentBox: React.FC<propsInterface> = (props: propsInterface) => {
 
           <div
             onClick={submit}
-            className="flex bg-ascent align-middle text-white px-2 py-.05 rounded-xl cursor-pointer text-lg ml-auto"
+            className="flex bg-ascent mt-2 items-center text-white px-2 py-.05 rounded-lg cursor-pointer text-lg ml-auto"
           >
-            <p className="mr-2 text-xl">Comment</p>
+            <p className="mr-2 text-xl mb-1">Comment</p>
 
             <p className="text-2xl"><BsArrowRight/></p>
 

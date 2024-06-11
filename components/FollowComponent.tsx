@@ -95,7 +95,7 @@ const FollowComponent:React.FC<propsInterface> = (props: propsInterface) => {
             setFollowed(true);
             follow();
           }}
-          className="cursor-pointer text-white text-sm ml-8 py-0.5 bg-ascent px-2 rounded-md"
+          className="cursor-pointer text-white text-sm ml-4 md:ml-8 py-0.5 bg-ascent px-2 rounded-md"
         >
           Follow
         </div>
@@ -107,7 +107,7 @@ const FollowComponent:React.FC<propsInterface> = (props: propsInterface) => {
             setFollowed(false);
             unFollow();
           }}
-          className="cursor-pointer text-red-500 text-sm ml-8 py-0.5 px-2 rounded-md border-2 border-red-500"
+          className="cursor-pointer text-red-500 text-sm ml-4 md:ml-8 py-0.5 px-2 rounded-md border-2 border-red-500"
         >
           UnFollow
         </div>

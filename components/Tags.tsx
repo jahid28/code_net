@@ -95,16 +95,16 @@ const Tags: React.FC = () => {
 
   return (
     <div className="text-color mb-6">
-      <div id="allTags" className="flex items-center">
+      <div id="allTags" className="flex items-center flex-wrap">
         <div className="text-3xl ml-2 flex w-fit font-bold items-center">
-          <p className="mr-2">Tags</p>
+          <p className="mr-2 mb-2">Tags</p>
 
           <p className="text-2xl">
             <BsTags />
           </p>
         </div>
 
-        <div className="ml-2">
+        <div className="ml-2 mb-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="flex">
@@ -166,7 +166,7 @@ const Tags: React.FC = () => {
           </DropdownMenu>
         </div>
 
-        <div className="ml-2">
+        <div className="ml-2 mb-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="flex">
@@ -469,7 +469,7 @@ const Tags: React.FC = () => {
           {tagsArr.map((e: string, index: number) => (
             <div
               key={index}
-              className="bg-dark-color flex items-center rounded-lg py-1 px-2 mr-2 cursor-pointer"
+              className="bg-dark-color mb-1 flex items-center rounded-lg py-1 px-2 mr-2 cursor-pointer"
               onClick={() => {
                 setTagsArr(() => tagsArr.filter((tag: string) => tag !== e));
                 if (e in msgTypeObj) {

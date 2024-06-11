@@ -66,7 +66,7 @@ const Navbar: React.FC = () => {
           className="flex items-center"
           href={"/"}
         >
-          <h2 className="mr-2 font-extrabold text-4xl">CodeNet</h2>
+          <h2 className="mr-2 font-extrabold text-2xl md:text-4xl ">CodeNet</h2>
 
           <p className="text-4xl"><BsCodeSlash/></p>
 

@@ -92,7 +92,7 @@ const SinglePost: React.FC<propsInterface> = (props: propsInterface) => {
           myName={myName}
         />
 
-        <p className="ml-auto">
+        <p className="ml-auto text-sm md:text-lg">
           {dayOfWeek} {day}-{month}-{year}
         </p>
       </div>
@@ -136,7 +136,7 @@ const SinglePost: React.FC<propsInterface> = (props: propsInterface) => {
       )}
       {data.imagesForMongoDB.length > 0 && (
         <div className="w-full grid place-items-center my-2">
-          <Carousel className="w-3/5 sm:w-full max-w-xs">
+          <Carousel className="w-4/5 md:w-3/5">
             <CarouselContent>
               {data.imagesForMongoDB.map((image: string, index: number) => (
                 <CarouselItem key={index}>
