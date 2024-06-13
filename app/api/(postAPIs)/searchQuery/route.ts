@@ -8,6 +8,7 @@ import googleUser from "@/models/googleUser";
 export async function POST(req: NextRequest) {
     try {
         const { queryArray } = await req.json()
+
         // const randomNumber:number = Math.floor(Math.random() * 3) + 1;
         // const redisPostList=await redis.lrange(`allPostList${randomNumber}`,0,-1)
 

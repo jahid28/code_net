@@ -8,30 +8,36 @@ import { postInterface } from "@/lib/interfaces";
 import SingleProfile from "@/components/SingleProfile";
 import Image from "next/image";
 import { profileInterface } from "@/lib/interfaces";
-interface PageProps {
-  searchParams: React.PropsWithChildren<{ query: string }>;
-}
+import { useSearchParams } from 'next/navigation'
+
+// interface PageProps {
+//   searchParams: React.PropsWithChildren<{ query: string }>;
+// }
 interface getPostInterface extends postInterface {
   _id: string;
 }
 
-const SearchPage: React.FC<PageProps> = ({ searchParams }) => {
+const SearchPage: React.FC = () => {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
+  const searchParams = useSearchParams()
 
   const [posts, setPosts] = useState<getPostInterface[]>([]);
   const [profiles, setProfiles] = useState<profileInterface[]>([]);
 
-  let query: string = searchParams.query;
-  if (query === undefined) {
+  let query: string | null = searchParams.get('query')
+  if (query === null || query.trim()==="") {
     router.replace("/");
   }
-  query = query.trim();
-  if (query === "") {
-    router.replace("/");
-  }
-  query = query.replace(/\s+/g, " ");
-  let queryArray = query.split(" ");
+  // else{
+
+  // }
+  // query = query.trim();
+  // if (query === "") {
+  //   router.replace("/");
+  // }
+  query = query!.replace(/\s+/g, " ");
+  let queryArray = query.trim().split(" ");
 
   const fetchData = async (): Promise<void> => {
     try {
@@ -58,8 +64,9 @@ const SearchPage: React.FC<PageProps> = ({ searchParams }) => {
   };
 
   useEffect((): void => {
+    console.log("search page effect");
     fetchData();
-  }, [searchParams.query]);
+  }, [searchParams]);
 
   return (
     <div className="grid place-items-center">

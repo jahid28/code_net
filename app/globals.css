@@ -98,3 +98,7 @@ body {
   animation: gradientAnimation 10s ease infinite;
 }
 
+.iconHover:hover {
+  color: #ef4444;
+
+}

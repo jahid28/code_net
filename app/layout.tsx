@@ -9,29 +9,37 @@ import { usePathname } from "next/navigation";
 import Tags from "@/components/Tags";
 import { Provider } from "react-redux";
 import store from "@/redux/store";
-
-const inter = Inter({ subsets: ["latin"] });
+// import { Metadata } from "next";
+// export const metadata: Metadata = {
+// title: "CodeNet</>",
+// description: "Welcome to CodeNet",
+// };
+// const inter = Inter({ subsets: ["latin"] });
 
 interface RootLayoutProps {
   children: React.ReactNode;
   // session: Session | null;
 }
 
-
 export default function RootLayout({ children }: RootLayoutProps) {
-  const pathname:string = usePathname();
+  // const pathname: string = usePathname();
+
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <AuthProvider >
+      <head>
+      <link rel="icon" href="codenetfavicon.png" type="image/x-icon"/>
+        {/* <meta name="viewport" content="width=device-width, initial-scale=1.0"> */}
+        <title>CodeNet &lt;/&gt;</title>
+      </head>
+      <body className="darkmode">
+        <AuthProvider>
           <Provider store={store}>
-          <Navbar />
-          {(pathname === "/" || pathname === "/tagSearch") && <Tags />}
-          {/* <AuthContext.Provider value={{ name: "jk" }}> */}
-            {/* <Navbar authenticated={false} name='null' image='null'/> */}
+            <Navbar />
+            {/* {(pathname === "/" || pathname === "/tagSearch") && <Tags />} */}
+            {/* <AuthContext.Provider value={{ name: "jk" }}> */}
             <div className="text-color">{children}</div>
-          {/* </AuthContext.Provider> */}
-          <Toaster richColors closeButton />
+            {/* </AuthContext.Provider> */}
+            <Toaster richColors closeButton />
           </Provider>
         </AuthProvider>
       </body>

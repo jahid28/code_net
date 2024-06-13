@@ -46,10 +46,10 @@ const Navbar: React.FC = () => {
   }, [currentUserDetails]);
 
 
-  useEffect((): void => {
-    document.body.className = "darkmode";
-    return;
-  }, []);
+  // useEffect((): void => {
+  //   document.body.className = "darkmode";
+  //   return;
+  // }, []);
 
   function logout(): void {
     const res: boolean = confirm("Are you sure you want to logout?");
@@ -63,7 +63,7 @@ const Navbar: React.FC = () => {
     <div className="sticky text-color top-0 w-[100vw] z-50  mb-4">
       <nav className="bg-dark-color flex p-2 w-full items-center">
         <Link
-          className="flex items-center"
+          className="flex items-center iconHover"
           href={"/"}
         >
           <h2 className="mr-2 font-extrabold text-2xl md:text-4xl ">CodeNet</h2>
@@ -82,7 +82,7 @@ const Navbar: React.FC = () => {
             className="cursor-pointer ml-2 mr-2 flex"
           >
            
-            <p className="text-3xl"><BsBell/></p>
+            <p className="text-3xl iconHover"><BsBell/></p>
 
             {isNoti && <p className="w-3 h-3 rounded-full bg-ascent"></p>}
           </Link>
@@ -95,7 +95,7 @@ const Navbar: React.FC = () => {
                 document.body.className = "darkmode";
                 setMode("darkmode");
               }}
-              className="text-3xl ml-2 cursor-pointer"
+              className="text-3xl ml-2 cursor-pointer iconHover"
             >
               <BsSun />
             </div>
@@ -105,7 +105,7 @@ const Navbar: React.FC = () => {
                 document.body.className = "lightmode";
                 setMode("lightmode");
               }}
-              className="text-3xl ml-2 cursor-pointer"
+              className="text-3xl ml-2 cursor-pointer iconHover"
             >
              <p className="text-2xl"> <BsMoon /></p>
             </div>
@@ -120,9 +120,9 @@ const Navbar: React.FC = () => {
                     <Image
                       src={`${profilePic}`}
                       alt="profile Pic"
-                      layout="fill"
-                      // width={100}
-                      // height={100}
+                      // layout="fill"
+                      width={100}
+                      height={100}
                       // layout="fill"
                       // className="rounded-full object-cover"
                       className="object-center"

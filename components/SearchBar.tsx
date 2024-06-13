@@ -37,10 +37,10 @@ const SearchBar: React.FC = () => {
       />
 
       <div
-        className="cursor-pointer ml-2 mb-1"
+        className="cursor-pointer ml-2"
         onClick={pushQuery}
       >
-        <p className="text-2xl"><BsSearch/></p>
+        <p className="text-3xl iconHover"><BsSearch/></p>
       </div>
     </div>
   );

@@ -173,7 +173,7 @@ const PostBox: React.FC = () => {
                     setCodeType(e);
                   }}
                 >
-                  <SelectTrigger className="w-[180px]">
+                  <SelectTrigger className="w-[180px] iconHover">
                     <SelectValue placeholder="Random Fact" />
                   </SelectTrigger>
                   <SelectContent>
@@ -217,7 +217,7 @@ const PostBox: React.FC = () => {
                     setLang(e);
                   }}
                 >
-                  <SelectTrigger className="w-[180px]">
+                  <SelectTrigger className="w-[180px] iconHover">
                     <SelectValue placeholder="Javascript" />
                   </SelectTrigger>
                   <SelectContent>
@@ -230,10 +230,10 @@ const PostBox: React.FC = () => {
                     <SelectItem value="CSS">CSS</SelectItem>
                     <SelectItem value="Java">Java</SelectItem>
                     <SelectItem value="C">C</SelectItem>
-                    <SelectItem value="C++">C++</SelectItem>
+                    <SelectItem value="Cplusplus">C++</SelectItem>
                     <SelectItem value="Ruby">Ruby</SelectItem>
                     <SelectItem value="PHP">PHP</SelectItem>
-                    <SelectItem value="C#">C#</SelectItem>
+                    <SelectItem value="Csharp">C#</SelectItem>
                     <SelectItem value="Go">Go</SelectItem>
                     <SelectItem value="Swift">Swift</SelectItem>
                     <SelectItem value="Kotlin">Kotlin</SelectItem>

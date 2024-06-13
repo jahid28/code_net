@@ -70,7 +70,7 @@ const CommentBox: React.FC<propsInterface> = (props: propsInterface) => {
           className="flex items-center cursor-pointer text-xl"
         >
          
-          <p className="text-2xl"><BsChatRightText/></p>
+          <p className="text-2xl iconHover"><BsChatRightText/></p>
           <p className="ml-2">{props.comments.length}</p>
         </div>
       </DialogTrigger>

@@ -15,6 +15,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { BsTags, BsXCircle } from "react-icons/bs";
+import { useSearchParams } from "next/navigation";
 
 interface msgTypeObjInterface {
   "Random Fact": boolean;
@@ -32,10 +33,10 @@ interface langObjInterface {
   CSS: boolean;
   Java: boolean;
   C: boolean;
-  "C++": boolean;
+  Cplusplus: boolean;
   Ruby: boolean;
   PHP: boolean;
-  "C#": boolean;
+  Csharp: boolean;
   Go: boolean;
   Swift: boolean;
   Kotlin: boolean;
@@ -43,10 +44,16 @@ interface langObjInterface {
   SQL: boolean;
 }
 
+// interface propsInterface {
+//   // followingList: string[];
+//   tagParams: string[];
+// }
 const Tags: React.FC = () => {
   const router: AppRouterInstance = useRouter();
+  const searchParams = useSearchParams();
 
   const [tagsArr, setTagsArr] = useState<Array<string>>([]);
+  const [tagParamCheck, setTagParamCheck] = useState<boolean>(false);
 
   const [msgTypeObj, setMsgTypeObj] = useState<msgTypeObjInterface>({
     "Random Fact": false,
@@ -64,10 +71,10 @@ const Tags: React.FC = () => {
     CSS: false,
     Java: false,
     C: false,
-    "C++": false,
+    Cplusplus: false,
     Ruby: false,
     PHP: false,
-    "C#": false,
+    Csharp: false,
     Go: false,
     Swift: false,
     Kotlin: false,
@@ -81,15 +88,54 @@ const Tags: React.FC = () => {
       finalQuery += tagsArr[i] + "-";
     }
 
-    router.push(`/tagSearch?tags=${finalQuery.slice(0, -1)}`);
+    router.push(`/?tags=${finalQuery.slice(0, -1)}`);
   }
+
+  type tagType = {
+    [key: string]: boolean;
+  };
+
+  useEffect(() => {
+    let tags: string | null = searchParams.get("tags");
+    if (tags != null && tags.trim() != "" && !tagParamCheck) {
+      setTagParamCheck(true);
+      console.log("calling tagsArr");
+      // if (props.tagParams.length > 0) {
+      //   setTagsArr(props.tagParams);
+      // }
+      setTagsArr(tags.split("-"));
+
+      let msgtemp: tagType = {};
+      let langtemp: tagType = {};
+
+      tags.split("-").map((e: string) => {
+        if (e in msgTypeObj) {
+          msgtemp[e] = true;
+        }
+
+        if (e in langObj) {
+          langtemp[e] = true;
+        }
+      });
+
+      setMsgTypeObj({
+        ...msgTypeObj,
+        ...msgtemp,
+      });
+      setLangObj({
+        ...langObj,
+        ...langtemp,
+      });
+    }
+  }, [searchParams]);
 
   useEffect((): void => {
     if (tagsArr.length > 0) {
       pushQuery();
     }
     if (tagsArr.length == 0) {
-      router.push(`/`);
+      console.log("empty tags");
+      router.push(`/?tags=`);
     }
   }, [tagsArr]);
 
@@ -99,15 +145,15 @@ const Tags: React.FC = () => {
         <div className="text-3xl ml-2 flex w-fit font-bold items-center">
           <p className="mr-2 mb-2">Tags</p>
 
-          <p className="text-2xl">
-            <BsTags />
+          <p className="text-2xl iconHover">
+            <BsTags/>
           </p>
         </div>
 
         <div className="ml-2 mb-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="flex">
+              <Button variant="outline" className="flex iconHover">
                 Msg Type <IoIosArrowDown className="text-xl mt-1 ml-2" />
               </Button>
             </DropdownMenuTrigger>
@@ -169,7 +215,7 @@ const Tags: React.FC = () => {
         <div className="ml-2 mb-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="flex">
+              <Button variant="outline" className="flex iconHover">
                 Language <IoIosArrowDown className="text-xl mt-1 ml-2" />
               </Button>
             </DropdownMenuTrigger>
@@ -317,16 +363,16 @@ const Tags: React.FC = () => {
                 C
               </DropdownMenuCheckboxItem>
               <DropdownMenuCheckboxItem
-                checked={langObj["C++"]}
+                checked={langObj["Cplusplus"]}
                 onCheckedChange={() => {
                   setLangObj({
                     ...langObj,
-                    "C++": !langObj["C++"],
+                    Cplusplus: !langObj["Cplusplus"],
                   });
-                  !langObj["C++"]
-                    ? setTagsArr([...tagsArr, "C++"])
+                  !langObj["Cplusplus"]
+                    ? setTagsArr([...tagsArr, "Cplusplus"])
                     : setTagsArr(
-                        tagsArr.filter((tag: string) => tag !== "C++")
+                        tagsArr.filter((tag: string) => tag !== "Cplusplus")
                       );
                 }}
               >
@@ -365,15 +411,17 @@ const Tags: React.FC = () => {
                 PHP
               </DropdownMenuCheckboxItem>
               <DropdownMenuCheckboxItem
-                checked={langObj["C#"]}
+                checked={langObj["Csharp"]}
                 onCheckedChange={() => {
                   setLangObj({
                     ...langObj,
-                    "C#": !langObj["C#"],
+                    Csharp: !langObj["Csharp"],
                   });
-                  !langObj["C#"]
-                    ? setTagsArr([...tagsArr, "C#"])
-                    : setTagsArr(tagsArr.filter((tag: string) => tag !== "C#"));
+                  !langObj["Csharp"]
+                    ? setTagsArr([...tagsArr, "Csharp"])
+                    : setTagsArr(
+                        tagsArr.filter((tag: string) => tag !== "Csharp")
+                      );
                 }}
               >
                 C#
@@ -488,7 +536,7 @@ const Tags: React.FC = () => {
               <p>{e}</p>
 
               <div>
-                <BsXCircle className="ml-2 text-lg" />
+                <BsXCircle className="ml-2 text-lg iconHover" />
               </div>
             </div>
           ))}

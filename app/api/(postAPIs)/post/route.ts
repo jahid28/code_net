@@ -1,6 +1,7 @@
 import { connectToMongo } from "@/utils/mongo";
 import redis from "@/utils/redis";
 import post from "@/models/post";
+import no_of_posts from "@/models/no_of_posts";
 import { NextRequest, NextResponse } from "next/server";
 import { postInterface } from "@/lib/interfaces";
 import normalUser from "@/models/normalUser";
@@ -137,12 +138,20 @@ export async function POST(req: NextRequest) {
         Is this message about programming/coding/tech? yes or no`
         );
 
+        await connectToMongo()
+
+        await no_of_posts.updateOne(
+            { _id: new Object('6669de36beb425e5f97e7850') },
+            { $inc: { no_of_post_req_doc: 1 } }
+          );
+
+
+
         if (result.response.text().toLowerCase().includes("no")) {
             return NextResponse.json({ success: false, msg: "Please post something related to programming, coding or tech" }, { status: 200 })
         }
 
 
-        await connectToMongo()
         const postToInsert = await post.insertMany([postDetails])
 
         for (let i = 0; i < checkUser[0].followers.length; i++) {

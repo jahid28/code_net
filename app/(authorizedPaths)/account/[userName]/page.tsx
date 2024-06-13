@@ -54,7 +54,8 @@ const AccountPage: React.FC<PageProps> = ({ params }) => {
         setLoading(false);
         return;
       }
-      setPosts(data.data);
+      // posts.reverse();
+      setPosts((data.data).reverse());
       setMyname(data.myName);
       setUserDetails(data.userDetails);
       setLoading(false);
@@ -82,7 +83,7 @@ const AccountPage: React.FC<PageProps> = ({ params }) => {
       {!loading && isEmpty(userDetails) && (
         <div className="grid place-items-center ">
           <Image
-            className="mt-10 mb-4"
+            className="mb-4"
             src="/empty.png"
             width={300}
             height={300}
@@ -141,7 +142,7 @@ const AccountPage: React.FC<PageProps> = ({ params }) => {
               className="ml-[6vw] cursor-pointer mb-2"
             >
               
-              <p className="text-xl">
+              <p className="text-xl iconHover">
                 <BsShareFill />
               </p>
             </div>
@@ -163,7 +164,7 @@ const AccountPage: React.FC<PageProps> = ({ params }) => {
       {!loading && posts.length == 0 && !isEmpty(userDetails) && (
         <div className="grid place-items-center ">
           <Image
-            className="mt-10 mb-4"
+            className="mb-4"
             src="/empty.png"
             width={300}
             height={300}

@@ -41,12 +41,53 @@ const SignupPage: React.FC = () => {
     userName: "",
   });
 
-  function inputClicked(e:React.FormEvent): void {
+  function inputClicked(e: React.FormEvent): void {
     e.preventDefault();
     if (inputRef.current) {
       inputRef.current.click();
     }
   }
+
+  const cropImage = (file: File): void => {
+    const reader: FileReader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (event: ProgressEvent<FileReader>) => {
+      const img: HTMLImageElement = document.createElement("img");
+      img.src = event.target!.result as string;
+      img.onload = () => {
+        const canvas: HTMLCanvasElement = document.createElement("canvas");
+        const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
+
+        const size: number = Math.min(img.width, img.height);
+        canvas.width = size;
+        canvas.height = size;
+
+        const x: number = (img.width - size) / 2;
+        const y: number = (img.height - size) / 2;
+
+        ctx!.drawImage(img, x, y, size, size, 0, 0, size, size);
+
+        canvas.toBlob((blob) => {
+          const croppedFile: File = new File([blob!], file.name, {
+            type: "image/jpeg",
+          });
+
+          setImagesToUload([croppedFile]);
+
+          const imagesArray: string[] = [];
+
+          const reader: FileReader = new FileReader();
+          reader.onload = (e: ProgressEvent<FileReader>) => {
+            if (e && e.target) {
+              imagesArray.push((e.target as FileReader).result as string);
+              setImages(imagesArray);
+            }
+          };
+          reader.readAsDataURL(croppedFile);
+        }, "image/jpeg");
+      };
+    };
+  };
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const files: FileList = e.target.files!;
@@ -54,23 +95,24 @@ const SignupPage: React.FC = () => {
       toast.error("Max 4 images are allowed");
       return;
     }
-    const imagesArray: string[] = [];
+    cropImage(files[0]);
+    // const imagesArray: string[] = [];
 
-    for (let i: number = 0; i < files.length; i++) {
-      const reader: FileReader = new FileReader();
-      reader.onload = (e: ProgressEvent<FileReader>) => {
-        if (e && e.target) {
-          imagesArray.push((e.target as FileReader).result as string);
-          if (imagesArray.length === files.length) {
-            setImages(imagesArray);
-          }
-        }
-      };
-      reader.readAsDataURL(files[i]);
-    }
+    // for (let i: number = 0; i < files.length; i++) {
+    //   const reader: FileReader = new FileReader();
+    //   reader.onload = (e: ProgressEvent<FileReader>) => {
+    //     if (e && e.target) {
+    //       imagesArray.push((e.target as FileReader).result as string);
+    //       if (imagesArray.length === files.length) {
+    //         setImages(imagesArray);
+    //       }
+    //     }
+    //   };
+    //   reader.readAsDataURL(files[i]);
+    // }
 
-    const selectedImages: File[] = Array.from(files);
-    setImagesToUload(selectedImages);
+    // const selectedImages: File[] = Array.from(files);
+    // setImagesToUload(selectedImages);
   };
 
   async function submit(e: React.FormEvent): Promise<void> {
@@ -139,13 +181,13 @@ const SignupPage: React.FC = () => {
   return (
     <div className="grid place-items-center">
       <ClipLoader
-        className="absolute top-[45vh] z-30"
+        className="absolute top-[80vh] z-30"
         color="#e94154"
         loading={loading}
         size={100}
       />
 
-      <h2 className="mt-2 mb-6 py-1 ml-4 mr-4 text-center font-bold text-3xl md:text-4xl bg-gr">
+      <h2 className="mt-2 mb-6 py-1 text-center font-bold text-3xl md:text-4xl bg-gr">
         Welcome to CodeNet &lt;/&gt;, your daily coding community.
       </h2>
 
@@ -278,8 +320,9 @@ const SignupPage: React.FC = () => {
             className=" w-fit cursor-pointer flex items-center text-ascent mt-1 mb-2"
           >
             <p className="mr-2 text-xl">Profile Pic(optional)</p>
-           
-            <p className="text-2xl"><FaRegImage />
+
+            <p className="text-2xl">
+              <FaRegImage />
             </p>
           </div>
 

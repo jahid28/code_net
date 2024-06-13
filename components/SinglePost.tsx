@@ -107,7 +107,7 @@ const SinglePost: React.FC<propsInterface> = (props: propsInterface) => {
           <div className="flex">
             <p className="px-1 bg-color rounded-md ml-2 mb-2">{data.lang}</p>
             <p
-              className="ml-auto cursor-pointer text-lg"
+              className="ml-auto cursor-pointer text-lg iconHover"
               onClick={() => {
                 navigator.clipboard
                   .writeText(data.code)
