@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { IoIosArrowDown } from "react-icons/io";
 import { useRouter } from "next/navigation";
@@ -20,7 +20,7 @@ import { useSearchParams } from "next/navigation";
 interface msgTypeObjInterface {
   "Random Fact": boolean;
   Question: boolean;
-  "Code to share": boolean;
+  "Code To Share": boolean;
 }
 
 interface langObjInterface {
@@ -44,10 +44,6 @@ interface langObjInterface {
   SQL: boolean;
 }
 
-// interface propsInterface {
-//   // followingList: string[];
-//   tagParams: string[];
-// }
 const Tags: React.FC = () => {
   const router: AppRouterInstance = useRouter();
   const searchParams = useSearchParams();
@@ -58,7 +54,7 @@ const Tags: React.FC = () => {
   const [msgTypeObj, setMsgTypeObj] = useState<msgTypeObjInterface>({
     "Random Fact": false,
     Question: false,
-    "Code to share": false,
+    "Code To Share": false,
   });
 
   const [langObj, setLangObj] = useState<langObjInterface>({
@@ -99,10 +95,7 @@ const Tags: React.FC = () => {
     let tags: string | null = searchParams.get("tags");
     if (tags != null && tags.trim() != "" && !tagParamCheck) {
       setTagParamCheck(true);
-      console.log("calling tagsArr");
-      // if (props.tagParams.length > 0) {
-      //   setTagsArr(props.tagParams);
-      // }
+     
       setTagsArr(tags.split("-"));
 
       let msgtemp: tagType = {};
@@ -134,18 +127,17 @@ const Tags: React.FC = () => {
       pushQuery();
     }
     if (tagsArr.length == 0) {
-      console.log("empty tags");
-      router.push(`/?tags=`);
+      router.push(`/`);
     }
   }, [tagsArr]);
 
   return (
     <div className="text-color mb-6">
       <div id="allTags" className="flex items-center flex-wrap">
-        <div className="text-3xl ml-2 flex w-fit font-bold items-center">
+        <div className="text-2xl md:text-3xl ml-2 flex w-fit font-bold items-center">
           <p className="mr-2 mb-2">Tags</p>
 
-          <p className="text-2xl iconHover">
+          <p className="text-xl md:text-2xl iconHover">
             <BsTags/>
           </p>
         </div>
@@ -193,20 +185,20 @@ const Tags: React.FC = () => {
                 Question
               </DropdownMenuCheckboxItem>
               <DropdownMenuCheckboxItem
-                checked={msgTypeObj["Code to share"]}
+                checked={msgTypeObj["Code To Share"]}
                 onCheckedChange={() => {
                   setMsgTypeObj({
                     ...msgTypeObj,
-                    "Code to share": !msgTypeObj["Code to share"],
+                    "Code To Share": !msgTypeObj["Code To Share"],
                   });
-                  !msgTypeObj["Code to share"]
-                    ? setTagsArr([...tagsArr, "Code to share"])
+                  !msgTypeObj["Code To Share"]
+                    ? setTagsArr([...tagsArr, "Code To Share"])
                     : setTagsArr(
-                        tagsArr.filter((tag: string) => tag !== "Code to share")
+                        tagsArr.filter((tag: string) => tag !== "Code To Share")
                       );
                 }}
               >
-                Code to share
+                Code To Share
               </DropdownMenuCheckboxItem>
             </DropdownMenuContent>
           </DropdownMenu>

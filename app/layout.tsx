@@ -5,8 +5,6 @@ import Navbar from "@/components/Navbar";
 import AuthProvider from "@/components/AuthProvider";
 import type { Session } from "next-auth";
 import { Toaster } from "@/components/ui/sonner";
-import { usePathname } from "next/navigation";
-import Tags from "@/components/Tags";
 import { Provider } from "react-redux";
 import store from "@/redux/store";
 // import { Metadata } from "next";

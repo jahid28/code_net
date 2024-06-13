@@ -46,10 +46,6 @@ const Navbar: React.FC = () => {
   }, [currentUserDetails]);
 
 
-  // useEffect((): void => {
-  //   document.body.className = "darkmode";
-  //   return;
-  // }, []);
 
   function logout(): void {
     const res: boolean = confirm("Are you sure you want to logout?");

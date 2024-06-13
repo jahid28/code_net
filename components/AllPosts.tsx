@@ -11,10 +11,6 @@ interface getPostInterface extends postInterface {
   _id: string;
 }
 
-// interface propsInterface {
-//   // followingList: string[];
-//   tagParams: string[];
-// }
 
 const AllPosts: React.FC = () => {
   const router = useRouter();
@@ -23,7 +19,6 @@ const AllPosts: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [posts, setPosts] = useState<getPostInterface[]>([]);
   const [tagPosts, setTagPosts] = useState<getPostInterface[]>([]);
-  // const [tagsArr, setTagsArr] = useState<string[]>([]);
   const [redisPostList, setRedisPostList] = useState<string[]>([]);
   const [loadNumber, setLoadNumber] = useState<number>(1);
 
@@ -77,19 +72,16 @@ const AllPosts: React.FC = () => {
   };
 
   useEffect(() => {
-    console.log("all posts useeffect");
     let tags: string | null = searchParams.get("tags");
     if (tags != null && tags.trim() != "") {
-      // setTagsArr(tags.split("-"));
       fetchTagsData(tags.split("-"));
     } else {
-      router.replace("/");
+      setLoadNumber(1);
       setTagPosts([]);
       fetchData();
     }
   }, [searchParams]);
 
-  // var localLoading:boolean=false
 
   const handleScroll = async (): Promise<void> => {
     console.log("scrolling");

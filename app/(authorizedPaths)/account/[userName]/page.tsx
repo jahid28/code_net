@@ -149,8 +149,9 @@ const AccountPage: React.FC<PageProps> = ({ params }) => {
           </div>
         </div>
       )}
+      
 
-      <div className="w-[98vw] md:w-[50vw] mb-6">
+      <div className="w-[90vw] md:w-[50vw] mb-6">
         {loading && <PostSkeleton />}
 
         {!loading &&

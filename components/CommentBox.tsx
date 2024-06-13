@@ -15,7 +15,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import Link from "next/link";
 import { commentSchema } from "@/lib/zodSchemas";
 import { commentInterface } from "@/lib/interfaces";
-import { BsArrowRight,BsChatRightText } from "react-icons/bs";
+import { BsArrowRight, BsChatRightText } from "react-icons/bs";
 
 interface propsInterface {
   postId: string;
@@ -23,12 +23,10 @@ interface propsInterface {
 }
 
 const CommentBox: React.FC<propsInterface> = (props: propsInterface) => {
-
-
   const [loading, setLoading] = useState<boolean>(false);
   const [comment, setComment] = useState<string>("");
 
-  async function submit(e:React.FormEvent): Promise<void> {
+  async function submit(e: React.FormEvent): Promise<void> {
     e.preventDefault();
     try {
       setLoading(true);
@@ -66,11 +64,10 @@ const CommentBox: React.FC<propsInterface> = (props: propsInterface) => {
   return (
     <Dialog>
       <DialogTrigger>
-        <div
-          className="flex items-center cursor-pointer text-xl"
-        >
-         
-          <p className="text-2xl iconHover"><BsChatRightText/></p>
+        <div className="flex items-center cursor-pointer text-xl">
+          <p className="text-2xl iconHover">
+            <BsChatRightText />
+          </p>
           <p className="ml-2">{props.comments.length}</p>
         </div>
       </DialogTrigger>
@@ -96,8 +93,9 @@ const CommentBox: React.FC<propsInterface> = (props: propsInterface) => {
           >
             <p className="mr-2 text-xl mb-1">Comment</p>
 
-            <p className="text-2xl"><BsArrowRight/></p>
-
+            <p className="text-2xl">
+              <BsArrowRight />
+            </p>
           </div>
 
           <div className="w-full grid place-items-center absolute top-40%">

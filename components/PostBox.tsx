@@ -9,6 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+
 import {
   Carousel,
   CarouselContent,
@@ -38,9 +39,7 @@ import { v4 } from "uuid";
 import ClipLoader from "react-spinners/ClipLoader";
 import { postSchema } from "@/lib/zodSchemas";
 
-
-import { BsSend,BsCardImage,BsArrowRight } from "react-icons/bs";
-
+import { BsSend, BsCardImage, BsArrowRight } from "react-icons/bs";
 
 const PostBox: React.FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -152,20 +151,18 @@ const PostBox: React.FC = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div
-          className="flex items-center cursor-pointer text-white bg-ascent font-bold rounded-lg text-2xl p-2"
-        >
+        <div className="flex items-center cursor-pointer text-white bg-ascent font-bold rounded-lg text-xl md:text-2xl p-2">
           Post
-            <p className="text-2xl ml-2"><BsSend/></p>
+          <p className="text-2xl ml-2">
+            <BsSend />
+          </p>
         </div>
       </DialogTrigger>
       <DialogContent>
-        <div className="max-h-[90vh] max-w-[90vw] overflow-y-auto">
+        <div className="overflow-y-auto min-h-[10vh] max-h-[80vh]">
           <DialogHeader>
             <div className="w-full mb-4">
-             
-
-              <p className="text-2xl mt-3 font-bold">Write a message :</p>
+              <p className="text-xl md:text-2xl mt-3 font-bold">Write a message :</p>
 
               <div className="mt-2 mr-auto">
                 <Select
@@ -207,7 +204,7 @@ const PostBox: React.FC = () => {
                 />
               </div>
 
-              <p className="text-2xl mt-3 font-bold">
+              <p className="text-xl md:text-2xl mt-3 font-bold">
                 Write your code here(optional) :
               </p>
 
@@ -260,7 +257,7 @@ const PostBox: React.FC = () => {
               {images.length > 0 && (
                 <div className="w-full grid place-items-center mt-3">
                   <h2>Selected images :</h2>
-                  <Carousel className="w-full max-w-xs">
+                  <Carousel className="w-3/5 md:w-3/5">
                     <CarouselContent>
                       {images.map((image: string, index: number) => (
                         <CarouselItem key={index}>
@@ -297,16 +294,16 @@ const PostBox: React.FC = () => {
                   onChange={handleImageChange}
                 />
                 <div
-                  
                   onClick={inputClicked}
                   className="w-fit cursor-pointer flex items-center text-ascent"
                 >
-                  <p className="mr-2 text-xl mb-1">Insert image(s)</p>
-                  <p className="text-2xl"><BsCardImage/></p>
+                  <p className="mr-2 text-lg md:text-xl mb-1">Insert image(s)</p>
+                  <p className="text-2xl">
+                    <BsCardImage />
+                  </p>
                 </div>
 
                 <div
-                  
                   onClick={() => {
                     submit();
                   }}
@@ -314,7 +311,9 @@ const PostBox: React.FC = () => {
                 >
                   <p className="mr-2 text-xl">Post</p>
 
-                  <p className="text-2xl"><BsArrowRight/></p>
+                  <p className="text-2xl">
+                    <BsArrowRight />
+                  </p>
                 </div>
               </div>
             </div>
