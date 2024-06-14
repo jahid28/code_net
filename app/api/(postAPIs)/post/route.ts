@@ -10,31 +10,31 @@ import { jwtTokenInterface } from "@/lib/interfaces";
 import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "@google/generative-ai";
 import jwt from "jsonwebtoken";
 
-function shuffle(array: string[]): string[] {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-}
+// function shuffle(array: string[]): string[] {
+//     for (let i = array.length - 1; i > 0; i--) {
+//         const j = Math.floor(Math.random() * (i + 1));
+//         [array[i], array[j]] = [array[j], array[i]];
+//     }
+//     return array;
+// }
 
 
-async function shuffleRedisListWithNewValue(listKey: string, newValue: string) {
+// async function shuffleRedisListWithNewValue(listKey: string, newValue: string) {
    
-    const allPostsfromRedis = await redis.lrange(listKey, 0, -1)
+//     const allPostsfromRedis = await redis.lrange(listKey, 0, -1)
 
-    allPostsfromRedis.push(newValue);
+//     allPostsfromRedis.push(newValue);
 
-    const shuffledItems = shuffle(allPostsfromRedis);
+//     const shuffledItems = shuffle(allPostsfromRedis);
 
-    await redis.del(listKey)
+//     await redis.del(listKey)
 
-    shuffledItems.map(async (post) => {
-        await redis.rpush(listKey, post)
-    })
+    // shuffledItems.map(async (post) => {
+    //     await redis.rpush(listKey, post)
+    // })
 
 
-}
+// }
 
 
 export async function POST(req: NextRequest) {
@@ -158,9 +158,11 @@ export async function POST(req: NextRequest) {
             await redis.rpush(`noti:${checkUser[0].followers[i]}`, postToInsert[0]._id.toString())
         }
 
-        shuffleRedisListWithNewValue('allPostList1', postToInsert[0]._id.toString())
-        shuffleRedisListWithNewValue('allPostList2', postToInsert[0]._id.toString())
-        shuffleRedisListWithNewValue('allPostList3', postToInsert[0]._id.toString())
+        await redis.rpush('allPostList', postToInsert[0]._id.toString())
+
+        // shuffleRedisListWithNewValue('allPostList1', postToInsert[0]._id.toString())
+        // shuffleRedisListWithNewValue('allPostList2', postToInsert[0]._id.toString())
+        // shuffleRedisListWithNewValue('allPostList3', postToInsert[0]._id.toString())
 
 
         return NextResponse.json({ success: true, msg: "Successfully posted" }, { status: 200 })

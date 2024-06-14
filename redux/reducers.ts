@@ -11,6 +11,7 @@ const initialState:reduxInterface = {
     following: [],
     noti:false
   },
+  redisPostList: []
 };
 
 export const reducer1 = (state = initialState, action: {type:string,payload?:string}) => {
@@ -25,6 +26,8 @@ export const reducer1 = (state = initialState, action: {type:string,payload?:str
       return { ...state, currentUserDetails: { ...state.currentUserDetails, following: [...state.currentUserDetails.following, action.payload] } };
     case 'popFollowingToArrReducer':
       return { ...state, currentUserDetails: { ...state.currentUserDetails, following: state.currentUserDetails.following.filter((i) => i != action.payload) } };
+    case 'storeAllPostsReducer':
+      return { ...state, redisPostList: action.payload};
     // case 'decActiontype':
     //   return { ...state, age: action.data - 1 };
     default:

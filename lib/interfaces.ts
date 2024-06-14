@@ -86,4 +86,5 @@ export interface reduxInterface {
     following: Array<string>,
     noti:boolean
   },
+  redisPostList: Array<string>
 };

@@ -16,6 +16,12 @@ export const getCurrentUserDetailsActionFunc = () => {
         // payload: email
     }
 }
+export const storeAllPostsActionFunc = (redisPostList:string[]) => {
+    return {
+        type: 'storeAllPostsAction',
+        payload: redisPostList
+    }
+}
 export const pushFollowingToArrFunc = (userName:string) => {
     return {
         type: 'pushFollowingToArrAction',
