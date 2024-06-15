@@ -4,21 +4,17 @@ import React, { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import SinglePost from "./SinglePost";
 import PostSkeleton from "./PostSkeleton";
-import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { storeAllPostsActionFunc } from "@/redux/actions";
 import { useDispatch, useSelector } from "react-redux";
-// import { set } from "mongoose";
 
-// import { it } from "node:test";
 interface getPostInterface extends postInterface {
   _id: string;
 }
 
 const AllPosts: React.FC = () => {
-  // const router = useRouter();
   const searchParams = useSearchParams();
 
   const dispatch = useDispatch();
@@ -26,9 +22,7 @@ const AllPosts: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [posts, setPosts] = useState<getPostInterface[]>([]);
   const [tagPosts, setTagPosts] = useState<getPostInterface[]>([]);
-  // const [redisPostList, setRedisPostList] = useState<string[]>([]);
-  // const [totalPosts, setTotalPosts] = useState<number>(0);
-  const [loadNumber, setLoadNumber] = useState<number>(1);
+ const [loadNumber, setLoadNumber] = useState<number>(1);
 
   const fetchTagsData = async (tagsArr: string[]): Promise<void> => {
     try {
@@ -54,22 +48,6 @@ const AllPosts: React.FC = () => {
     }
   };
 
-  // let redisPostList: string[] =[]
-
-  // if(redisPostList.length===0){
-  //   console.log("useSelector")
-  //   redisPostList=useSelector(
-  //     (state: any) => state.reducer1.redisPostList
-  //   );
-  // }
-
-  // useEffect(() => {
-  //   if (totalPosts === 0) {
-
-  //     setTotalPosts(redisPostList.length);
-  //     // dispatch({ type: "storeAllPostsReducer", payload: [] });
-  //   }
-  // }, [redisPostList]);
 
   const temp = useSelector((state: any) => state.reducer1.redisPostList);
 
@@ -92,9 +70,7 @@ const AllPosts: React.FC = () => {
       }
       if (temp.length === 0) {
         dispatch(storeAllPostsActionFunc(data.redisPostList));
-        // setRedisPostList(data.redisPostList);
       }
-      // setPosts(data.data);
       setPosts(data.data);
 
       setLoading(false);
@@ -118,7 +94,6 @@ const AllPosts: React.FC = () => {
 
   const getMore = async () => {
     try {
-      // setLoading(true);
       const res: Response = await fetch("/api/loadMorePosts", {
         method: "POST",
         headers: {
@@ -129,76 +104,19 @@ const AllPosts: React.FC = () => {
       const data = await res.json();
       if (data.success === false) {
         toast.error(data.msg);
-        // setLoading(false);
         return;
       }
       setLoadNumber((prev) => prev + 1);
-      // setPosts(data.data);
       setPosts((prev) => [...prev, ...data.data]);
-      // setLoading(false);
     } catch (error) {
       toast.error(String(error));
     }
-    // setItems([...items, "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]);
   };
 
-  // const handleScroll = async (): Promise<void> => {
-  //   // console.log("scrolling");
-  //   // if (
-  //   //   window.innerHeight + window.scrollY >= document.body.offsetHeight &&
-  //   //   // !localLoading &&
-  //   //   redisPostList.length > loadNumber * 10
-  //   // ) {
-  //   //   console.log("scrolling end");
-  //   console.log("loadddd");
-  //   setLoadNumber((prev) => prev + 1);
-  //   // setLoading(true);
-
-  //   const res: Response = await fetch("/api/loadMorePosts", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-type": "application/json",
-  //     },
-  //     body: JSON.stringify({ redisPostList, loadNumber }),
-  //   });
-  //   const data = await res.json();
-  //   if (data.success === false) {
-  //     toast.error(data.msg);
-  //     // setLoading(false);
-  //     return;
-  //   }
-
-  //   setPosts((prev) => [...prev, ...data.data]);
-  //   // setLoading(false);
-  //   // }
-  // };
-
-  // useEffect(() => {
-  //   if (loading === false && searchParams.get("tags") === null) {
-  //     window.addEventListener("scroll", handleScroll);
-  //   }
-
-  //   return () => {
-  //     window.removeEventListener("scroll", handleScroll);
-  //   };
-  // }, [redisPostList, loadNumber, searchParams, loading]);
-
-  // const [items, setItems] = useState([
-  //   "1",
-  //   "2",
-  //   "3",
-  //   "4",
-  //   "5",
-  //   "6",
-  //   "7",
-  //   "8",
-  //   "9",
-  //   "10",
-  // ]);
 
   return (
     <div className="grid place-items-center">
-      <div className="w-[90vw] md:w-[50vw] mb-6">
+      <div className="w-[95vw] md:w-[50vw] mb-6">
         {searchParams.get("tags") != null &&
           !loading &&
           tagPosts.length === 0 && (
@@ -221,12 +139,6 @@ const AllPosts: React.FC = () => {
             return <SinglePost key={index} data={e} />;
           })}
 
-        {/* {((!loading && loadNumber === 1) || loadNumber != 1) &&
-          searchParams.get("tags") === null &&
-          // tagPosts.length === 0 &&
-          posts.map((e: getPostInterface, index: number) => {
-            return <SinglePost key={index} data={e} />;
-          })} */}
 
         {loading && <PostSkeleton />}
 

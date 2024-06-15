@@ -10,45 +10,15 @@ import { jwtTokenInterface } from "@/lib/interfaces";
 import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "@google/generative-ai";
 import jwt from "jsonwebtoken";
 
-// function shuffle(array: string[]): string[] {
-//     for (let i = array.length - 1; i > 0; i--) {
-//         const j = Math.floor(Math.random() * (i + 1));
-//         [array[i], array[j]] = [array[j], array[i]];
-//     }
-//     return array;
-// }
-
-
-// async function shuffleRedisListWithNewValue(listKey: string, newValue: string) {
-   
-//     const allPostsfromRedis = await redis.lrange(listKey, 0, -1)
-
-//     allPostsfromRedis.push(newValue);
-
-//     const shuffledItems = shuffle(allPostsfromRedis);
-
-//     await redis.del(listKey)
-
-    // shuffledItems.map(async (post) => {
-    //     await redis.rpush(listKey, post)
-    // })
-
-
-// }
-
 
 export async function POST(req: NextRequest) {
     try {
         let { codeType, msg, code, lang, imagesForMongoDB } = await req.json();
-        // const email=res.data.email
-        // const password=res.data.password
-        // const { email, password } = await req.json();
-        if (code == "") {
+       if (code == "") {
             code = " "
             lang = "None"
         }
         const token = req.cookies.get("token")?.value
-        // const verify: jwtTokenInterface = jwt.verify(token, `${process.env.NEXTAUTH_SECRET}`)
 
         let verify: jwtTokenInterface | undefined = undefined;
 
@@ -159,10 +129,6 @@ export async function POST(req: NextRequest) {
         }
 
         await redis.rpush('allPostList', postToInsert[0]._id.toString())
-
-        // shuffleRedisListWithNewValue('allPostList1', postToInsert[0]._id.toString())
-        // shuffleRedisListWithNewValue('allPostList2', postToInsert[0]._id.toString())
-        // shuffleRedisListWithNewValue('allPostList3', postToInsert[0]._id.toString())
 
 
         return NextResponse.json({ success: true, msg: "Successfully posted" }, { status: 200 })

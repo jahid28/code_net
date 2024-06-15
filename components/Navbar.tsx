@@ -16,7 +16,6 @@ import SearchBar from "./SearchBar";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { getCurrentUserDetailsActionFunc } from "@/redux/actions";
-// import { storeAllPostsActionFunc } from "@/redux/actions";
 
 import { BsSearch,BsBell,BsHouse,BsPerson,BsMoon,BsSun,BsCodeSlash } from "react-icons/bs";
 

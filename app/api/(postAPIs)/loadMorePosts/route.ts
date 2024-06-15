@@ -6,8 +6,6 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest) {
     try {
         const {redisPostList,loadNumber} = await req.json();
-        // const randomNumber:number = Math.floor(Math.random() * 3) + 1;
-        // const redisPostList=await redis.lrange(`allPostList${randomNumber}`,0,-1)
         
         let data = []
         
@@ -20,7 +18,6 @@ export async function POST(req: NextRequest) {
             }
         }
 
-        // const data = await post.find()
 
         return NextResponse.json({ success: true, data }, { status: 201 })
 

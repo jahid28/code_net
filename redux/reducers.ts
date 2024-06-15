@@ -1,4 +1,3 @@
-import { googleUserInterface } from "../lib/interfaces";
 import { reduxInterface } from "../lib/interfaces";
 const initialState:reduxInterface = {
   email:"",
@@ -28,8 +27,6 @@ export const reducer1 = (state = initialState, action: {type:string,payload?:str
       return { ...state, currentUserDetails: { ...state.currentUserDetails, following: state.currentUserDetails.following.filter((i) => i != action.payload) } };
     case 'storeAllPostsReducer':
       return { ...state, redisPostList: action.payload};
-    // case 'decActiontype':
-    //   return { ...state, age: action.data - 1 };
     default:
       return state;
   }

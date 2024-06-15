@@ -3,7 +3,6 @@ import redis from "@/utils/redis";
 import post from "@/models/post";
 import { NextRequest, NextResponse } from "next/server";
 import { postInterface } from "@/lib/interfaces";
-// import { useDispatch, useSelector } from "react-redux";
 
 interface getPostInterface extends postInterface {
     _id: string

@@ -8,7 +8,6 @@ import Image from "next/image";
 import FollowComponent from "@/components/FollowComponent";
 import ProfileSkeleton from "@/components/ProfileSkeleton";
 import { googleUserInterface } from "@/lib/interfaces";
-
 import { BsShareFill } from "react-icons/bs";
 
 interface userDetailInterface extends googleUserInterface {
@@ -19,10 +18,11 @@ interface PageProps {
   params: { userName: string };
 }
 
+interface getPostInterface extends postInterface {
+  _id: string;
+}
+
 const AccountPage: React.FC<PageProps> = ({ params }) => {
-  interface getPostInterface extends postInterface {
-    _id: string;
-  }
 
  
   const [loading, setLoading] = useState<boolean>(false);
@@ -157,7 +157,7 @@ const AccountPage: React.FC<PageProps> = ({ params }) => {
         {!loading &&
           posts.length > 0 &&
           !isEmpty(userDetails) &&
-          posts.map((e, index) => {
+          posts.map((e:getPostInterface, index:number) => {
             return <SinglePost key={index} data={e} />;
           })}
       </div>
