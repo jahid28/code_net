@@ -2,7 +2,6 @@ import { call, put, takeLatest, takeEvery } from 'redux-saga/effects';
 
 function* getEmailSagaFunc(action: { type: string, payload: string }) {
   yield put({ type: 'getEmailReducer', payload: action.payload });
-
 }
 function* clearEmailSagaFunc() {
   yield put({ type: 'clearEmailReducer' });

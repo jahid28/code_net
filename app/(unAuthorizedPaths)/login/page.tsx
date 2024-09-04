@@ -78,7 +78,7 @@ const LoginPage: React.FC = () => {
         size={100}
       />
       <h2 className="mt-2 mb-2 py-1 ml-4 mr-4 text-center font-bold text-3xl md:text-4xl bg-gr">
-        Welcome to CodeNet &lt;/&gt;, your daily coding community.
+        Welcome to DevGram &lt;/&gt;, your daily coding community.
       </h2>
       <h2 className="mb-6 py-1 ml-4 mr-4 text-center font-bold text-3xl md:text-4xl bg-gr">
         Login to continue.

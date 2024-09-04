@@ -188,7 +188,7 @@ const SignupPage: React.FC = () => {
       />
 
       <h2 className="mt-2 mb-6 py-1 text-center font-bold text-3xl md:text-4xl bg-gr">
-        Welcome to CodeNet &lt;/&gt;, your daily coding community.
+        Welcome to DevGram &lt;/&gt;, your daily coding community.
       </h2>
 
       <div className="w-[90vw] md:w-[50vw] lg:w-[30vw] bg-dark-color rounded-lg p-8 mb-10 relative z-10 shadow-md">

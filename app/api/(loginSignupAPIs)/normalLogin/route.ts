@@ -49,8 +49,8 @@ export async function POST(req: NextRequest) {
 //     await resend.emails.send({
 //         from:'jahidrhps123@gmail.com',
 //         to:"jahidkhan777367@gmail.com",
-//         subject:"CodeNet Reset Password",
-//         text:`OTP is 77. Use this code to reset your password in CodeNet`
+//         subject:"DevGram Reset Password",
+//         text:`OTP is 77. Use this code to reset your password in DevGram`
 //       }).then(()=>{
 //         // toast.success("Enter the OTP sent to your Email");
 //     })

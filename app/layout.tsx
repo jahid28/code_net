@@ -9,8 +9,8 @@ import { Provider } from "react-redux";
 import store from "@/redux/store";
 // import { Metadata } from "next";
 // export const metadata: Metadata = {
-// title: "CodeNet</>",
-// description: "Welcome to CodeNet",
+// title: "DevGram</>",
+// description: "Welcome to DevGram",
 // };
 // const inter = Inter({ subsets: ["latin"] });
 
@@ -25,9 +25,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
       <head>
-      <link rel="icon" href="codenetfavicon.png" type="image/x-icon"/>
+      <link rel="icon" href="DevGramfavicon.png" type="image/x-icon"/>
         {/* <meta name="viewport" content="width=device-width, initial-scale=1.0"> */}
-        <title>CodeNet &lt;/&gt;</title>
+        <title>DevGram &lt;/&gt;</title>
       </head>
       <body className="darkmode">
         <AuthProvider>
