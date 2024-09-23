@@ -123,8 +123,7 @@ const SignupPage: React.FC = () => {
       if (!captchaValue) {
         toast.error("Fill the captcha");
         return;
-      }
-      else if(formData.password !== formData.cpassword){
+      } else if (formData.password !== formData.cpassword) {
         toast.error("Passwords do not match");
         return;
       }
@@ -168,7 +167,7 @@ const SignupPage: React.FC = () => {
         toast.error(errorMsg);
         return;
       }
-    
+
       const response: Response = await fetch("/api/normalSignup", {
         method: "POST",
         headers: {
@@ -182,14 +181,26 @@ const SignupPage: React.FC = () => {
         setTimeout(() => {
           window.location.reload();
         }, 2000);
-        setFormData({ email: "", password: "", cpassword: "",name: "", userName: "" });
+        setFormData({
+          email: "",
+          password: "",
+          cpassword: "",
+          name: "",
+          userName: "",
+        });
       } else {
         toast.error(data.msg);
       }
       setLoading(false);
     } catch (error) {
       toast.error("Something went wrong!");
-      setFormData({ email: "", password: "", cpassword: "",name: "", userName: "" });
+      setFormData({
+        email: "",
+        password: "",
+        cpassword: "",
+        name: "",
+        userName: "",
+      });
       setLoading(false);
     }
   }

@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
             // cookies().set('profilePic', `${check[0].profilePic}`,{ maxAge: 60 * 60 * 24 })
             const token = jwt.sign({ name: check[0].name, userName: check[0].userName, email, profilePic: check[0].profilePic }, `${process.env.NEXTAUTH_SECRET}`, { expiresIn: '7d' });
 
-            cookies().set('token', `${token}`, { maxAge: 60 * 60 * 24*7 })
+            cookies().set('token', `${token}`, { maxAge: 60 * 60 * 24 * 7 })
 
             return NextResponse.json({ success: true, msg: "Successfully logged in" }, { status: 201 })
 

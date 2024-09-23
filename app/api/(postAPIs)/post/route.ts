@@ -14,7 +14,7 @@ import jwt from "jsonwebtoken";
 export async function POST(req: NextRequest) {
     try {
         let { codeType, msg, code, lang, imagesForMongoDB } = await req.json();
-       if (code == "") {
+        if (code == "") {
             code = " "
             lang = "None"
         }
@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
         const userName = verify.userName
         const name = verify.name
         const profilePic = verify.profilePic
-        
+
         let checkUser = await normalUser.find({ userName })
         if (checkUser.length === 0) {
             checkUser = await googleUser.find({ userName })
@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
                 return NextResponse.json({ success: false, msg: "User donot exist!" }, { status: 200 })
             }
         }
-        
+
 
         const postDetails: postInterface = {
             userName,
@@ -113,7 +113,7 @@ export async function POST(req: NextRequest) {
         await no_of_posts.updateOne(
             { _id: new Object('6669de36beb425e5f97e7850') },
             { $inc: { no_of_post_req_doc: 1 } }
-          );
+        );
 
 
 

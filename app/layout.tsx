@@ -23,7 +23,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
       <head>
-      <link rel="icon" href="codenetfavicon.png" type="image/x-icon"/>
+        <link rel="icon" href="codenetfavicon.png" type="image/x-icon" />
         {/* <meta name="viewport" content="width=device-width, initial-scale=1.0"> */}
         <title>CodeNet &lt;/&gt;</title>
       </head>

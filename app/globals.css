@@ -66,16 +66,16 @@ body {
   border: 1px solid var(--p-color);
 }
 
-.bg-ascent{
+.bg-ascent {
   color: white;
   background-color: #ef4444;
 }
-.bg-ascent:hover{
+.bg-ascent:hover {
   /* color: white; */
-  background-color: #dc2626
+  background-color: #dc2626;
 }
-.text-ascent{
-  color: #ef4444
+.text-ascent {
+  color: #ef4444;
   /* color: var(--ascent); */
 }
 @keyframes gradientAnimation {
@@ -91,7 +91,7 @@ body {
 }
 
 .bg-gr {
-  background: linear-gradient(45deg, #cd4949,#b25897, #9cdb68);
+  background: linear-gradient(45deg, #cd4949, #b25897, #9cdb68);
   -webkit-background-clip: text;
   background-size: 400%;
   -webkit-text-fill-color: transparent;
@@ -100,5 +100,4 @@ body {
 
 .iconHover:hover {
   color: #ef4444;
-
 }

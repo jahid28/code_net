@@ -9,8 +9,8 @@ import { cookies } from "next/headers";
 
 export async function GET(req: NextRequest) {
     try {
-        const token=req.cookies.get("token")?.value
-        if(token===undefined){
+        const token = req.cookies.get("token")?.value
+        if (token === undefined) {
             return NextResponse.json({ success: false, msg: "Token not found!" }, { status: 200 })
         }
         // const verify:jwtTokenInterface=jwt.verify(token,`${process.env.NEXTAUTH_SECRET}`)
@@ -26,32 +26,32 @@ export async function GET(req: NextRequest) {
             }
         }
 
-        if(verify===undefined){
+        if (verify === undefined) {
             return NextResponse.json({ success: false, msg: "Token not found!" }, { status: 200 })
         }
 
 
-        await connectToMongo()        
-        let data=await normalUser.find({userName:verify.userName})
+        await connectToMongo()
+        let data = await normalUser.find({ userName: verify.userName })
 
-        if(data.length===0){
-            data=await googleUser.find({userName:verify.userName})
-            if(data.length===0){
+        if (data.length === 0) {
+            data = await googleUser.find({ userName: verify.userName })
+            if (data.length === 0) {
                 return NextResponse.json({ success: false, msg: "User donot exist!" }, { status: 200 });
             }
         }
 
-       
-      
-        
+
+
+
         const notiListLength = await redis.llen(`noti:${verify.userName}`);
-        let noti=false
-        if(notiListLength>0){
-            noti=true
+        let noti = false
+        if (notiListLength > 0) {
+            noti = true
         }
 
 
-        return NextResponse.json({ success: true,name:verify.name,profilePic:verify.profilePic, email:verify.email,userName:verify.userName,following:data[0].following,followers:data[0].followers,noti }, { status: 200 })
+        return NextResponse.json({ success: true, name: verify.name, profilePic: verify.profilePic, email: verify.email, userName: verify.userName, following: data[0].following, followers: data[0].followers, noti }, { status: 200 })
 
     } catch (error) {
 

@@ -23,8 +23,6 @@ interface getPostInterface extends postInterface {
 }
 
 const AccountPage: React.FC<PageProps> = ({ params }) => {
-
- 
   const [loading, setLoading] = useState<boolean>(false);
   const [posts, setPosts] = useState<getPostInterface[]>([]);
   const [myName, setMyname] = useState<string>("");
@@ -55,7 +53,7 @@ const AccountPage: React.FC<PageProps> = ({ params }) => {
         return;
       }
       // posts.reverse();
-      setPosts((data.data).reverse());
+      setPosts(data.data.reverse());
       setMyname(data.myName);
       setUserDetails(data.userDetails);
       setLoading(false);
@@ -121,10 +119,7 @@ const AccountPage: React.FC<PageProps> = ({ params }) => {
             </p>
             <p className="ml-[6vw] mr-[4vw] mb-2">{posts.length} Posts</p>
 
-            <FollowComponent
-              userToFollow={userName}
-              myName={myName}
-            />
+            <FollowComponent userToFollow={userName} myName={myName} />
 
             <div
               onClick={() => {
@@ -141,7 +136,6 @@ const AccountPage: React.FC<PageProps> = ({ params }) => {
               }}
               className="ml-[6vw] cursor-pointer mb-2"
             >
-              
               <p className="text-xl iconHover">
                 <BsShareFill />
               </p>
@@ -149,7 +143,6 @@ const AccountPage: React.FC<PageProps> = ({ params }) => {
           </div>
         </div>
       )}
-      
 
       <div className="w-[90vw] md:w-[50vw] mb-6">
         {loading && <PostSkeleton />}
@@ -157,7 +150,7 @@ const AccountPage: React.FC<PageProps> = ({ params }) => {
         {!loading &&
           posts.length > 0 &&
           !isEmpty(userDetails) &&
-          posts.map((e:getPostInterface, index:number) => {
+          posts.map((e: getPostInterface, index: number) => {
             return <SinglePost key={index} data={e} />;
           })}
       </div>

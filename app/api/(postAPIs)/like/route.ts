@@ -1,12 +1,12 @@
 import { connectToMongo } from "@/utils/mongo";
 import post from "@/models/post";
 import { NextRequest, NextResponse } from "next/server";
- import { jwtTokenInterface } from "@/lib/interfaces";
+import { jwtTokenInterface } from "@/lib/interfaces";
 import jwt from "jsonwebtoken";
 
 export async function POST(req: NextRequest) {
     try {
-        const token=req.cookies.get("token")?.value
+        const token = req.cookies.get("token")?.value
         // const verify:jwtTokenInterface=jwt.verify(token,`${process.env.NEXTAUTH_SECRET}`)
 
         let verify: jwtTokenInterface | undefined = undefined;
@@ -24,14 +24,14 @@ export async function POST(req: NextRequest) {
         }
 
         const userName = verify.userName
-        
-      
-        await connectToMongo()        
+
+
+        await connectToMongo()
         const { _id } = await req.json()
 
-        const data = await post.find({ _id})
+        const data = await post.find({ _id })
 
-        if(data.length===0){
+        if (data.length === 0) {
             return NextResponse.json({ success: false, msg: "Post doesnot exist!" }, { status: 200 })
         }
 

@@ -8,7 +8,7 @@ import { postInterface } from "@/lib/interfaces";
 import SingleProfile from "@/components/SingleProfile";
 import Image from "next/image";
 import { profileInterface } from "@/lib/interfaces";
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams } from "next/navigation";
 
 // interface PageProps {
 //   searchParams: React.PropsWithChildren<{ query: string }>;
@@ -20,13 +20,13 @@ interface getPostInterface extends postInterface {
 const SearchPage: React.FC = () => {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
-  const searchParams = useSearchParams()
+  const searchParams = useSearchParams();
 
   const [posts, setPosts] = useState<getPostInterface[]>([]);
   const [profiles, setProfiles] = useState<profileInterface[]>([]);
 
-  let query: string | null = searchParams.get('query')
-  if (query === null || query.trim()==="") {
+  let query: string | null = searchParams.get("query");
+  if (query === null || query.trim() === "") {
     router.replace("/");
   }
   // else{

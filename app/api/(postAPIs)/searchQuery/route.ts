@@ -3,7 +3,7 @@ import post from "@/models/post";
 import { NextRequest, NextResponse } from "next/server";
 import normalUser from "@/models/normalUser";
 import googleUser from "@/models/googleUser";
- 
+
 
 export async function POST(req: NextRequest) {
     try {
