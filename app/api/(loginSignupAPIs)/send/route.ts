@@ -25,23 +25,15 @@ export async function POST(req: NextRequest) {
         });
 
         const mailOptions = {
-            from: "DevGram", // replace with your email address
+            from: "CodeNet", // replace with your email address
             to: email,
-            subject: "DevGram Password Reset",
+            subject: "CodeNet Password Reset",
             html: `<p>Your OTP is <span style="color: blue;font-size: 20px;">${otp}</span></p>
-               <p>Use this OTP to reset your DevGram password.</p>
+               <p>Use this OTP to reset your CodeNet password.</p>
                `,
         };
 
         await transporter.sendMail(mailOptions);
-        //     await resend.emails.send({
-        //         from: 'DevGram <DevGram@resend.dev>',
-        //         to: email,
-        //         subject: "DevGram Reset Password",
-        //         html: `<p>Your OTP is <span style="color: red;font-size: 20px;">${otp}</span></p>
-        //   <p>Use this OTP to reset your DevGram password.</p>
-        //   `,
-        //     })
 
         // if (error) {
         return NextResponse.json({ success: true, msg: "Enter the OTP sent to your Email" }, { status: 201 })

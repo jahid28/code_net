@@ -54,7 +54,6 @@ const AllPosts: React.FC = () => {
   const fetchData = async (): Promise<void> => {
     try {
       setLoading(true);
-      console.log("res temp list", temp);
       const res: Response = await fetch("/api/getPosts", {
         method: "POST",
         headers: {

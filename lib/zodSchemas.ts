@@ -44,7 +44,8 @@ export const signupSchema = z.object({
     userName: z
       .string()
       .trim()
-      .min(2, { message: "User Name must be atleast 2 characters long." }),
+      .min(2, { message: "User Name must be at least 2 characters long." })
+      .transform((val) => val.replace(/\s+/g, "")),
     profilePic: z
       .string()
       .trim(),

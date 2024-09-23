@@ -10,16 +10,12 @@ export async function POST(req: NextRequest) {
     try {
         await connectToMongo()
         // const { name, email, password } = await req.json();
-        const {name,email,password,userName,profilePic} = await req.json();
-        // const name = res.data.name
-        // const email = res.data.email
-        // const password = res.data.password
-        // const userName = res.data.userName
-        // const profilePic = res.data.profilePic
-
-        
-
-      
+        const res = await req.json();
+        const name = res.data.name
+        const email = res.data.email
+        const password = res.data.password
+        const userName = res.data.userName
+        const profilePic = res.data.profilePic
 
         const checkEmail = await normalUser.find({ email })
         const checkEmail2 = await googleUser.find({ email })

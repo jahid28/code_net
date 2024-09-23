@@ -23,6 +23,7 @@ import { FaRegImage } from "react-icons/fa6";
 interface formInter {
   email: string;
   password: string;
+  cpassword: string;
   name: string;
   userName: string;
 }
@@ -37,6 +38,7 @@ const SignupPage: React.FC = () => {
   const [formData, setFormData] = useState<formInter>({
     email: "",
     password: "",
+    cpassword: "",
     name: "",
     userName: "",
   });
@@ -118,10 +120,14 @@ const SignupPage: React.FC = () => {
   async function submit(e: React.FormEvent): Promise<void> {
     e.preventDefault();
     try {
-      // if (!captchaValue) {
-      //   toast.error("Fill the captcha");
-      //   return;
-      // }
+      if (!captchaValue) {
+        toast.error("Fill the captcha");
+        return;
+      }
+      else if(formData.password !== formData.cpassword){
+        toast.error("Passwords do not match");
+        return;
+      }
       const signupDetails = {
         name: formData.name,
         email: formData.email,
@@ -153,12 +159,22 @@ const SignupPage: React.FC = () => {
         signupDetails.profilePic = url;
       }
 
+      const result2 = signupSchema.safeParse(signupDetails);
+      if (!result2.success) {
+        let errorMsg = "";
+        result2.error.issues.forEach((i) => {
+          errorMsg += i.path[0] + " : " + i.message + ". ";
+        });
+        toast.error(errorMsg);
+        return;
+      }
+    
       const response: Response = await fetch("/api/normalSignup", {
         method: "POST",
         headers: {
           "Content-type": "application/json",
         },
-        body: JSON.stringify(signupDetails),
+        body: JSON.stringify(result2),
       });
       const data = await response.json();
       if (data.success == true) {
@@ -166,14 +182,14 @@ const SignupPage: React.FC = () => {
         setTimeout(() => {
           window.location.reload();
         }, 2000);
-        setFormData({ email: "", password: "", name: "", userName: "" });
+        setFormData({ email: "", password: "", cpassword: "",name: "", userName: "" });
       } else {
         toast.error(data.msg);
       }
       setLoading(false);
     } catch (error) {
       toast.error("Something went wrong!");
-      setFormData({ email: "", password: "", name: "", userName: "" });
+      setFormData({ email: "", password: "", cpassword: "",name: "", userName: "" });
       setLoading(false);
     }
   }
@@ -188,7 +204,7 @@ const SignupPage: React.FC = () => {
       />
 
       <h2 className="mt-2 mb-6 py-1 text-center font-bold text-3xl md:text-4xl bg-gr">
-        Welcome to DevGram &lt;/&gt;, your daily coding community.
+        Welcome to CodeNet &lt;/&gt;, your daily coding community.
       </h2>
 
       <div className="w-[90vw] md:w-[50vw] lg:w-[30vw] bg-dark-color rounded-lg p-8 mb-10 relative z-10 shadow-md">
@@ -196,7 +212,7 @@ const SignupPage: React.FC = () => {
 
         <form action="" onSubmit={submit}>
           <div className=" mb-4">
-            <label htmlFor="email" className="leading-7 text-sm">
+            <label htmlFor="name" className="leading-7 text-sm">
               Your Name
             </label>
             <input
@@ -238,7 +254,7 @@ const SignupPage: React.FC = () => {
           </div>
 
           <div className=" mb-4">
-            <label htmlFor="email" className="leading-7 text-sm">
+            <label htmlFor="password" className="leading-7 text-sm">
               Password
             </label>
             <input
@@ -254,6 +270,27 @@ const SignupPage: React.FC = () => {
               type="password"
               id="password"
               name="password"
+              className="w-full text-color bg-transparent rounded border-2 border-gray-600 focus:ring-2 focus:ring-gray-600 text-base outline-none text-black py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+            />
+          </div>
+
+          <div className=" mb-4">
+            <label htmlFor="password" className="leading-7 text-sm">
+              Confirm Password
+            </label>
+            <input
+              value={formData.cpassword}
+              placeholder="********"
+              onChange={(event) =>
+                setFormData({
+                  ...formData,
+                  [event.target.name]: event.target.value,
+                })
+              }
+              required
+              type="password"
+              id="cpassword"
+              name="cpassword"
               className="w-full text-color bg-transparent rounded border-2 border-gray-600 focus:ring-2 focus:ring-gray-600 text-base outline-none text-black py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
             />
           </div>
@@ -326,11 +363,11 @@ const SignupPage: React.FC = () => {
             </p>
           </div>
 
-          {/* <ReCAPTCHA
+          <ReCAPTCHA
             sitekey={`${process.env.NEXT_PUBLIC_REACT_APP_RECAPTCHA}`}
             onChange={(value: any) => setCaptchaValue(value)}
             // domain="ecommerce-both-frontend.onrender.com"
-          /> */}
+          />
 
           <input
             className="w-full mt-3 cursor-pointer text-white py-2 px-6 focus:outline-none bg-ascent rounded text-lg"

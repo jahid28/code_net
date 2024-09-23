@@ -64,7 +64,6 @@ const SearchPage: React.FC = () => {
   };
 
   useEffect((): void => {
-    console.log("search page effect");
     fetchData();
   }, [searchParams]);
 

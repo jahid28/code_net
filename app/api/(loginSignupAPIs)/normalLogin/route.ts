@@ -42,19 +42,3 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ success: false, msg: "Something went wrong!" }, { status: 400 })
     }
 }
-
-// export async function GET(){
-//     const resend=new Resend(process.env.NEXT_PUBLIC_RESEND_API)
-
-//     await resend.emails.send({
-//         from:'jahidrhps123@gmail.com',
-//         to:"jahidkhan777367@gmail.com",
-//         subject:"DevGram Reset Password",
-//         text:`OTP is 77. Use this code to reset your password in DevGram`
-//       }).then(()=>{
-//         // toast.success("Enter the OTP sent to your Email");
-//     })
-//     .catch(()=>{
-//         // toast.error("Something went wrong!");
-//       })
-// }

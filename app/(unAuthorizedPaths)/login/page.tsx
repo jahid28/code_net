@@ -26,10 +26,10 @@ const LoginPage: React.FC = () => {
   async function submit(e: React.FormEvent): Promise<void> {
     e.preventDefault();
     try {
-      // if (!captchaValue) {
-      //   toast.error("Fill the captcha");
-      //   return;
-      // }
+      if (!captchaValue) {
+        toast.error("Fill the captcha");
+        return;
+      }
       const loginDetails = {
         email: formData.email,
         password: formData.password,
@@ -78,7 +78,7 @@ const LoginPage: React.FC = () => {
         size={100}
       />
       <h2 className="mt-2 mb-2 py-1 ml-4 mr-4 text-center font-bold text-3xl md:text-4xl bg-gr">
-        Welcome to DevGram &lt;/&gt;, your daily coding community.
+        Welcome to CodeNet &lt;/&gt;, your daily coding community.
       </h2>
       <h2 className="mb-6 py-1 ml-4 mr-4 text-center font-bold text-3xl md:text-4xl bg-gr">
         Login to continue.
@@ -128,11 +128,11 @@ const LoginPage: React.FC = () => {
             />
           </div>
 
-          {/* <ReCAPTCHA
+          <ReCAPTCHA
             sitekey={`${process.env.NEXT_PUBLIC_REACT_APP_RECAPTCHA}`}
             onChange={(value: any) => setCaptchaValue(value)}
             // domain="ecommerce-both-frontend.onrender.com"
-          /> */}
+          />
           <input
             className="w-full mt-3 cursor-pointer text-white py-2 px-6 focus:outline-none bg-ascent rounded text-lg"
             type="submit"
