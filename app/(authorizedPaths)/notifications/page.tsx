@@ -37,7 +37,7 @@ const NotiPage: React.FC = () => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      toast.error(String(error));
+      toast.error("An error occurred while fetching notifications.");
     }
   };
 

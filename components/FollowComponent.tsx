@@ -59,7 +59,7 @@ const FollowComponent:React.FC<propsInterface> = (props: propsInterface) => {
         toast.success(data.msg);
       }
     } catch (error) {
-      toast.error(String(error));
+      toast.error("An error occurred while trying to follow the user.");
     }
   }
 
@@ -84,7 +84,7 @@ const FollowComponent:React.FC<propsInterface> = (props: propsInterface) => {
         toast.success(data.msg);
       }
     } catch (error) {
-      toast.error(String(error));
+      toast.error("An error occurred while trying to unfollow the user.");
     }
   }
   return (

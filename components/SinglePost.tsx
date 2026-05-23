@@ -115,7 +115,7 @@ const SinglePost: React.FC<propsInterface> = (props: propsInterface) => {
                     toast.success("Code Copied!");
                   })
                   .catch((err) => {
-                    toast.error(err);
+                    toast.error("Failed to copy code");
                   });
               }}
             >
@@ -181,7 +181,7 @@ const SinglePost: React.FC<propsInterface> = (props: propsInterface) => {
                 toast.success("Post link copied!");
               })
               .catch((err) => {
-                toast.error(err);
+                toast.error("Failed to copy post link");
               });
           }}
           className="ml-[10vw] mt-1 md:ml-16 cursor-pointer"

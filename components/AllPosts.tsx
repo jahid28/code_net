@@ -43,7 +43,7 @@ const AllPosts: React.FC = () => {
       setLoading(false);
       setTagPosts(data.postArray);
     } catch (error) {
-      toast.error(String(error));
+      toast.error("An error occurred while fetching posts for the specified tags.");
       setLoading(false);
     }
   };
@@ -74,7 +74,7 @@ const AllPosts: React.FC = () => {
 
       setLoading(false);
     } catch (error) {
-      toast.error(String(error));
+      toast.error("An error occurred while fetching posts.");
       setLoading(false);
     }
   };
@@ -108,7 +108,7 @@ const AllPosts: React.FC = () => {
       setLoadNumber((prev) => prev + 1);
       setPosts((prev) => [...prev, ...data.data]);
     } catch (error) {
-      toast.error(String(error));
+      toast.error("An error occurred while fetching more posts.");
     }
   };
 

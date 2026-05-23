@@ -23,6 +23,6 @@ export async function dislike(_id: string):Promise<void> {
       toast.error(data.msg);
     }
   } catch (err) {
-    toast.error(String(err));
+    toast.error("An error occurred while trying to dislike the post.");
   }
 }

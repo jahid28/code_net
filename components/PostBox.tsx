@@ -144,7 +144,7 @@ const PostBox: React.FC = () => {
       setLang("Javascript");
     } catch (error) {
       setLoading(false);
-      toast.error(String(error));
+      toast.error("Something went wrong!");
     }
   };
 

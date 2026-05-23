@@ -59,7 +59,7 @@ const SearchPage: React.FC = () => {
       setPosts(data.postArray);
       setProfiles(data.profileArray);
     } catch (error) {
-      toast.error(String(error));
+      toast.error("An error occurred while fetching search results.");
     }
   };
 

@@ -21,6 +21,6 @@ export async function like(_id: string): Promise<void> {
         toast.error(data.msg);
       }
     } catch (err) {
-      toast.error(String(err));
+      toast.error("An error occurred while trying to like the post.");
     }
   }

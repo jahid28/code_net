@@ -131,7 +131,7 @@ const AccountPage: React.FC<PageProps> = ({ params }) => {
                     toast.success("Profile link copied!");
                   })
                   .catch((err) => {
-                    toast.error(err);
+                    toast.error("Failed to copy profile link");
                   });
               }}
               className="ml-[6vw] cursor-pointer mb-2"

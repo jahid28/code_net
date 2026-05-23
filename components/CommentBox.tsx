@@ -57,7 +57,7 @@ const CommentBox: React.FC<propsInterface> = (props: propsInterface) => {
         toast.success(data.msg);
       }
     } catch (error) {
-      toast.error(String(error));
+      toast.error("An error occurred while posting your comment.");
     }
   }
 
